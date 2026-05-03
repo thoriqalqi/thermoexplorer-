@@ -1,0 +1,230 @@
+level 3 :
+Hukum II Termodinamika dan Aplikasinya dalam Kehidupan Sehari-hari
+
+Tantangan 1 - Kemampuan Berpikir Kritis (Critical Thinking)
+	Buka link simulasi PhET berikut:
+	Pilih mode simulasi Ideal atau tampilan utama gas dalam wadah. 
+	Masukkan sejumlah partikel gas ke dalam wadah menggunakan pompa. 
+	Aktifkan tampilan pengukuran suhu dan tekanan. 
+	Pertahankan volume wadah tetap, kemudian naikkan suhu gas secara bertahap. 
+	Amati perubahan gerak partikel, suhu, dan tekanan gas. 
+	Catat data hasil pengamatan ke dalam tabel. 
+	Ulangi pengamatan dengan beberapa variasi suhu. 
+	Bandingkan perubahan tekanan pada setiap kenaikan suhu. 
+	Gunakan data tersebut untuk menjawab soal berpikir kritis.
+
+1.	(Interpretasi) Pada simulasi Gas Properties, saat suhu gas dinaikkan dalam wadah bervolume tetap, partikel gas terlihat bergerak lebih cepat dan tekanan meningkat. Makna paling tepat dari hasil pengamatan tersebut adalah…
+A.	Kenaikan suhu menyebabkan energi kinetik partikel gas meningkat sehingga tumbukan partikel dengan dinding wadah menjadi lebih sering dan kuat.
+B.	Kenaikan suhu menyebabkan partikel gas kehilangan energi sehingga tekanan meningkat.
+C.	Tekanan meningkat karena volume wadah bertambah besar saat suhu dinaikkan.
+D.	Partikel gas bergerak lebih cepat karena tekanan menurun.
+E.	Suhu tidak berhubungan dengan tekanan karena keduanya merupakan besaran yang berbeda.
+Kunci Jawaban: A
+Pembahasan:
+Jawaban A tepat karena data simulasi menunjukkan bahwa kenaikan suhu berkaitan dengan peningkatan energi kinetik partikel gas. Ketika energi kinetik meningkat, partikel bergerak lebih cepat dan menumbuk dinding wadah lebih sering serta lebih kuat. Akibatnya, tekanan gas meningkat
+2.	(Analisis) Seorang peserta didik menaikkan suhu gas dalam wadah tertutup dengan volume tetap. Tekanan gas meningkat, tetapi volume tidak berubah. Analisis hubungan konsep yang paling tepat adalah…
+A.	Suhu, energi kinetik, dan tekanan saling berhubungan; ketika suhu meningkat, energi kinetik partikel meningkat dan tekanan naik karena volume tetap.
+B.	Suhu hanya memengaruhi warna partikel, bukan gerak atau tekanan gas.
+C.	Tekanan meningkat karena jumlah partikel gas berkurang.
+D.	Volume tetap menyebabkan energi kinetik partikel menjadi nol.
+E.	Suhu meningkat karena tekanan terlebih dahulu meningkat tanpa adanya perubahan energi.
+Kunci Jawaban: A
+Pembahasan:
+Pada volume tetap, kenaikan suhu menyebabkan energi kinetik rata-rata partikel gas meningkat. Karena partikel bergerak lebih cepat, tumbukan terhadap dinding wadah semakin kuat dan sering. Hal ini menyebabkan tekanan meningkat. Jadi, konsep suhu, energi kinetik, dan tekanan saling berkaitan.
+3.	(Evaluasi) Seorang peserta didik ingin menyelidiki pengaruh suhu terhadap tekanan gas. Ia mengubah suhu gas, tetapi pada saat yang sama juga mengubah volume wadah dan menambah jumlah partikel gas. Evaluasi paling tepat terhadap prosedur tersebut adalah…
+A.	Prosedur sudah tepat karena semakin banyak variabel diubah, semakin lengkap data yang diperoleh.
+B.	Prosedur kurang tepat karena untuk mengetahui pengaruh suhu terhadap tekanan, variabel lain seperti volume dan jumlah partikel sebaiknya dibuat tetap.
+C.	Prosedur sudah tepat karena tekanan hanya dipengaruhi suhu, bukan volume atau jumlah partikel.
+D.	Prosedur kurang tepat karena suhu tidak boleh diubah dalam percobaan gas.
+E.	Prosedur benar karena Hukum II Termodinamika tidak membutuhkan pengendalian variabel.
+Kunci Jawaban: B
+Pembahasan:
+Jawaban B tepat karena untuk menilai hubungan suhu dan tekanan secara valid, variabel lain harus dikontrol. Jika suhu, volume, dan jumlah partikel diubah bersamaan, sulit menentukan penyebab utama perubahan tekanan. Prosedur ilmiah yang baik memerlukan pengendalian variabel
+4.	(Penjelasan) Pada simulasi, ketika gas dipanaskan, partikel bergerak semakin cepat dan tekanan meningkat. Penjelasan ilmiah paling sistematis yang sesuai dengan Hukum II Termodinamika adalah…
+A.	Pemanasan menyebabkan energi panas berpindah ke gas, energi kinetik partikel meningkat, tumbukan menjadi lebih kuat, dan sistem cenderung menyebarkan energi ke bentuk gerak partikel.
+B.	Pemanasan menyebabkan energi hilang sehingga partikel mencari energi baru dari dinding wadah.
+C.	Tekanan meningkat karena partikel berhenti bergerak dan menekan dinding secara diam.
+D.	Gas menjadi panas karena tekanan meningkat terlebih dahulu tanpa adanya perpindahan energi.
+E.	Kalor selalu berubah seluruhnya menjadi usaha tanpa ada energi yang tersebar.
+Kunci Jawaban: A
+Pembahasan:
+Penjelasan A paling sistematis karena mengurutkan proses secara logis: kalor diberikan ke gas, energi dalam gas meningkat, energi kinetik partikel bertambah, partikel bergerak lebih cepat, dan tekanan naik. Ini juga sesuai dengan gagasan Hukum II Termodinamika bahwa energi panas cenderung menyebar dan tidak seluruhnya dapat dimanfaatkan sebagai usaha terarah.
+5.	(Inferensi) Dalam simulasi, diperoleh data berikut:
+Kesimpulan paling logis berdasarkan data tersebut adalah…
+A.	Pada volume tetap, tekanan gas cenderung meningkat ketika suhu meningkat.
+B.	Pada volume tetap, tekanan gas menurun ketika suhu meningkat.
+C.	Tekanan gas tidak dipengaruhi suhu.
+D.	Volume gas selalu berubah ketika suhu dinaikkan.
+E.	Suhu tinggi menyebabkan partikel gas berhenti bergerak.
+Kunci Jawaban: A
+Pembahasan:
+Data menunjukkan pola bahwa suhu rendah menghasilkan tekanan rendah, suhu sedang menghasilkan tekanan sedang, dan suhu tinggi menghasilkan tekanan tinggi, sementara volume tetap. Maka kesimpulan logisnya adalah tekanan meningkat seiring kenaikan suhu pada volume tetap
+
+6.	(Regulasi Diri) Seorang peserta didik awalnya menyimpulkan bahwa “tekanan gas meningkat karena volume wadah membesar.” Setelah memeriksa ulang data, ternyata volume wadah tetap, sedangkan suhu dinaikkan. Sikap berpikir kritis yang paling tepat adalah…
+A.	Tetap mempertahankan kesimpulan awal karena jawaban pertama biasanya paling benar.
+B.	Mengoreksi kesimpulan bahwa tekanan meningkat terutama karena suhu naik sehingga energi kinetik partikel bertambah.
+C.	Mengabaikan data simulasi karena tidak sesuai dengan dugaan awal.
+D.	Mengubah semua variabel sekaligus agar kesimpulan awal tetap terlihat benar.
+E.	Menyimpulkan bahwa tekanan tidak dapat dijelaskan dengan data apa pun.
+Kunci Jawaban: B
+Pembahasan:
+Regulasi diri dalam berpikir kritis ditunjukkan dengan kemampuan memeriksa kembali kesalahan dan memperbaiki kesimpulan berdasarkan bukti. Karena volume tetap dan suhu meningkat, maka tekanan naik akibat meningkatnya energi kinetik partikel gas, bukan karena volume membesar
+
+
+Tantangan 2 – Kemampuan Berpikir Sistemik (Systemik Thinking)
+SIMULASI 1 — Energy Forms and Changes
+Langkah-Langkah Simulasi
+	Buka link simulasi PhET berikut:
+	Pilih tab Systems. 
+	Atur Energy Source menjadi Burner. 
+	Hubungkan burner dengan sistem yang memuat ketel/turbin/generator. 
+	Siapkan stopwatch, boleh menggunakan stopwatch dari HP. 
+	Tekan tombol mulai pada stopwatch bersamaan dengan menaikkan pemanas hingga terlihat nyala api. 
+	Amati paket energi yang keluar dari ketel dan paket energi yang diserap oleh turbin/generator. 
+	Catat jumlah energi yang diserap sistem dan energi yang terbuang ke lingkungan. 
+	Ulangi pengamatan pada tiga variasi waktu, yaitu 60 s, 120 s, dan 180 s. 
+	Hitung efisiensi sistem menggunakan rumus: (η=(1-Q_Lepas/Q_Serap )×100%)
+
+1.	(Pemahaman Hubungan dalam Sistem) Pada simulasi PhET, energi dari burner digunakan untuk memanaskan ketel, kemudian energi dari ketel menggerakkan turbin/generator. Hubungan sistemik yang paling tepat antara komponen tersebut adalah…
+A.	Burner, ketel, dan turbin bekerja terpisah sehingga tidak saling memengaruhi.
+B.	Burner berperan sebagai sumber kalor, ketel sebagai penerima dan penyalur energi, turbin/generator sebagai pengubah energi menjadi usaha mekanik, sedangkan lingkungan menerima energi yang terbuang.
+C.	Turbin menghasilkan kalor untuk memanaskan ketel, lalu ketel mengembalikan energi ke burner.
+D.	Lingkungan tidak berhubungan dengan sistem karena semua energi berubah menjadi usaha berguna.
+E.	Burner hanya menghasilkan energi mekanik, sedangkan ketel hanya menyimpan energi tanpa menyalurkannya.
+Kunci Jawaban: B
+Pembahasan:
+Jawaban B paling tepat karena menunjukkan hubungan antar subsistem. Burner menghasilkan energi panas, ketel menerima dan menyalurkan energi, turbin/generator mengubah sebagian energi menjadi usaha mekanik, sedangkan sebagian energi lain terbuang ke lingkungan. Sistem tidak dapat dipahami sebagai bagian yang berdiri sendiri, tetapi sebagai rangkaian komponen yang saling memengaruhi.
+2.	(Analisis Sistem) Dalam percobaan selama 120 sekon, jika peserta didik mencatat bahwa energi yang diserap sistem sebanyak 80 paket energi, sedangkan energi yang terbuang ke lingkungan sebanyak 30 paket energi. Jika efisiensi dihitung dengan rumus: (η=(1-Q_Lepas/Q_Serap )×100%)
+maka analisis yang paling tepat adalah…
+A.	Efisiensi sistem 37,5%, artinya sebagian besar energi berubah menjadi usaha berguna.
+B.	Efisiensi sistem 62,5%, artinya 62,5% energi yang diserap berubah menjadi usaha berguna dan 37,5% terbuang.
+C.	Efisiensi sistem 30%, artinya semua energi yang tidak terbuang menjadi kalor kembali.
+D.	Efisiensi sistem 80%, artinya seluruh energi dari burner berhasil digunakan turbin.
+E.	Efisiensi sistem 100%, karena energi tidak dapat dimusnahkan.
+Kunci Jawaban: B
+Pembahasan:
+(η=(1-30/80)×100%)
+(η=(1-0,375)×100%)
+η=62,5 %
+Artinya, dari 80 paket energi yang diserap, sebanyak 62,5% dapat dimanfaatkan sebagai energi berguna, sedangkan 37,5% terbuang ke lingkungan. Energi tidak musnah, tetapi tidak seluruh energi dapat diubah menjadi usaha berguna
+3.	(Sintesis Sistem) Setelah melakukan simulasi selama 60 s, 120 s, dan 180 s, peserta didik melihat bahwa semakin lama burner dinyalakan, semakin banyak paket energi yang keluar dari ketel. Sebagian paket energi menggerakkan turbin, sedangkan sebagian lainnya terbuang ke lingkungan. Kesimpulan sistemik paling tepat adalah…
+A.	Semakin lama pemanasan, semua energi pasti berubah menjadi usaha berguna.
+B.	Pemanasan hanya memengaruhi burner, tetapi tidak memengaruhi turbin dan lingkungan.
+C.	Sistem menunjukkan bahwa energi dari burner mengalami perubahan bentuk dan distribusi: sebagian menjadi energi mekanik pada turbin, sebagian tersimpan sementara dalam sistem, dan sebagian terbuang ke lingkungan.
+D.	Energi yang terbuang menunjukkan bahwa hukum kekekalan energi tidak berlaku pada mesin kalor.
+E.	Turbin hanya dapat bekerja jika tidak ada energi yang terbuang ke lingkungan.
+Kunci Jawaban: C
+Pembahasan:
+Jawaban C merupakan sintesis paling lengkap karena menyatukan hubungan antara sumber energi, perubahan bentuk energi, dan rugi-rugi energi. Energi dari burner tidak hilang, tetapi berpindah dan berubah bentuk. Sebagian energi dimanfaatkan untuk menggerakkan turbin, sebagian berada dalam sistem, dan sebagian terbuang ke lingkungan. Hal ini sesuai dengan Hukum I Termodinamika bahwa energi tidak dapat diciptakan atau dimusnahkan, tetapi dapat berubah bentuk.
+4.	(Evaluasi Sistem)  Seorang peserta didik menyatakan:
+“Jika waktu pemanasan diperpanjang dari 60 s menjadi 180 s, maka efisiensi mesin pasti selalu meningkat karena energi yang masuk semakin banyak.”
+Evaluasi paling tepat terhadap pernyataan tersebut adalah…
+A.	Benar, karena semakin banyak energi masuk berarti semua energi berubah menjadi usaha.
+B.	Benar, karena efisiensi hanya bergantung pada lamanya waktu pemanasan.
+C.	Kurang tepat, karena bertambahnya energi masuk belum tentu menaikkan efisiensi jika energi yang terbuang ke lingkungan juga bertambah.
+D.	Salah, karena semakin lama dipanaskan, energi dalam sistem pasti menjadi nol.
+E.	Salah, karena energi dari burner tidak dapat berpindah ke turbin.
+Kunci Jawaban: C
+Pembahasan:
+Pernyataan tersebut kurang tepat karena efisiensi tidak hanya ditentukan oleh lamanya waktu pemanasan atau banyaknya energi yang masuk. Efisiensi ditentukan oleh perbandingan antara energi berguna dan energi yang terbuang. Jika waktu pemanasan bertambah tetapi energi yang terbuang juga meningkat, maka efisiensi belum tentu naik. Oleh karena itu, peserta didik perlu mengevaluasi sistem secara menyeluruh, bukan hanya dari satu variabel.
+Tantangan 3 – Kemampuan Berpikir Ilmiah (Scientific Thinking)
+Simulasi Virtual – Hukum Termodinamika II
+	Buka simulasi PhET:
+	Pilih tab Systems 
+	Aktifkan Energy Source: Burner dan Energy User: Generator 
+	Amati aliran energi masuk (panas), energi berguna (mekanik), dan energi terbuang (lingkungan)
+Catatan:
+Q_in : simbol "E" menuju generator dari pemanas. 
+W_out:  simbol "E" yang keluar dari baling-baling.
+Tabel Hasil Pengamatan
+
+1.	(Inkuiri) Setelah mengamati simulasi, pertanyaan penelitian paling tepat adalah…
+A.	Berapa banyak energi yang dihasilkan?
+B.	Mengapa tidak semua energi panas dapat diubah menjadi usaha pada mesin?
+C.	Apakah energi bisa hilang?
+D.	Bagaimana cara membuat mesin bekerja tanpa energi?
+E.	Apakah suhu selalu tetap?
+Kunci: B
+Pembahasan:
+Pertanyaan ini langsung mengarah pada inti Hukum II Termodinamika:
+Tidak semua energi berubah menjadi usaha, sebagian energi akan terbuang sebagai energi yang tidak terpakai. Hal ini berhubungan dengan entropi yang selalu meningkat pada proses alami. Jadi, hipotesis yang berbasis data adalah semakin besar perbedaan suhu, semakin efisien sistem, meskipun tetap ada energi yang terbuang.
+2.	(Analisis) Pendekatan eksperimen paling valid adalah…
+A.	Mengubah semua variabel sekaligus
+B.	Mengubah suhu saja, lalu menghitung rasio W/Q_in 
+C.	Mengamati tanpa mencatat data
+D.	Menggunakan satu percobaan saja
+E.	Mengabaikan energi terbuang
+Kunci: B
+Pembahasan:
+Untuk analisis yang valid, kita harus mengontrol variabel lain dan hanya mengubah satu variabel yang relevan, dalam hal ini suhu. Dengan cara ini, kita bisa mempelajari hubungan langsung antara suhu dan efisiensi sistem tanpa dipengaruhi oleh variabel lain. Efisiensi =W/Q_in , sehingga perubahan suhu akan memengaruhi jumlah energi yang terbuang dan yang menjadi usaha
+3.	(Inferensi) Jika suhu sumber panas dinaikkan, tetapi energi terbuang juga meningkat, maka inferensi paling tepat adalah…
+A.	Efisiensi selalu meningkat
+B.	Efisiensi bergantung pada distribusi energi, bukan hanya energi masuk
+C.	Energi hilang
+D.	Mesin menjadi sempurna
+E.	Usaha tidak berubah
+Kunci: B
+Pembahasan:
+Hukum II Termodinamika menyatakan bahwa tidak semua energi dapat diubah menjadi usaha. Sebagian besar energi akan terbuang ke lingkungan sebagai entropi, dan efisiensi sistem dipengaruhi oleh seberapa baik sistem dapat memanfaatkan energi tersebut. Ini menunjukkan bahwa efisiensi bergantung pada bagaimana energi terdistribusi, bukan hanya besar energi yang masuk
+4.	(Argumentasi) Pernyataan berikut:
+“Mesin kalor dapat dibuat 100% efisien jika energi cukup besar.”
+Evaluasi argumen paling ilmiah adalah…
+A.	Benar, karena energi besar bisa jadi usaha semua
+B.	Salah, karena Hukum II Termodinamika membatasi efisiensi dan selalu ada energi yang terbuang ke reservoir dingin
+C.	Benar, jika suhu tinggi
+D.	Salah, karena mesin tidak butuh energi
+E.	Benar, karena kalor tidak terbatas
+Kunci: B
+Pembahasan:
+Menurut Hukum II Termodinamika, efisiensi mesin kalor selalu kurang dari 100% karena ada energi yang terbuang ke reservoir dingin. Sebagai contoh, meskipun suhu tinggi dapat meningkatkan efisiensi, mesin kalor tetap akan menghasilkan entropi, yang menyebabkan energi tidak dapat sepenuhnya diubah menjadi usaha. Mesin tidak bisa beroperasi secara sempurna tanpa membuang sebagian energi.
+
+Tantangan 4 – Kemampuan Berpikir Inovatif (Innovative Thinking)
+Dalam Hukum II Termodinamika, kalor secara alami mengalir dari benda bersuhu lebih tinggi ke benda bersuhu lebih rendah. Pada proses pembuatan es krim dengan batu es, campuran es krim memiliki suhu lebih tinggi daripada batu es. Akibatnya, kalor dari campuran es krim berpindah ke batu es. Jika wadah kurang tertutup atau kurang terisolasi, sebagian kalor dari lingkungan juga dapat masuk ke sistem, sehingga proses pembekuan menjadi kurang efisien.
+Setelah memahami konsep tersebut, peserta didik menonton video praktikum pembuatan es krim menggunakan batu es.
+Tonton video di sini:
+
+1.	(Fleksibilitas) Berdasarkan konsep Hukum II Termodinamika dan video pembuatan es krim dengan batu es, penyebab utama proses pembekuan menjadi kurang efisien adalah…
+A.	Campuran es krim tidak memiliki kalor sama sekali.
+B.	Batu es memberikan kalor ke campuran es krim sehingga campuran menjadi panas.
+C.	Wadah yang kurang terisolasi membuat kalor dari lingkungan ikut masuk ke sistem.
+D.	Kalor berhenti berpindah karena suhu batu es lebih rendah.
+E.	Campuran es krim membeku karena energi panas musnah.
+Kunci: C
+Pembahasan:
+Jawaban C tepat karena pada proses pendinginan, kalor dari campuran es krim berpindah ke batu es. Namun jika wadah kurang terisolasi, kalor dari lingkungan juga masuk ke sistem. Akibatnya, batu es tidak hanya menyerap kalor dari campuran es krim, tetapi juga dari lingkungan, sehingga proses pembekuan menjadi kurang efisien
+2.	(Kelancaran) Agar proses pembuatan es krim lebih efisien, kumpulan solusi yang paling tepat adalah…
+A.	Membuka wadah, mengurangi batu es, dan mengaduk lebih jarang.
+B.	Menutup wadah, menambahkan isolasi, menggunakan campuran es-garam, dan mengaduk secara teratur.
+C.	Menggunakan air panas, memperbesar wadah, dan mengurangi garam.
+D.	Membiarkan wadah di tempat terbuka agar udara bebas masuk.
+E.	Mengurangi batu es agar suhu sistem cepat seimbang.
+Kunci: B
+Pembahasan:
+Jawaban B tepat karena memuat beberapa solusi yang saling mendukung. Menutup wadah dan menambahkan isolasi dapat mengurangi kalor dari lingkungan yang masuk ke sistem. Campuran es dan garam dapat menurunkan titik beku sehingga suhu sekitar campuran es krim menjadi lebih rendah. Pengadukan teratur membantu perpindahan kalor dari campuran es krim ke lingkungan dingin berlangsung lebih merata
+3.	 (Berpikir Kreatif) Rancangan kreatif yang paling sesuai untuk meningkatkan efisiensi pembuatan es krim berdasarkan Hukum II Termodinamika adalah…
+A.	Wadah dua lapis dengan ruang isolasi di antaranya, bagian luar berisi campuran es-garam, dan bagian dalam berisi adonan es krim yang dapat diputar.
+B.	Wadah terbuka besar agar udara luar dapat mempercepat pembekuan.
+C.	Wadah logam tipis tanpa penutup agar kalor mudah masuk dari lingkungan.
+D.	Wadah berwarna gelap yang diletakkan di bawah sinar matahari.
+E.	Wadah tanpa es agar suhu adonan turun secara alami.
+Kunci: A
+Pembahasan:
+Jawaban A tepat karena rancangan tersebut menggabungkan beberapa prinsip. Ruang isolasi mengurangi kalor dari lingkungan masuk ke sistem. Campuran es-garam membuat lingkungan sekitar adonan menjadi lebih dingin. Bagian dalam yang dapat diputar membantu perpindahan kalor dari adonan ke campuran pendingin secara merata. Jadi, rancangan ini kreatif karena tidak hanya memakai batu es, tetapi juga memperbaiki desain sistem agar pendinginan lebih efisien.
+4.	 (Mengidentifikasi Permasalahan) Jika es krim sulit membeku meskipun sudah diberi batu es, masalah utama yang paling mungkin terjadi adalah…
+A.	Campuran es krim terlalu dingin sehingga tidak dapat membeku.
+B.	Batu es menyerap kalor dari campuran es krim dan lingkungan sekaligus karena wadah kurang tertutup atau kurang terisolasi.
+C.	Kalor dari campuran es krim hilang sepenuhnya sehingga tidak ada proses yang terjadi.
+D.	Batu es membuat suhu campuran meningkat.
+E.	Garam menghentikan perpindahan kalor.
+Kunci: B
+Pembahasan:
+Jawaban B tepat. Masalah utamanya bukan sekadar jumlah es, tetapi arah dan sumber kalor yang masuk ke sistem. Agar es krim membeku, kalor dari campuran es krim harus berpindah ke batu es. Jika wadah kurang tertutup atau kurang terisolasi, kalor dari lingkungan juga masuk. Akibatnya, batu es cepat mencair dan kemampuan sistem untuk mendinginkan adonan berkurang
+5.	(Merumuskan Hipotesis) Hipotesis yang paling tepat untuk menguji rancangan sistem pendinginan es krim yang lebih efisien adalah…
+A.	Jika wadah dibuat lebih terbuka, maka es krim akan lebih cepat membeku karena udara luar membantu pendinginan.
+B.	Jika wadah diberi isolasi dan campuran es-garam digunakan, maka suhu adonan es krim akan turun lebih cepat dibandingkan wadah tanpa isolasi.
+C.	Jika jumlah adonan ditambah, maka es krim pasti lebih cepat membeku.
+D.	Jika batu es dikurangi, maka suhu sistem akan lebih rendah.
+E.	Jika wadah diletakkan di tempat panas, maka pembekuan akan lebih cepat.
+Kunci: B
+Pembahasan:
+Jawaban B tepat karena hipotesisnya jelas, dapat diuji, dan memiliki variabel. Variabel bebasnya adalah penggunaan isolasi dan campuran es-garam. Variabel terikatnya adalah penurunan suhu adonan atau waktu pembekuan. Hipotesis ini sesuai Hukum II Termodinamika karena bertujuan memperbesar perpindahan kalor dari adonan ke pendingin, sekaligus mengurangi kalor dari lingkungan yang masuk ke sistem

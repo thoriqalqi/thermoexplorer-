@@ -112,39 +112,297 @@
 <script src="js/game.js"></script>
 <script>
 window.LEVEL_CONFIG = {
-  levelNum: 3,
-  zone: 'zone3',
-  title: 'Hukum II Termodinamika',
-  subtitle: 'Entropi & Efisiensi',
-  color: '#10B981',
-  timeSeconds: 18 * 60,
-  challenges: {
-    ct: {
-      scenario: "Gunakan simulasi PhET Gas Properties. Masukkan sejumlah partikel gas, pertahankan volume tetap, kemudian naikkan suhu gas secara bertahap. Amati perubahan tekanan dan gerakan partikel.",
-      questions: [
-        { ind: "Interpretasi & Analisis", xp: 20, q: "Pada simulasi Gas Properties, saat suhu gas dinaikkan dalam wadah bervolume tetap, partikel gas terlihat bergerak lebih cepat dan tekanan meningkat. Makna paling tepat adalah…", a: ["Kenaikan suhu menyebabkan energi kinetik partikel gas meningkat sehingga tumbukan partikel dengan dinding wadah menjadi lebih sering dan kuat", "Kenaikan suhu menyebabkan partikel gas kehilangan energi sehingga tekanan meningkat", "Tekanan meningkat karena volume wadah bertambah besar saat suhu dinaikkan", "Partikel gas bergerak lebih cepat karena tekanan menurun"], c: 0 },
-        { ind: "Evaluasi Prosedur", xp: 25, q: "Seorang peserta didik ingin menyelidiki pengaruh suhu terhadap tekanan gas. Ia mengubah suhu gas, tetapi pada saat yang sama juga mengubah volume wadah dan menambah jumlah partikel. Evaluasi paling tepat adalah…", a: ["Prosedur sudah tepat karena semakin banyak variabel diubah, semakin lengkap data", "Prosedur kurang tepat karena untuk mengetahui pengaruh suhu terhadap tekanan, variabel lain seperti volume dan jumlah partikel sebaiknya dibuat tetap", "Prosedur sudah tepat karena tekanan hanya dipengaruhi suhu", "Prosedur kurang tepat karena suhu tidak boleh diubah"], c: 1 }
+  "levelNum": 3,
+  "zone": "zone3",
+  "title": "Hukum II Termodinamika",
+  "subtitle": "Entropi & Efisiensi",
+  "color": "#10B981",
+  "timeSeconds": 1080,
+  "challenges": {
+    "ct": {
+      "scenario": "Gunakan simulasi PhET Gas Properties. Masukkan sejumlah partikel gas, pertahankan volume tetap, kemudian naikkan suhu gas secara bertahap. Amati perubahan tekanan dan gerakan partikel.",
+      "questions": [
+        {
+          "ind": "Interpretasi",
+          "xp": 15,
+          "q": "Pada simulasi Gas Properties, saat suhu gas dinaikkan dalam wadah bervolume tetap, partikel gas terlihat bergerak lebih cepat dan tekanan meningkat. Makna paling tepat dari hasil pengamatan tersebut adalah…",
+          "a": [
+            "Kenaikan suhu menyebabkan energi kinetik partikel gas meningkat sehingga tumbukan partikel dengan dinding wadah menjadi lebih sering dan kuat.",
+            "Kenaikan suhu menyebabkan partikel gas kehilangan energi sehingga tekanan meningkat.",
+            "Tekanan meningkat karena volume wadah bertambah besar saat suhu dinaikkan.",
+            "Partikel gas bergerak lebih cepat karena tekanan menurun.",
+            "Suhu tidak berhubungan dengan tekanan karena keduanya merupakan besaran yang berbeda."
+          ],
+          "c": 0,
+          "p": "Jawaban A tepat karena data simulasi menunjukkan bahwa kenaikan suhu berkaitan dengan peningkatan energi kinetik partikel gas. Ketika energi kinetik meningkat, partikel bergerak lebih cepat dan menumbuk dinding wadah lebih sering serta lebih kuat. Akibatnya, tekanan gas meningkat"
+        },
+        {
+          "ind": "Analisis",
+          "xp": 20,
+          "q": "Seorang peserta didik menaikkan suhu gas dalam wadah tertutup dengan volume tetap. Tekanan gas meningkat, tetapi volume tidak berubah. Analisis hubungan konsep yang paling tepat adalah…",
+          "a": [
+            "Suhu, energi kinetik, dan tekanan saling berhubungan; ketika suhu meningkat, energi kinetik partikel meningkat dan tekanan naik karena volume tetap.",
+            "Suhu hanya memengaruhi warna partikel, bukan gerak atau tekanan gas.",
+            "Tekanan meningkat karena jumlah partikel gas berkurang.",
+            "Volume tetap menyebabkan energi kinetik partikel menjadi nol.",
+            "Suhu meningkat karena tekanan terlebih dahulu meningkat tanpa adanya perubahan energi."
+          ],
+          "c": 0,
+          "p": "Pada volume tetap, kenaikan suhu menyebabkan energi kinetik rata-rata partikel gas meningkat. Karena partikel bergerak lebih cepat, tumbukan terhadap dinding wadah semakin kuat dan sering. Hal ini menyebabkan tekanan meningkat. Jadi, konsep suhu, energi kinetik, dan tekanan saling berkaitan."
+        },
+        {
+          "ind": "Evaluasi",
+          "xp": 25,
+          "q": "Seorang peserta didik ingin menyelidiki pengaruh suhu terhadap tekanan gas. Ia mengubah suhu gas, tetapi pada saat yang sama juga mengubah volume wadah dan menambah jumlah partikel gas. Evaluasi paling tepat terhadap prosedur tersebut adalah…",
+          "a": [
+            "Prosedur sudah tepat karena semakin banyak variabel diubah, semakin lengkap data yang diperoleh.",
+            "Prosedur kurang tepat karena untuk mengetahui pengaruh suhu terhadap tekanan, variabel lain seperti volume dan jumlah partikel sebaiknya dibuat tetap.",
+            "Prosedur sudah tepat karena tekanan hanya dipengaruhi suhu, bukan volume atau jumlah partikel.",
+            "Prosedur kurang tepat karena suhu tidak boleh diubah dalam percobaan gas.",
+            "Prosedur benar karena Hukum II Termodinamika tidak membutuhkan pengendalian variabel."
+          ],
+          "c": 1,
+          "p": "Jawaban B tepat karena untuk menilai hubungan suhu dan tekanan secara valid, variabel lain harus dikontrol. Jika suhu, volume, dan jumlah partikel diubah bersamaan, sulit menentukan penyebab utama perubahan tekanan. Prosedur ilmiah yang baik memerlukan pengendalian variabel"
+        },
+        {
+          "ind": "Penjelasan",
+          "xp": 20,
+          "q": "Pada simulasi, ketika gas dipanaskan, partikel bergerak semakin cepat dan tekanan meningkat. Penjelasan ilmiah paling sistematis yang sesuai dengan Hukum II Termodinamika adalah…",
+          "a": [
+            "Pemanasan menyebabkan energi panas berpindah ke gas, energi kinetik partikel meningkat, tumbukan menjadi lebih kuat, dan sistem cenderung menyebarkan energi ke bentuk gerak partikel.",
+            "Pemanasan menyebabkan energi hilang sehingga partikel mencari energi baru dari dinding wadah.",
+            "Tekanan meningkat karena partikel berhenti bergerak dan menekan dinding secara diam.",
+            "Gas menjadi panas karena tekanan meningkat terlebih dahulu tanpa adanya perpindahan energi.",
+            "Kalor selalu berubah seluruhnya menjadi usaha tanpa ada energi yang tersebar."
+          ],
+          "c": 0,
+          "p": "Penjelasan A paling sistematis karena mengurutkan proses secara logis: kalor diberikan ke gas, energi dalam gas meningkat, energi kinetik partikel bertambah, partikel bergerak lebih cepat, dan tekanan naik. Ini juga sesuai dengan gagasan Hukum II Termodinamika bahwa energi panas cenderung menyebar dan tidak seluruhnya dapat dimanfaatkan sebagai usaha terarah."
+        },
+        {
+          "ind": "Inferensi",
+          "xp": 15,
+          "q": "Dalam simulasi, diperoleh data berikut:\nKesimpulan paling logis berdasarkan data tersebut adalah…",
+          "a": [
+            "Pada volume tetap, tekanan gas cenderung meningkat ketika suhu meningkat.",
+            "Pada volume tetap, tekanan gas menurun ketika suhu meningkat.",
+            "Tekanan gas tidak dipengaruhi suhu.",
+            "Volume gas selalu berubah ketika suhu dinaikkan.",
+            "Suhu tinggi menyebabkan partikel gas berhenti bergerak."
+          ],
+          "c": 0,
+          "p": "Data menunjukkan pola bahwa suhu rendah menghasilkan tekanan rendah, suhu sedang menghasilkan tekanan sedang, dan suhu tinggi menghasilkan tekanan tinggi, sementara volume tetap. Maka kesimpulan logisnya adalah tekanan meningkat seiring kenaikan suhu pada volume tetap"
+        },
+        {
+          "ind": "Regulasi Diri",
+          "xp": 15,
+          "q": "Seorang peserta didik awalnya menyimpulkan bahwa “tekanan gas meningkat karena volume wadah membesar.” Setelah memeriksa ulang data, ternyata volume wadah tetap, sedangkan suhu dinaikkan. Sikap berpikir kritis yang paling tepat adalah…",
+          "a": [
+            "Tetap mempertahankan kesimpulan awal karena jawaban pertama biasanya paling benar.",
+            "Mengoreksi kesimpulan bahwa tekanan meningkat terutama karena suhu naik sehingga energi kinetik partikel bertambah.",
+            "Mengabaikan data simulasi karena tidak sesuai dengan dugaan awal.",
+            "Mengubah semua variabel sekaligus agar kesimpulan awal tetap terlihat benar.",
+            "Menyimpulkan bahwa tekanan tidak dapat dijelaskan dengan data apa pun."
+          ],
+          "c": 1,
+          "p": "Regulasi diri dalam berpikir kritis ditunjukkan dengan kemampuan memeriksa kembali kesalahan dan memperbaiki kesimpulan berdasarkan bukti. Karena volume tetap dan suhu meningkat, maka tekanan naik akibat meningkatnya energi kinetik partikel gas, bukan karena volume membesar"
+        }
       ]
     },
-    st: {
-      scenario: "Gunakan simulasi PhET Energy Forms and Changes. Atur sumber energi ke Burner dan hubungkan dengan ketel/turbin/generator. Amati aliran energi masuk, energi berguna, dan energi terbuang.",
-      questions: [
-        { ind: "Pemahaman Hubungan Sistem", xp: 20, q: "Hubungan sistemik yang paling tepat antara komponen tersebut adalah…", a: ["Burner, ketel, dan turbin bekerja terpisah", "Burner berperan sebagai sumber kalor, ketel sebagai penerima dan penyalur energi, turbin/generator sebagai pengubah energi menjadi usaha mekanik, sedangkan lingkungan menerima energi yang terbuang", "Turbin menghasilkan kalor untuk memanaskan ketel", "Lingkungan tidak berhubungan dengan sistem"], c: 1 },
-        { ind: "Analisis & Inferensi", xp: 25, q: "Dalam percobaan 120s, energi diserap 80 paket, terbuang 30 paket. Berapa efisiensi sistem? (η = (1 - Qlepas/Qserap) × 100%)", a: ["Efisiensi sistem 37,5%, artinya sebagian besar energi berubah menjadi usaha", "Efisiensi sistem 62,5%, artinya 62,5% energi yang diserap berubah menjadi usaha berguna dan 37,5% terbuang", "Efisiensi sistem 30%", "Efisiensi sistem 80%"], c: 1 }
+    "st": {
+      "scenario": "Gunakan simulasi PhET Energy Forms and Changes. Atur sumber energi ke Burner dan hubungkan dengan ketel/turbin/generator. Amati aliran energi masuk, energi berguna, dan energi terbuang.",
+      "questions": [
+        {
+          "ind": "Pemahaman Hubungan dalam Sistem",
+          "xp": 20,
+          "q": "Pada simulasi PhET, energi dari burner digunakan untuk memanaskan ketel, kemudian energi dari ketel menggerakkan turbin/generator. Hubungan sistemik yang paling tepat antara komponen tersebut adalah…",
+          "a": [
+            "Burner, ketel, dan turbin bekerja terpisah sehingga tidak saling memengaruhi.",
+            "Burner berperan sebagai sumber kalor, ketel sebagai penerima dan penyalur energi, turbin/generator sebagai pengubah energi menjadi usaha mekanik, sedangkan lingkungan menerima energi yang terbuang.",
+            "Turbin menghasilkan kalor untuk memanaskan ketel, lalu ketel mengembalikan energi ke burner.",
+            "Lingkungan tidak berhubungan dengan sistem karena semua energi berubah menjadi usaha berguna.",
+            "Burner hanya menghasilkan energi mekanik, sedangkan ketel hanya menyimpan energi tanpa menyalurkannya."
+          ],
+          "c": 1,
+          "p": "Jawaban B paling tepat karena menunjukkan hubungan antar subsistem. Burner menghasilkan energi panas, ketel menerima dan menyalurkan energi, turbin/generator mengubah sebagian energi menjadi usaha mekanik, sedangkan sebagian energi lain terbuang ke lingkungan. Sistem tidak dapat dipahami sebagai bagian yang berdiri sendiri, tetapi sebagai rangkaian komponen yang saling memengaruhi."
+        },
+        {
+          "ind": "Analisis Sistem",
+          "xp": 20,
+          "q": "Dalam percobaan selama 120 sekon, jika peserta didik mencatat bahwa energi yang diserap sistem sebanyak 80 paket energi, sedangkan energi yang terbuang ke lingkungan sebanyak 30 paket energi. Jika efisiensi dihitung dengan rumus: (η=(1-Q_Lepas/Q_Serap )×100%)\nmaka analisis yang paling tepat adalah…",
+          "a": [
+            "Efisiensi sistem 37,5%, artinya sebagian besar energi berubah menjadi usaha berguna.",
+            "Efisiensi sistem 62,5%, artinya 62,5% energi yang diserap berubah menjadi usaha berguna dan 37,5% terbuang.",
+            "Efisiensi sistem 30%, artinya semua energi yang tidak terbuang menjadi kalor kembali.",
+            "Efisiensi sistem 80%, artinya seluruh energi dari burner berhasil digunakan turbin.",
+            "Efisiensi sistem 100%, karena energi tidak dapat dimusnahkan."
+          ],
+          "c": 1,
+          "p": "(η=(1-30/80)×100%)\n(η=(1-0,375)×100%)\nη=62,5 %\nArtinya, dari 80 paket energi yang diserap, sebanyak 62,5% dapat dimanfaatkan sebagai energi berguna, sedangkan 37,5% terbuang ke lingkungan. Energi tidak musnah, tetapi tidak seluruh energi dapat diubah menjadi usaha berguna"
+        },
+        {
+          "ind": "Sintesis Sistem",
+          "xp": 15,
+          "q": "Setelah melakukan simulasi selama 60 s, 120 s, dan 180 s, peserta didik melihat bahwa semakin lama burner dinyalakan, semakin banyak paket energi yang keluar dari ketel. Sebagian paket energi menggerakkan turbin, sedangkan sebagian lainnya terbuang ke lingkungan. Kesimpulan sistemik paling tepat adalah…",
+          "a": [
+            "Semakin lama pemanasan, semua energi pasti berubah menjadi usaha berguna.",
+            "Pemanasan hanya memengaruhi burner, tetapi tidak memengaruhi turbin dan lingkungan.",
+            "Sistem menunjukkan bahwa energi dari burner mengalami perubahan bentuk dan distribusi: sebagian menjadi energi mekanik pada turbin, sebagian tersimpan sementara dalam sistem, dan sebagian terbuang ke lingkungan.",
+            "Energi yang terbuang menunjukkan bahwa hukum kekekalan energi tidak berlaku pada mesin kalor.",
+            "Turbin hanya dapat bekerja jika tidak ada energi yang terbuang ke lingkungan."
+          ],
+          "c": 2,
+          "p": "Jawaban C merupakan sintesis paling lengkap karena menyatukan hubungan antara sumber energi, perubahan bentuk energi, dan rugi-rugi energi. Energi dari burner tidak hilang, tetapi berpindah dan berubah bentuk. Sebagian energi dimanfaatkan untuk menggerakkan turbin, sebagian berada dalam sistem, dan sebagian terbuang ke lingkungan. Hal ini sesuai dengan Hukum I Termodinamika bahwa energi tidak dapat diciptakan atau dimusnahkan, tetapi dapat berubah bentuk."
+        },
+        {
+          "ind": "Evaluasi Sistem",
+          "xp": 25,
+          "q": "Seorang peserta didik menyatakan:\n“Jika waktu pemanasan diperpanjang dari 60 s menjadi 180 s, maka efisiensi mesin pasti selalu meningkat karena energi yang masuk semakin banyak.”\nEvaluasi paling tepat terhadap pernyataan tersebut adalah…",
+          "a": [
+            "Benar, karena semakin banyak energi masuk berarti semua energi berubah menjadi usaha.",
+            "Benar, karena efisiensi hanya bergantung pada lamanya waktu pemanasan.",
+            "Kurang tepat, karena bertambahnya energi masuk belum tentu menaikkan efisiensi jika energi yang terbuang ke lingkungan juga bertambah.",
+            "Salah, karena semakin lama dipanaskan, energi dalam sistem pasti menjadi nol.",
+            "Salah, karena energi dari burner tidak dapat berpindah ke turbin."
+          ],
+          "c": 2,
+          "p": "Pernyataan tersebut kurang tepat karena efisiensi tidak hanya ditentukan oleh lamanya waktu pemanasan atau banyaknya energi yang masuk. Efisiensi ditentukan oleh perbandingan antara energi berguna dan energi yang terbuang. Jika waktu pemanasan bertambah tetapi energi yang terbuang juga meningkat, maka efisiensi belum tentu naik. Oleh karena itu, peserta didik perlu mengevaluasi sistem secara menyeluruh, bukan hanya dari satu variabel."
+        }
       ]
     },
-    sci: {
-      scenario: "Simulasi Virtual Hukum Termodinamika II (Generator). Amati aliran energi masuk (panas), berguna (mekanik), dan terbuang (lingkungan) pada berbagai kondisi suhu.",
-      questions: [
-        { ind: "Inquiry & Hypothesis", xp: 20, q: "Setelah mengamati simulasi, pertanyaan penelitian paling tepat adalah…", a: ["Berapa banyak energi yang dihasilkan?", "Mengapa tidak semua energi panas dapat diubah menjadi usaha pada mesin?", "Apakah energi bisa hilang?", "Bagaimana cara membuat mesin bekerja tanpa energi?"], c: 1 },
-        { ind: "Analysis & Argumentation", xp: 25, q: "Jika suhu sumber panas dinaikkan, tetapi energi terbuang juga meningkat, maka inferensi paling tepat adalah…", a: ["Efisiensi selalu meningkat", "Efisiensi bergantung pada distribusi energi, bukan hanya energi masuk", "Energi hilang", "Mesin menjadi sempurna"], c: 1 }
+    "sci": {
+      "scenario": "Simulasi Virtual Hukum Termodinamika II (Generator). Amati aliran energi masuk (panas), berguna (mekanik), dan terbuang (lingkungan) pada berbagai kondisi suhu.",
+      "questions": [
+        {
+          "ind": "Inkuiri",
+          "xp": 15,
+          "q": "Setelah mengamati simulasi, pertanyaan penelitian paling tepat adalah…",
+          "a": [
+            "Berapa banyak energi yang dihasilkan?",
+            "Mengapa tidak semua energi panas dapat diubah menjadi usaha pada mesin?",
+            "Apakah energi bisa hilang?",
+            "Bagaimana cara membuat mesin bekerja tanpa energi?",
+            "Apakah suhu selalu tetap?"
+          ],
+          "c": 1,
+          "p": "Pertanyaan ini langsung mengarah pada inti Hukum II Termodinamika:\nTidak semua energi berubah menjadi usaha, sebagian energi akan terbuang sebagai energi yang tidak terpakai. Hal ini berhubungan dengan entropi yang selalu meningkat pada proses alami. Jadi, hipotesis yang berbasis data adalah semakin besar perbedaan suhu, semakin efisien sistem, meskipun tetap ada energi yang terbuang."
+        },
+        {
+          "ind": "Analisis",
+          "xp": 20,
+          "q": "Pendekatan eksperimen paling valid adalah…",
+          "a": [
+            "Mengubah semua variabel sekaligus",
+            "Mengubah suhu saja, lalu menghitung rasio W/Q_in",
+            "Mengamati tanpa mencatat data",
+            "Menggunakan satu percobaan saja",
+            "Mengabaikan energi terbuang"
+          ],
+          "c": 1,
+          "p": "Untuk analisis yang valid, kita harus mengontrol variabel lain dan hanya mengubah satu variabel yang relevan, dalam hal ini suhu. Dengan cara ini, kita bisa mempelajari hubungan langsung antara suhu dan efisiensi sistem tanpa dipengaruhi oleh variabel lain. Efisiensi =W/Q_in , sehingga perubahan suhu akan memengaruhi jumlah energi yang terbuang dan yang menjadi usaha"
+        },
+        {
+          "ind": "Inferensi",
+          "xp": 15,
+          "q": "Jika suhu sumber panas dinaikkan, tetapi energi terbuang juga meningkat, maka inferensi paling tepat adalah…",
+          "a": [
+            "Efisiensi selalu meningkat",
+            "Efisiensi bergantung pada distribusi energi, bukan hanya energi masuk",
+            "Energi hilang",
+            "Mesin menjadi sempurna",
+            "Usaha tidak berubah"
+          ],
+          "c": 1,
+          "p": "Hukum II Termodinamika menyatakan bahwa tidak semua energi dapat diubah menjadi usaha. Sebagian besar energi akan terbuang ke lingkungan sebagai entropi, dan efisiensi sistem dipengaruhi oleh seberapa baik sistem dapat memanfaatkan energi tersebut. Ini menunjukkan bahwa efisiensi bergantung pada bagaimana energi terdistribusi, bukan hanya besar energi yang masuk"
+        },
+        {
+          "ind": "Argumentasi",
+          "xp": 15,
+          "q": "Pernyataan berikut:\n“Mesin kalor dapat dibuat 100% efisien jika energi cukup besar.”\nEvaluasi argumen paling ilmiah adalah…",
+          "a": [
+            "Benar, karena energi besar bisa jadi usaha semua",
+            "Salah, karena Hukum II Termodinamika membatasi efisiensi dan selalu ada energi yang terbuang ke reservoir dingin",
+            "Benar, jika suhu tinggi",
+            "Salah, karena mesin tidak butuh energi",
+            "Benar, karena kalor tidak terbatas"
+          ],
+          "c": 1,
+          "p": "Menurut Hukum II Termodinamika, efisiensi mesin kalor selalu kurang dari 100% karena ada energi yang terbuang ke reservoir dingin. Sebagai contoh, meskipun suhu tinggi dapat meningkatkan efisiensi, mesin kalor tetap akan menghasilkan entropi, yang menyebabkan energi tidak dapat sepenuhnya diubah menjadi usaha. Mesin tidak bisa beroperasi secara sempurna tanpa membuang sebagian energi."
+        }
       ]
     },
-    inn: {
-      scenario: "Hukum II Termodinamika pada pembuatan es krim dengan batu es. Kalor mengalir dari campuran es krim (lebih tinggi) ke batu es (lebih rendah). Peserta didik diminta mengidentifikasi sistem, penyebab ketidakefisienan, dan merancang solusi inovatif.",
-      questions: [
-        { ind: "Identifying Issues", xp: 20, q: "Penyebab utama proses pembekuan menjadi kurang efisien adalah…", a: ["Campuran es krim tidak memiliki kalor sama sekali", "Batu es memberikan kalor ke campuran es krim", "Wadah yang kurang terisolasi membuat kalor dari lingkungan ikut masuk ke sistem", "Kalor berhenti berpindah karena suhu batu es lebih rendah"], c: 2 },
-        { ind: "Creative Solution", xp: 30, q: "Rancangan kreatif yang paling sesuai untuk meningkatkan efisiensi pembuatan es krim adalah…", a: ["Wadah dua lapis dengan ruang isolasi di antaranya, bagian luar berisi campuran es-garam, dan bagian dalam berisi adonan yang dapat diputar. Hipotesis: Jika wadah diberi isolasi dan campuran es-garam digunakan, maka suhu adonan es krim akan turun lebih cepat", "Wadah terbuka besar", "Wadah logam tipis tanpa penutup", "Wadah tanpa es"], c: 0 }
+    "inn": {
+      "scenario": "Hukum II Termodinamika pada pembuatan es krim dengan batu es. Kalor mengalir dari campuran es krim (lebih tinggi) ke batu es (lebih rendah). Peserta didik diminta mengidentifikasi sistem, penyebab ketidakefisienan, dan merancang solusi inovatif.",
+      "questions": [
+        {
+          "ind": "Fleksibilitas",
+          "xp": 20,
+          "q": "Berdasarkan konsep Hukum II Termodinamika dan video pembuatan es krim dengan batu es, penyebab utama proses pembekuan menjadi kurang efisien adalah…",
+          "a": [
+            "Campuran es krim tidak memiliki kalor sama sekali.",
+            "Batu es memberikan kalor ke campuran es krim sehingga campuran menjadi panas.",
+            "Wadah yang kurang terisolasi membuat kalor dari lingkungan ikut masuk ke sistem.",
+            "Kalor berhenti berpindah karena suhu batu es lebih rendah.",
+            "Campuran es krim membeku karena energi panas musnah."
+          ],
+          "c": 2,
+          "p": "Jawaban C tepat karena pada proses pendinginan, kalor dari campuran es krim berpindah ke batu es. Namun jika wadah kurang terisolasi, kalor dari lingkungan juga masuk ke sistem. Akibatnya, batu es tidak hanya menyerap kalor dari campuran es krim, tetapi juga dari lingkungan, sehingga proses pembekuan menjadi kurang efisien"
+        },
+        {
+          "ind": "Kelancaran",
+          "xp": 15,
+          "q": "Agar proses pembuatan es krim lebih efisien, kumpulan solusi yang paling tepat adalah…",
+          "a": [
+            "Membuka wadah, mengurangi batu es, dan mengaduk lebih jarang.",
+            "Menutup wadah, menambahkan isolasi, menggunakan campuran es-garam, dan mengaduk secara teratur.",
+            "Menggunakan air panas, memperbesar wadah, dan mengurangi garam.",
+            "Membiarkan wadah di tempat terbuka agar udara bebas masuk.",
+            "Mengurangi batu es agar suhu sistem cepat seimbang."
+          ],
+          "c": 1,
+          "p": "Jawaban B tepat karena memuat beberapa solusi yang saling mendukung. Menutup wadah dan menambahkan isolasi dapat mengurangi kalor dari lingkungan yang masuk ke sistem. Campuran es dan garam dapat menurunkan titik beku sehingga suhu sekitar campuran es krim menjadi lebih rendah. Pengadukan teratur membantu perpindahan kalor dari campuran es krim ke lingkungan dingin berlangsung lebih merata"
+        },
+        {
+          "ind": "Berpikir Kreatif",
+          "xp": 30,
+          "q": "Rancangan kreatif yang paling sesuai untuk meningkatkan efisiensi pembuatan es krim berdasarkan Hukum II Termodinamika adalah…",
+          "a": [
+            "Wadah dua lapis dengan ruang isolasi di antaranya, bagian luar berisi campuran es-garam, dan bagian dalam berisi adonan es krim yang dapat diputar.",
+            "Wadah terbuka besar agar udara luar dapat mempercepat pembekuan.",
+            "Wadah logam tipis tanpa penutup agar kalor mudah masuk dari lingkungan.",
+            "Wadah berwarna gelap yang diletakkan di bawah sinar matahari.",
+            "Wadah tanpa es agar suhu adonan turun secara alami."
+          ],
+          "c": 0,
+          "p": "Jawaban A tepat karena rancangan tersebut menggabungkan beberapa prinsip. Ruang isolasi mengurangi kalor dari lingkungan masuk ke sistem. Campuran es-garam membuat lingkungan sekitar adonan menjadi lebih dingin. Bagian dalam yang dapat diputar membantu perpindahan kalor dari adonan ke campuran pendingin secara merata. Jadi, rancangan ini kreatif karena tidak hanya memakai batu es, tetapi juga memperbaiki desain sistem agar pendinginan lebih efisien."
+        },
+        {
+          "ind": "Mengidentifikasi Permasalahan",
+          "xp": 20,
+          "q": "Jika es krim sulit membeku meskipun sudah diberi batu es, masalah utama yang paling mungkin terjadi adalah…",
+          "a": [
+            "Campuran es krim terlalu dingin sehingga tidak dapat membeku.",
+            "Batu es menyerap kalor dari campuran es krim dan lingkungan sekaligus karena wadah kurang tertutup atau kurang terisolasi.",
+            "Kalor dari campuran es krim hilang sepenuhnya sehingga tidak ada proses yang terjadi.",
+            "Batu es membuat suhu campuran meningkat.",
+            "Garam menghentikan perpindahan kalor."
+          ],
+          "c": 1,
+          "p": "Jawaban B tepat. Masalah utamanya bukan sekadar jumlah es, tetapi arah dan sumber kalor yang masuk ke sistem. Agar es krim membeku, kalor dari campuran es krim harus berpindah ke batu es. Jika wadah kurang tertutup atau kurang terisolasi, kalor dari lingkungan juga masuk. Akibatnya, batu es cepat mencair dan kemampuan sistem untuk mendinginkan adonan berkurang"
+        },
+        {
+          "ind": "Merumuskan Hipotesis",
+          "xp": 20,
+          "q": "Hipotesis yang paling tepat untuk menguji rancangan sistem pendinginan es krim yang lebih efisien adalah…",
+          "a": [
+            "Jika wadah dibuat lebih terbuka, maka es krim akan lebih cepat membeku karena udara luar membantu pendinginan.",
+            "Jika wadah diberi isolasi dan campuran es-garam digunakan, maka suhu adonan es krim akan turun lebih cepat dibandingkan wadah tanpa isolasi.",
+            "Jika jumlah adonan ditambah, maka es krim pasti lebih cepat membeku.",
+            "Jika batu es dikurangi, maka suhu sistem akan lebih rendah.",
+            "Jika wadah diletakkan di tempat panas, maka pembekuan akan lebih cepat."
+          ],
+          "c": 1,
+          "p": "Jawaban B tepat karena hipotesisnya jelas, dapat diuji, dan memiliki variabel. Variabel bebasnya adalah penggunaan isolasi dan campuran es-garam. Variabel terikatnya adalah penurunan suhu adonan atau waktu pembekuan. Hipotesis ini sesuai Hukum II Termodinamika karena bertujuan memperbesar perpindahan kalor dari adonan ke pendingin, sekaligus mengurangi kalor dari lingkungan yang masuk ke sistem"
+        }
       ]
     }
   }

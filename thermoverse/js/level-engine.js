@@ -14,7 +14,7 @@ let challengeXP  = {}; // {ct:80, st:45, ...}
 let userAnswers  = {}; // {ct:[1,0,...], st:[1], ...}
 let xpEarned     = {}; // {ct:60, st:45, ...}
 const ORDER = ['ct','st','sci','inn'];
-const TOTAL_QUESTIONS = 10; // CT:4 ST:2 SCI:2 INN:2
+let TOTAL_QUESTIONS = 0;
 
 // XP mapping by indicator keyword
 const XP_MAP = {
@@ -137,14 +137,16 @@ function updateTabLocks(){
 }
 
 // ── Render challenges ──────────────────────────
-function renderAllChallenges(){
-  ORDER.forEach(renderChallenge);
+function renderAllChallenges(savedAnswers = null){
+  ORDER.forEach(k => renderChallenge(k, savedAnswers ? savedAnswers[k] : null));
 }
 
-function renderChallenge(key){
+function renderChallenge(key, savedAnswers = null){
   const el=document.getElementById('content-'+key);
   if(!el) return;
   const ch=cfg.challenges[key];
+  const isReviewMode = savedAnswers != null;
+
   el.innerHTML=`
     <div class="scenario-box">
       <div class="scenario-label">📍 Skenario / Konteks Masalah</div>
@@ -152,6 +154,12 @@ function renderChallenge(key){
     </div>
     ${ch.questions.map((q,i)=>{
       const qxp=getXP(q.ind);
+      let explHTML = '';
+      if(isReviewMode) {
+        explHTML = `<div class="le-korr-expl" style="margin-top:16px; padding:14px; background:rgba(255,255,255,0.7); border-radius:8px; font-size:0.9rem; border:1px dashed #CBD5E1; color:#334155;">
+             <strong>💡 Pembahasan:</strong><br/>${q.p || 'Pembahasan terperinci akan ditambahkan oleh guru.'}
+          </div>`;
+      }
       return `<div class="question-block" id="${key}-q-${i}" style="margin-top:24px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
           <span class="indicator-label">${q.ind}</span>
@@ -159,18 +167,28 @@ function renderChallenge(key){
         </div>
         <div class="question-text"><strong>${i+1}. ${q.q}</strong></div>
         <div class="options-grid">
-          ${q.a.map((opt,oi)=>`
-            <label class="option-btn" onclick="leSelect('${key}',${i},${oi})">
-              <input type="radio" name="${key}_q${i}" value="${oi}" style="display:none;">
+          ${q.a.map((opt,oi)=>{
+            let extraClass = '';
+            let isSelected = false;
+            if(isReviewMode) {
+               const sel = savedAnswers[i];
+               if(oi === q.c) extraClass = 'correct';
+               else if(oi === sel) extraClass = 'wrong';
+               isSelected = (oi === sel);
+            }
+            return `<label class="option-btn ${extraClass} ${isSelected?'selected':''}" ${!isReviewMode ? `onclick="leSelect('${key}',${i},${oi})"` : 'style="pointer-events:none"'}>
+              <input type="radio" name="${key}_q${i}" value="${oi}" style="display:none;" ${isSelected?'checked':''} ${isReviewMode?'disabled':''}>
               <div class="option-key">${String.fromCharCode(65+oi)}</div>
               <div>${opt}</div>
-            </label>`).join('')}
+            </label>`;
+          }).join('')}
         </div>
+        ${explHTML}
       </div>`;
     }).join('')}
-    <div style="margin-top:24px;display:flex;justify-content:flex-end;">
+    ${!isReviewMode ? `<div style="margin-top:24px;display:flex;justify-content:flex-end;">
       <button class="btn btn-primary" onclick="leSubmit('${key}')">✅ Simpan &amp; Lanjut</button>
-    </div>`;
+    </div>` : ''}`;
 }
 
 // ── Select option ──────────────────────────────
@@ -242,6 +260,7 @@ window.leFinish=function(){
   state.zones[cfg.zone]={
     completed:allDone, score:pct,
     xpEarned:totalXP, speedBonus:bonus,
+    timeTaken:elapsed,
     challengesDone:Array.from(completedSet),
     answers:userAnswers
   };
@@ -254,89 +273,46 @@ window.leFinish=function(){
 
 // ── Result / Koreksi Screen ────────────────────
 function showResult(elapsed, bonus, totalXP, pct){
-  document.querySelectorAll('.challenge-card').forEach(c=>c.style.display='none');
-  document.querySelectorAll('.challenge-tabs').forEach(t=>t.style.display='none');
+  const headerRight = document.querySelector('.level-header-right');
+  if(headerRight) headerRight.style.display = 'none';
 
-  let correctAll=0, wrongAll=0;
+  let correctAll=0, wrongAll=0, baseXP=0;
   ORDER.forEach(k=>{
     const ch=cfg.challenges[k];
     (userAnswers[k]||[]).forEach((sel,i)=>{
-      if(sel===ch.questions[i].c) correctAll++; else wrongAll++;
+      if(sel===ch.questions[i].c) {
+        correctAll++;
+        baseXP += getXP(ch.questions[i].ind);
+      } else {
+        wrongAll++;
+      }
     });
   });
 
   const em=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0');
-  const chIcons={ct:'🔍',st:'🔗',sci:'🔬',inn:'💡'};
-  const chNames={ct:'Critical Thinking',st:'Systemic Thinking',sci:'Scientific Thinking',inn:'Innovative Thinking'};
 
-  const detailRows=ORDER.map(k=>{
-    const ch=cfg.challenges[k];
-    const xp=xpEarned[k]||0;
-    const maxXP=ch.questions.reduce((s,q)=>s+getXP(q.ind),0);
-    return `<div class="le-res-row">
-      <span>${chIcons[k]} ${chNames[k]}</span>
-      <span>⚡ ${xp}/${maxXP} XP</span>
-    </div>`;
-  }).join('');
-
-  // Koreksi per soal
-  const koreksi=ORDER.map(k=>{
-    const ch=cfg.challenges[k];
-    return `<div class="le-korr-section">
-      <div class="le-korr-title">${chIcons[k]} ${chNames[k]}</div>
-      ${ch.questions.map((q,i)=>{
-        const sel=userAnswers[k]?.[i];
-        const benar=sel===q.c;
-        return `<div class="le-korr-item ${benar?'k-correct':'k-wrong'}">
-          <div class="le-korr-q"><strong>S${i+1}.</strong> ${q.q}</div>
-          <div class="le-korr-ans">
-            ${benar
-              ? `<span class="k-ok">✅ Jawaban kamu: <strong>${String.fromCharCode(65+(sel||0))}. ${q.a[sel||0]}</strong></span>`
-              : `<span class="k-err">❌ Jawaban kamu: <strong>${sel!=null?String.fromCharCode(65+sel)+'. '+q.a[sel]:'—'}</strong></span>
-                 <span class="k-key">✅ Kunci: <strong>${String.fromCharCode(65+q.c)}. ${q.a[q.c]}</strong></span>`
-            }
-          </div>
-        </div>`;
-      }).join('')}
-    </div>`;
-  }).join('');
-
-  const rs=document.getElementById('result-screen');
-  rs.style.display='block';
-  rs.innerHTML=`
-    <div class="le-result-wrap">
-      <div style="font-size:4rem;margin-bottom:12px">${pct>=80?'🏆':pct>=60?'⭐':'📝'}</div>
-      <h2 class="le-res-title">Level ${cfg.levelNum} Selesai!</h2>
-
-      <div class="le-stats-grid">
-        <div class="le-stat-box"><div class="le-stat-val">⏱ ${em}</div><div class="le-stat-lbl">Waktu Tempuh</div></div>
-        <div class="le-stat-box ok"><div class="le-stat-val">✅ ${correctAll}</div><div class="le-stat-lbl">Benar</div></div>
+  const banner = document.createElement('div');
+  banner.innerHTML = `
+    <div style="background:white; border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(124,58,237,0.12); margin-bottom:24px; text-align:center; border:2px solid #E2E8F0;">
+      <div style="font-size:3.5rem;margin-bottom:12px">${pct>=80?'🏆':pct>=60?'⭐':'📝'}</div>
+      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:#0F172A;margin-bottom:20px;">Level ${cfg.levelNum} Selesai!</h2>
+      <div class="le-stats-grid" style="max-width:700px; margin:0 auto 20px;">
+        <div class="le-stat-box ok"><div class="le-stat-val">✅ ${correctAll}</div><div class="le-stat-lbl">Benar (⚡${baseXP})</div></div>
         <div class="le-stat-box err"><div class="le-stat-val">❌ ${wrongAll}</div><div class="le-stat-lbl">Salah</div></div>
-        <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${totalXP}</div><div class="le-stat-lbl">Total XP</div></div>
+        <div class="le-stat-box"><div class="le-stat-val">⏱ ${em}</div><div class="le-stat-lbl">Bonus ⚡${bonus}</div></div>
+        <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${totalXP}</div><div class="le-stat-lbl">Total XP Akhir</div></div>
       </div>
-
-      <div class="le-detail-card">
-        <div class="le-detail-title">📊 Rincian XP per Tantangan</div>
-        ${detailRows}
-        <div class="le-res-row bonus-row">
-          <span>🚀 Bonus Kecepatan (sisa ${String(Math.floor(timeRemaining/60)).padStart(2,'0')}:${String(timeRemaining%60).padStart(2,'0')})</span>
-          <span>⚡ +${bonus} XP</span>
-        </div>
-        <div class="le-res-row total-row">
-          <span>🏅 TOTAL</span>
-          <span>⚡ ${totalXP} XP</span>
-        </div>
-      </div>
-
-      <div class="le-korr-wrap">
-        <div class="le-korr-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          📋 Lihat Koreksi Jawaban ▾
-        </div>
-        <div class="le-korr-body">${koreksi}</div>
-      </div>
-
-      <a href="map.html" class="btn btn-primary" style="margin-top:28px;padding:14px 48px;font-size:1.1rem;">🗺️ Kembali ke Peta</a>
-    </div>`;
+      <p style="color:#64748B; font-size:0.95rem; margin-bottom:24px;">Silakan lihat pembahasan jawaban Anda di bawah ini.</p>
+      <a href="map.html" class="btn btn-primary" style="padding:12px 36px;font-size:1.05rem;">🗺️ Kembali ke Peta</a>
+    </div>
+  `;
+  document.querySelector('.level-header').insertAdjacentElement('afterend', banner);
+  
+  // Render review mode
+  renderAllChallenges(userAnswers);
+  ORDER.forEach(k => completedSet.add(k));
+  updateTabLocks(true);
+  switchTab('ct');
 }
 
 // ── Progress sync to Firebase ──────────────────
@@ -374,6 +350,14 @@ function syncProgress(){
 document.addEventListener('DOMContentLoaded',()=>{
   cfg=window.LEVEL_CONFIG;
   timeRemaining=cfg.timeSeconds||18*60;
+  
+  // Hitung dinamis total soal
+  TOTAL_QUESTIONS = 0;
+  ORDER.forEach(k => {
+    if(cfg.challenges[k] && cfg.challenges[k].questions) {
+      TOTAL_QUESTIONS += cfg.challenges[k].questions.length;
+    }
+  });
 
   // Hide challenge panels initially
   document.querySelectorAll('.challenge-card').forEach(c=>c.style.display='none');
@@ -406,37 +390,63 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 // ── Already Completed Screen ───────────────────
 function showAlreadyCompleted(zoneData){
-  // Tampilkan tab CT saja (disabled, read-only)
-  document.querySelectorAll('.challenge-card').forEach(c=>c.style.display='none');
-  document.querySelectorAll('.challenge-tabs').forEach(t=>t.style.display='none');
+  const headerRight = document.querySelector('.level-header-right');
+  if(headerRight) headerRight.style.display = 'none';
 
-  const rs=document.getElementById('result-screen');
-  if(!rs) return;
-  rs.style.display='block';
+  let correctAll=0, wrongAll=0, baseXP=0;
+  const ans = zoneData.answers || {};
+  ORDER.forEach(k=>{
+    const ch=cfg.challenges[k];
+    if(ans[k]){
+      ans[k].forEach((sel,i)=>{
+        if(sel===ch.questions[i].c) {
+          correctAll++;
+          baseXP += getXP(ch.questions[i].ind);
+        } else {
+          wrongAll++;
+        }
+      });
+    }
+  });
 
-  const xp=zoneData.xpEarned||0;
+  const totalXP=zoneData.xpEarned||0;
   const bonus=zoneData.speedBonus||0;
-  const done=Array.isArray(zoneData.challengesDone)?zoneData.challengesDone.length:4;
+  const score=zoneData.score||0;
+  
+  let em = "18:00";
+  if (zoneData.timeTaken !== undefined) {
+    em = String(Math.floor(zoneData.timeTaken/60)).padStart(2,'0')+':'+String(zoneData.timeTaken%60).padStart(2,'0');
+  } else {
+    // Estimasi untuk data lama
+    if(bonus >= 60) em = "< 06:00";
+    else if(bonus >= 40) em = "< 09:00";
+    else if(bonus >= 25) em = "< 12:00";
+    else if(bonus >= 10) em = "< 15:00";
+  }
+  
+  const reviewBanner = document.createElement('div');
+  reviewBanner.innerHTML = `
+    <div style="background:white; border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(124,58,237,0.12); margin-bottom:24px; text-align:center; border:2px solid #E2E8F0;">
+      <div style="font-size:3.5rem;margin-bottom:12px">${score>=80?'🏆':score>=60?'⭐':'📝'}</div>
+      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:#0F172A;margin-bottom:20px;">✅ Level ${cfg.levelNum} Sudah Selesai</h2>
+      <div class="le-stats-grid" style="max-width:700px; margin:0 auto 20px;">
+        <div class="le-stat-box ok"><div class="le-stat-val">✅ ${correctAll}</div><div class="le-stat-lbl">Benar (⚡${baseXP})</div></div>
+        <div class="le-stat-box err"><div class="le-stat-val">❌ ${wrongAll}</div><div class="le-stat-lbl">Salah</div></div>
+        <div class="le-stat-box"><div class="le-stat-val">⏱ ${em}</div><div class="le-stat-lbl">Bonus ⚡${bonus}</div></div>
+        <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${totalXP}</div><div class="le-stat-lbl">Total XP Akhir</div></div>
+      </div>
+      <p style="color:#64748B; font-size:0.95rem; margin-bottom:24px;">Kamu berada di mode Review Jawaban & Pembahasan.</p>
+      <a href="map.html" class="btn btn-primary" style="padding:12px 36px;font-size:1.05rem;">🗺️ Kembali ke Peta</a>
+    </div>
+  `;
+  document.querySelector('.level-header').insertAdjacentElement('afterend', reviewBanner);
 
-  rs.innerHTML=`
-    <div class="le-result-wrap">
-      <div style="font-size:4rem;margin-bottom:12px">🔒</div>
-      <h2 class="le-res-title">Level ${cfg.levelNum} Sudah Selesai</h2>
-      <p style="color:#64748B;margin-bottom:24px;font-size:.95rem">
-        Kamu sudah menyelesaikan level ini. XP tidak dapat ditambah lagi untuk mencegah kecurangan.
-      </p>
-      <div class="le-stats-grid">
-        <div class="le-stat-box ok"><div class="le-stat-val">✅ ${done}/4</div><div class="le-stat-lbl">Challenge Selesai</div></div>
-        <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${xp+bonus}</div><div class="le-stat-lbl">XP Didapat</div></div>
-      </div>
-      <div class="le-detail-card" style="margin-bottom:24px;">
-        <div class="le-detail-title">ℹ️ Informasi</div>
-        <p style="font-size:.87rem;color:#64748B;line-height:1.6;margin:0">
-          Untuk mengerjakan ulang level ini, minta guru untuk me-reset sesi atau daftarkan kelompok baru dengan kode akses baru.
-        </p>
-      </div>
-      <a href="map.html" class="btn btn-primary" style="padding:14px 48px;font-size:1.1rem;">🗺️ Kembali ke Peta</a>
-    </div>`;
+  // Render review mode
+  levelStarted = true;
+  ORDER.forEach(k => completedSet.add(k));
+  renderAllChallenges(ans);
+  updateTabLocks();
+  switchTab('ct');
 }
 
 

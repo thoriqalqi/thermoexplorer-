@@ -81,39 +81,297 @@
 <script src="js/game.js"></script>
 <script>
 window.LEVEL_CONFIG = {
-  levelNum: 2,
-  zone: 'zone2',
-  title: 'Hukum I Termodinamika',
-  subtitle: 'Energi, Kalor & Usaha',
-  color: '#6366F1',
-  timeSeconds: 18 * 60,
-  challenges: {
-    ct: {
-      scenario: "Sebuah eksperimen dilakukan menggunakan gas ideal di dalam silinder berpiston. Gas mengalami empat proses berbeda (A, B, C, D).<br><br><b>Tabel Data Eksperimen:</b><br><table class='data-table'><tr><th>Proses</th><th>Jenis</th><th>Q (J)</th><th>W (J)</th><th>ΔU (J)</th></tr><tr><td>A</td><td>Isobarik</td><td>+1200</td><td>+300</td><td>?</td></tr><tr><td>B</td><td>Isokhorik</td><td>+800</td><td>0</td><td>?</td></tr><tr><td>C</td><td>Isotermal</td><td>+500</td><td>?</td><td>0</td></tr><tr><td>D</td><td>Adiabatik</td><td>0</td><td>?</td><td>-450</td></tr></table>",
-      questions: [
-        { ind: "Interpretasi & Analisis", xp: 20, q: "Berdasarkan tabel, nilai ΔU pada Proses A dan W pada Proses C yang benar sesuai Hukum I Termodinamika (ΔU = Q − W) adalah…", a: ["ΔU Proses A = +1500 J dan W Proses C = +500 J", "ΔU Proses A = +900 J dan W Proses C = +500 J", "ΔU Proses A = +1500 J dan W Proses C = −500 J", "ΔU Proses A = +900 J dan W Proses C = −500 J"], c: 1 },
-        { ind: "Evaluasi", xp: 25, q: "Seorang teknisi menyatakan: 'Mesin adiabatik adalah yang paling efisien karena seluruh energi dalam sistem dapat dikonversi menjadi usaha tanpa kerugian.' Evaluasi yang paling tepat adalah…", a: ["Pernyataan benar sepenuhnya, karena data tabel menunjukkan Q = 0 pada proses D", "Pernyataan benar sebagian: proses adiabatik memang tidak melibatkan pertukaran kalor, namun efisiensinya tidak selalu maksimal karena usaha berasal dari penurunan energi dalam (ΔU = −450 J), bukan kalor eksternal", "Pernyataan salah sepenuhnya, karena pada proses adiabatik seluruh usaha berasal dari lingkungan", "Pernyataan benar sepenuhnya karena ΔU = −450 J membuktikan energi dalam berkurang sepenuhnya menjadi usaha berguna"], c: 1 }
+  "levelNum": 2,
+  "zone": "zone2",
+  "title": "Hukum I Termodinamika",
+  "subtitle": "Energi, Kalor & Usaha",
+  "color": "#6366F1",
+  "timeSeconds": 1080,
+  "challenges": {
+    "ct": {
+      "scenario": "Sebuah eksperimen dilakukan menggunakan gas ideal di dalam silinder berpiston. Gas mengalami empat proses berbeda (A, B, C, D).<br><br><b>Tabel Data Eksperimen:</b><br><table class='data-table'><tr><th>Proses</th><th>Jenis</th><th>Q (J)</th><th>W (J)</th><th>ΔU (J)</th></tr><tr><td>A</td><td>Isobarik</td><td>+1200</td><td>+300</td><td>?</td></tr><tr><td>B</td><td>Isokhorik</td><td>+800</td><td>0</td><td>?</td></tr><tr><td>C</td><td>Isotermal</td><td>+500</td><td>?</td><td>0</td></tr><tr><td>D</td><td>Adiabatik</td><td>0</td><td>?</td><td>-450</td></tr></table>",
+      "questions": [
+        {
+          "ind": "Interpretasi",
+          "xp": 15,
+          "q": "Berdasarkan grafik P-V dan tabel di atas, penafsiran yang paling tepat terhadap informasi yang disajikan adalah…",
+          "a": [
+            "Proses A berlangsung pada volume tetap karena garis grafik bergerak horizontal, sementara Proses B berlangsung pada tekanan tetap karena garis bergerak vertikal, keduanya menunjukkan tidak ada usaha yang dilakukan sistem.",
+            "Grafik P-V menunjukkan bahwa Proses A (isobarik) ditandai dengan garis horizontal yang menunjukkan tekanan tetap sambil volume bertambah, sedangkan Proses B (isokhorik) ditandai garis vertikal yang menunjukkan volume tetap sambil tekanan berubah dan hanya Proses A yang melibatkan usaha oleh sistem.",
+            "Semua proses dalam grafik menghasilkan usaha positif karena seluruh garis pada grafik P-V bergerak dari kiri ke kanan, menandakan volume selalu bertambah pada setiap proses termodinamika yang terjadi.",
+            "Tabel data menunjukkan bahwa pada Proses C nilai ΔU = 0 berarti gas tidak menerima kalor apapun dari lingkungan, karena energi dalam yang tidak berubah menandakan tidak ada interaksi termal yang terjadi.",
+            "Proses D bersifat adiabatik sehingga Q = 0 dan W = 0 secara bersamaan, artinya tidak ada perubahan apapun pada sistem dan grafik P-V untuk proses D seharusnya berupa titik, bukan garis lengkung."
+          ],
+          "c": 1,
+          "p": "Interpretasi grafik P-V yang benar mensyaratkan pemahaman bahwa garis horizontal = tekanan tetap (isobarik, ada usaha = luas area di bawah kurva), dan garis vertikal = volume tetap (isokhorik, tidak ada usaha karena W = PΔV = 0). Tabel mengkonfirmasi W = 0 pada proses B. Pilihan A keliru karena menukar definisi keduanya. Pilihan C salah karena proses B tidak menghasilkan usaha."
+        },
+        {
+          "ind": "Analisis",
+          "xp": 20,
+          "q": "Berdasarkan data tabel, nilai ΔU pada Proses A dan W pada Proses C yang benar sesuai Hukum I Termodinamika (ΔU = Q − W) adalah…",
+          "a": [
+            "ΔU Proses A = +1.500 J dan W Proses C = +500 J",
+            "ΔU Proses A = +900 J dan W Proses C = +500 J",
+            "ΔU Proses A = +1.500 J dan W Proses C = −500 J",
+            "ΔU Proses A = +900 J dan W Proses C = −500 J",
+            "ΔU Proses A = +300 J dan W Proses C = 0 J"
+          ],
+          "c": 1,
+          "p": "Proses A: ΔU = Q − W = 1.200 − 300 = +900 J. Kalor yang diterima sistem (1.200 J) digunakan sebagian untuk melakukan usaha (300 J) dan sisanya menaikkan energi dalam (900 J).\nProses C (Isotermal): Karena ΔU = 0 (suhu tetap, energi dalam tetap), maka berdasarkan ΔU = Q − W → 0 = 500 − W → W = +500 J. Seluruh kalor yang diterima digunakan sepenuhnya untuk melakukan usaha terhadap lingkungan."
+        },
+        {
+          "ind": "Evaluasi",
+          "xp": 25,
+          "q": "Seorang teknisi menyatakan: \"Pada proses adiabatik (Proses D), karena tidak ada kalor yang masuk atau keluar sistem, maka mesin yang bekerja secara adiabatik adalah mesin yang paling efisien karena seluruh energi dalam sistem dapat dikonversi menjadi usaha tanpa kerugian apapun.\"\nEvaluasi terhadap pernyataan teknisi tersebut berdasarkan data tabel dan Hukum I Termodinamika adalah…",
+          "a": [
+            "Pernyataan benar sepenuhnya, karena data tabel menunjukkan Q = 0 pada proses D membuktikan tidak ada energi yang terbuang, menjadikan proses adiabatik sebagai proses paling efisien dalam segala kondisi operasional mesin.",
+            "Pernyataan benar sebagian: proses adiabatik memang tidak melibatkan pertukaran kalor, namun efisiensinya tidak selalu maksimal karena usaha yang dihasilkan berasal dari penurunan energi dalam (ΔU = −450 J), bukan dari kalor eksternal yang artinya sistem justru kehilangan energi dalamnya.",
+            "Pernyataan salah sepenuhnya, karena pada proses adiabatik justru seluruh usaha berasal dari lingkungan yang menekan gas, sehingga ΔU bernilai positif dan sistem menerima energi, bukan melepasnya.",
+            "Pernyataan benar sepenuhnya, karena berdasarkan tabel ΔU = −450 J membuktikan energi dalam berkurang sepenuhnya menjadi usaha berguna tanpa ada satu joule pun yang hilang sebagai kalor ke lingkungan.",
+            "Pernyataan salah sepenuhnya, karena Hukum I Termodinamika melarang proses adiabatik terjadi pada mesin nyata dimana Q = 0 hanya berlaku secara teoritis dan tidak memiliki relevansi terhadap efisiensi mesin dalam praktik."
+          ],
+          "c": 1,
+          "p": "Evaluasi kritis harus memisahkan dua klaim: (1) Q = 0 pada proses adiabatik  BENAR berdasarkan tabel. (2) Paling efisien tanpa kerugian itu KELIRU, karena data menunjukkan ΔU = −450 J, artinya energi dalam sistem berkurang untuk menghasilkan usaha. Jika ΔU = −450 J dan Q = 0, maka W = Q − ΔU = 0 − (−450) = +450 J. Mesin \"menghabiskan\" energi internalnya, bukan bebas rugi energi. Pernyataan teknisi terlalu menyederhanakan konsep efisiensi"
+        },
+        {
+          "ind": "Penjelasan",
+          "xp": 20,
+          "q": "Pada Proses B (Isokhorik) dengan data Q = +800 J dan W = 0, penjelasan yang paling logis, koheren, dan didukung bukti dari tabel mengenai apa yang terjadi pada energi sistem adalah…",
+          "a": [
+            "Karena W = 0, maka gas tidak menerima kalor apapun dari lingkungan, sehingga energi dalam sistem tetap konstan sebesar nol joule dan tidak terjadi perubahan kondisi gas selama proses berlangsung.",
+            "Karena volume tetap maka piston tidak bergerak sehingga W = 0. Seluruh kalor sebesar 800 J yang diterima sistem digunakan sepenuhnya untuk menaikkan energi dalam gas (ΔU = +800 J), yang secara makroskopis ditunjukkan dengan kenaikan suhu dan tekanan gas pada volume yang sama.",
+            "Karena W = 0 dan Q = +800 J, energi dalam sistem berkurang sebesar 800 J karena kalor yang masuk justru mendorong molekul-molekul gas untuk bergerak keluar melalui dinding silinder, sehingga ΔU = −800 J.",
+            "Pada proses isokhorik, kalor yang diterima (800 J) dibagi merata antara kenaikan energi dalam (400 J) dan energi kinetik translasi molekul gas (400 J) yang terpisah dari energi dalam, sehingga ΔU = +400 J berdasarkan prinsip ekipartisi.",
+            "Karena tekanan gas berubah namun volume tetap, maka usaha yang dilakukan sistem sebenarnya ada namun tidak terukur oleh alat, sehingga nilai W = 0 dalam tabel adalah perkiraan dan nilai sebenarnya ΔU < 800 J."
+          ],
+          "c": 1,
+          "p": "Penjelasan yang baik harus menghubungkan tiga elemen secara berurutan dan koheren: (1) Bukti fisik berupa piston tidak bergerak karena volume tetap → W = P·ΔV = 0. (2) Penerapan Hukum I yaitu ΔU = Q − W = 800 − 0 = +800 J. (3) Interpretasi makroskopis  melalui kenaikan ΔU pada volume tetap berarti suhu dan tekanan gas meningkat. Rangkaian logis ini merupakan ciri eksplanasi ilmiah yang valid dan dapat diverifikasi dari data tabel."
+        },
+        {
+          "ind": "Inferensi",
+          "xp": 15,
+          "q": "Berdasarkan keseluruhan data keempat proses dalam tabel, seorang insinyur ingin memilih proses yang paling sesuai untuk mengisi ulang energi dalam gas (ΔU terbesar positif) dengan kalor input seminimal mungkin. Kesimpulan yang paling tepat berdasarkan data adalah…",
+          "a": [
+            "Proses C (Isotermal) paling tepat dipilih karena ΔU = 0 menandakan gas tidak membuang energi sama sekali, sehingga seluruh kalor input tersimpan secara efisien sebagai cadangan energi dalam gas.",
+            "Proses D (Adiabatik) paling tepat dipilih karena Q = 0 berarti tidak memerlukan kalor input sama sekali, namun ΔU = −450 J menunjukkan energi dalam gas justru terisi ulang dari lingkungan secara spontan.",
+            "Proses B (Isokhorik) paling tepat dipilih karena seluruh kalor yang diberikan (Q = +800 J) dikonversi 100% menjadi kenaikan energi dalam (ΔU = +800 J) tanpa ada yang terkonversi menjadi usaha (W = 0), menjadikannya proses paling efisien untuk tujuan pengisian energi dalam.",
+            "Proses A (Isobarik) paling tepat dipilih karena memiliki nilai Q terbesar (+1.200 J) sehingga energi yang masuk ke sistem paling banyak, dan ΔU = +900 J membuktikan bahwa proses ini menghasilkan kenaikan energi dalam tertinggi di antara semua proses.",
+            "Semua proses memiliki efisiensi pengisian energi dalam yang sama karena Hukum I Termodinamika menjamin kekekalan energi pada setiap proses, sehingga tidak ada proses yang lebih unggul dari proses lainnya dalam hal pengisian energi dalam."
+          ],
+          "c": 2,
+          "p": "Inferensi ini memerlukan perhitungan rasio efisiensi konversi kalor menjadi ΔU untuk setiap proses:\nProses A: ΔU/Q = 900/1.200 = 75%\nProses B: ΔU/Q = 800/800 = 100% ✓\nProses C: ΔU/Q = 0/500 = 0%\nProses D: tidak memerlukan Q (adiabatik), tetapi ΔU negatif (energi berkurang)\nProses B unggul karena 100% kalor input dikonversi menjadi ΔU tanpa ada yang \"bocor\" sebagai usaha mekanik. Kesimpulan ini ditarik secara logis dari perbandingan kuantitatif data tabel."
+        },
+        {
+          "ind": "Regulasi Diri",
+          "xp": 15,
+          "q": "Setelah mengerjakan soal-soal di atas, seorang peserta didik menuliskan kesimpulan akhir: \"Berdasarkan analisis grafik dan tabel, saya menyimpulkan bahwa pada Proses D (adiabatik), karena Q = 0 maka berdasarkan Hukum I Termodinamika W juga harus = 0, sehingga ΔU = 0 − 0 = 0. Ini berarti proses adiabatik tidak mengubah apapun dalam sistem.\"\nSetelah meninjau kembali seluruh data tabel dan konsep Hukum I Termodinamika, koreksi diri yang paling tepat adalah…",
+          "a": [
+            "Kesimpulan sudah benar dan tidak perlu dikoreksi, karena Q = 0 memang secara logis mengimplikasikan W = 0 pada proses adiabatik, dan persamaan ΔU = Q − W = 0 − 0 = 0 sudah sesuai dengan definisi proses adiabatik dalam Hukum I Termodinamika.",
+            "Kesimpulan perlu dikoreksi pada satu poin: Q = 0 pada proses adiabatik tidak berarti W = 0. Data tabel menunjukkan ΔU = −450 J, sehingga dengan ΔU = Q − W maka W = Q − ΔU = 0 − (−450) = +450 J. Sistem tetap melakukan usaha sebesar 450 J dengan mengorbankan energi dalamnya, bukan dari kalor eksternal.",
+            "Kesimpulan perlu dikoreksi secara total: pada proses adiabatik seharusnya Q = W = ΔU = +450 J karena kekekalan energi mengharuskan ketiga variabel bernilai sama untuk menjaga keseimbangan sistem secara termodinamika.",
+            "Kesimpulan sudah benar secara konsep namun salah dalam angka: nilai yang benar adalah ΔU = +450 J (positif) bukan nol, karena proses adiabatik selalu menghasilkan kenaikan energi dalam akibat kompresi gas yang terjadi secara spontan.",
+            "Kesimpulan perlu dikoreksi: pada proses adiabatik berlaku Q = 0 dan ΔU = 0 secara bersamaan, sehingga yang harus dikoreksi hanya nilai W yang seharusnya W = Q + ΔU = 0 + 0 = 0, bukan seperti yang tertulis dalam tabel sebesar −450 J."
+          ],
+          "c": 1,
+          "p": "Regulasi diri yang efektif mensyaratkan kemampuan mendeteksi titik kesalahan spesifik dalam rantai penalaran. Kesalahan siswa terletak pada asumsi keliru bahwa Q = 0 → W = 0, padahal Hukum I Termodinamika menyatakan ΔU = Q − W, bukan Q = W. Data tabel dengan jelas menunjukkan ΔU = −450 J ≠ 0. Koreksi tepat: W = 0 − (−450) = +450 J. Artinya gas melakukan usaha +450 J kepada lingkungan dengan \"mengorbankan\" energi dalamnya sendiri — itulah prinsip kerja proses adiabatik seperti pada ekspansi cepat gas di dalam silinder mesin diesel"
+        }
       ]
     },
-    st: {
-      scenario: "Sebuah video praktikum menunjukkan empat fenomena: (1) Balon berisi air yang dipanaskan api tidak meletus, (2) Gelas plastik berisi air yang dibakar tidak bocor, (3) Lilin yang menyala di dalam piring berisi air padam saat ditutup gelas, (4) Balon yang dipasang pada mulut botol mengembang saat botol dipanaskan.",
-      questions: [
-        { ind: "Pemahaman Hubungan Sistem", xp: 20, q: "Kesimpulan sistemik paling lengkap yang dapat disusun dari seluruh video praktikum tersebut adalah…", a: ["Kalor dari api selalu menyebabkan benda terbakar karena energi panas tidak dapat berpindah", "Perubahan sistem akibat kalor bergantung pada komponen penyusun sistem, aliran energi, pertukaran materi, dan perubahan energi dalam yang terjadi", "Semua percobaan menunjukkan bahwa kalor dapat dihentikan seluruhnya oleh air, gelas, atau botol", "Sistem yang dipanaskan selalu menjadi sistem terisolasi karena kalor tersimpan permanen"], c: 1 },
-        { ind: "Analisis & Evaluasi Sistem", xp: 25, q: "Seorang peserta didik menyatakan: 'Pada percobaan lilin yang ditutup gelas, api padam karena energi panas di dalam gelas habis.' Evaluasi ilmiah paling tepat adalah…", a: ["Pernyataan benar, karena energi panas dapat habis ketika sistem ditutup", "Pernyataan benar, karena gelas menghentikan semua bentuk energi", "Pernyataan kurang tepat, karena api padam terutama akibat berkurangnya oksigen, sedangkan energi tidak musnah tetapi berpindah dan berubah bentuk", "Pernyataan salah, karena lilin akan tetap menyala selama masih ada sumbu"], c: 2 }
+    "st": {
+      "scenario": "Sebuah video praktikum menunjukkan empat fenomena: (1) Balon berisi air yang dipanaskan api tidak meletus, (2) Gelas plastik berisi air yang dibakar tidak bocor, (3) Lilin yang menyala di dalam piring berisi air padam saat ditutup gelas, (4) Balon yang dipasang pada mulut botol mengembang saat botol dipanaskan.",
+      "questions": [
+        {
+          "ind": "Pemahaman Hubungan dalam Sistem",
+          "xp": 20,
+          "q": "Pada video balon berisi air yang dipanaskan, balon tidak langsung pecah meskipun terkena api. Jika sistem yang diamati adalah balon berisi air, analisis hubungan antarkomponen yang paling tepat adalah…",
+          "a": [
+            "Api menaikkan suhu karet balon secara cepat, tetapi air menekan api sehingga kalor hilang.",
+            "Kalor dari api berpindah ke karet balon, lalu sebagian besar diserap air sehingga kenaikan suhu karet lebih lambat.",
+            "Karet balon tidak menerima kalor karena seluruh kalor langsung dipantulkan oleh air ke lingkungan.",
+            "Air membuat sistem menjadi terisolasi sehingga tidak ada kalor yang masuk ke dalam balon.",
+            "Api hanya memanaskan udara di sekitar balon sehingga tidak terjadi perubahan energi dalam sistem."
+          ],
+          "c": 1,
+          "p": "Balon tidak langsung pecah karena kalor dari api tidak hanya tertahan pada karet balon. Kalor berpindah dari api ke karet, lalu diteruskan ke air di dalam balon. Air memiliki kemampuan menyerap kalor cukup besar, sehingga kenaikan suhu karet menjadi lebih lambat dan balon tidak cepat rusak."
+        },
+        {
+          "ind": "Analisis Sistem",
+          "xp": 20,
+          "q": "Pada video gelas plastik kosong dan gelas plastik berisi air dipanaskan dengan api. Gelas kosong lebih cepat rusak, sedangkan gelas berisi air lebih lama bertahan. Analisis paling tepat terhadap perbedaan kedua sistem tersebut adalah…",
+          "a": [
+            "Gelas kosong cepat rusak karena tidak ada zat penyerap kalor yang cukup besar, sedangkan gelas berisi air memiliki air yang menyerap sebagian kalor.",
+            "Gelas berisi air lebih tahan karena air menghentikan seluruh perpindahan kalor dari api ke plastik.",
+            "Gelas kosong cepat rusak karena termasuk sistem terbuka, sedangkan gelas berisi air termasuk sistem terisolasi.",
+            "Gelas berisi air tidak mengalami perubahan energi dalam karena suhu air selalu tetap.",
+            "Gelas kosong dan gelas berisi air menerima kalor yang sama dan menghasilkan perubahan suhu plastik yang sama."
+          ],
+          "c": 0,
+          "p": "Gelas plastik kosong cepat rusak karena kalor dari api langsung menaikkan suhu plastik sampai mendekati titik lelehnya. Pada gelas berisi air, sebagian kalor diserap oleh air sehingga energi dalam air meningkat. Akibatnya, suhu plastik naik lebih lambat dan gelas lebih lama bertahan."
+        },
+        {
+          "ind": "Sintesis Sistem",
+          "xp": 15,
+          "q": "Berdasarkan seluruh video praktikum: balon berisi air tahan api, gelas plastik berisi air tidak cepat rusak, lilin mati saat ditutup gelas, dan balon pada botol mengembang ketika botol dipanaskan. Kesimpulan sistemik paling lengkap yang dapat disusun adalah…",
+          "a": [
+            "Kalor dari api selalu menyebabkan benda terbakar karena energi panas tidak dapat berpindah ke bentuk lain.",
+            "Perubahan sistem akibat kalor bergantung pada komponen penyusun sistem, aliran energi, pertukaran materi, dan perubahan energi dalam yang terjadi.",
+            "Semua percobaan menunjukkan bahwa kalor dapat dihentikan seluruhnya oleh air, gelas, atau botol.",
+            "Sistem yang dipanaskan selalu menjadi sistem terisolasi karena kalor masuk dan tersimpan permanen.",
+            "Perubahan volume gas tidak berhubungan dengan kalor, tetapi hanya ditentukan oleh bentuk wadah."
+          ],
+          "c": 1,
+          "p": "Keempat percobaan menunjukkan bahwa akibat pemberian kalor tidak selalu sama. Balon berisi air dan gelas berisi air bertahan karena air menyerap kalor. Lilin padam karena pertukaran materi berupa oksigen terbatas. Balon pada botol mengembang karena gas di dalam botol menerima kalor sehingga volumenya berubah. Jadi, perubahan sistem dipengaruhi oleh komponen penyusun, aliran energi, pertukaran materi, dan perubahan energi dalam"
+        },
+        {
+          "ind": "Evaluasi Sistem",
+          "xp": 25,
+          "q": "Seorang peserta didik menyatakan:\n“Pada percobaan lilin yang ditutup gelas, api padam karena energi panas di dalam gelas habis.”\nEvaluasi ilmiah paling tepat terhadap pernyataan tersebut adalah…",
+          "a": [
+            "Pernyataan benar, karena energi panas dapat habis ketika sistem ditutup.",
+            "Pernyataan benar, karena gelas menghentikan semua bentuk energi di dalam sistem.",
+            "Pernyataan kurang tepat, karena api padam terutama akibat berkurangnya oksigen, sedangkan energi tidak musnah tetapi berpindah dan berubah bentuk.",
+            "Pernyataan salah, karena lilin akan tetap menyala selama masih ada sumbu.",
+            "Pernyataan benar sebagian, karena kalor hilang seluruhnya ke lingkungan sehingga pembakaran berhenti."
+          ],
+          "c": 2,
+          "p": "Pernyataan bahwa “energi panas habis” kurang tepat karena energi tidak dapat dimusnahkan. Lilin padam terutama karena oksigen di dalam gelas semakin berkurang sehingga proses pembakaran berhenti. Kalor yang sudah dihasilkan tetap berpindah ke udara, gelas, dan lingkungan."
+        }
       ]
     },
-    sci: {
-      scenario: "Tim peneliti muda melakukan percobaan untuk menyelidiki hubungan Q, W, dan ΔU pada empat proses termodinamika.<br><br><b>Data Hasil Percobaan:</b><br><table class='data-table'><tr><th>Proses</th><th>Jenis</th><th>Q (J)</th><th>W (J)</th><th>ΔU (J)</th></tr><tr><td>1</td><td>Isobarik</td><td>+800</td><td>+320</td><td>?</td></tr><tr><td>2</td><td>Isokhorik</td><td>+500</td><td>0</td><td>?</td></tr><tr><td>3</td><td>Isotermal</td><td>+450</td><td>+450</td><td>0</td></tr><tr><td>4</td><td>Adiabatik</td><td>0</td><td>?</td><td>-380</td></tr></table>",
-      questions: [
-        { ind: "Inquiry & Hypothesis", xp: 20, q: "Rumusan masalah, hipotesis, dan rencana penyelidikan lanjutan yang paling tepat untuk menyelidiki anomali pada Percobaan 3 (Isotermal, ΔU = 0) adalah…", a: ["Rumusan masalah: Mengapa nilai ΔU pada semua proses selalu lebih kecil dari nilai Q?", "Rumusan masalah: Apakah pada proses isotermal, seluruh kalor yang diterima sistem dikonversi menjadi usaha tanpa perubahan energi dalam? Hipotesis: Pada proses isotermal, karena suhu konstan maka energi dalam tidak berubah (ΔU = 0). Rencana: Mengulangi proses isotermal dengan nilai Q bervariasi", "Rumusan masalah: Mengapa proses adiabatik menghasilkan kurva P-V yang lebih curam?", "Rumusan masalah: Apakah nilai usaha W pada proses isobarik selalu lebih besar?"], c: 1 },
-        { ind: "Analysis & Argumentation", xp: 25, q: "Analisis paling tepat berdasarkan Hukum I Termodinamika (ΔU = Q − W) untuk data tabel tersebut adalah…", a: ["Semua nilai ΔU bernilai 0 karena energi bersifat kekal", "Percobaan 1: ΔU = +480 J; Percobaan 2: ΔU = +500 J; Percobaan 3: ΔU = 0 J; Percobaan 4: W = +380 J. Pola: semakin besar usaha (W), semakin kecil pertambahan energi dalam (ΔU) untuk Q yang sama", "Percobaan 1: ΔU = +1120 J; Percobaan 2: ΔU = +500 J; Percobaan 3: ΔU = +900 J", "ΔU sistem selalu berkurang karena kalor dikonversi menjadi usaha yang merugikan"], c: 1 }
+    "sci": {
+      "scenario": "Tim peneliti muda melakukan percobaan untuk menyelidiki hubungan Q, W, dan ΔU pada empat proses termodinamika.<br><br><b>Data Hasil Percobaan:</b><br><table class='data-table'><tr><th>Proses</th><th>Jenis</th><th>Q (J)</th><th>W (J)</th><th>ΔU (J)</th></tr><tr><td>1</td><td>Isobarik</td><td>+800</td><td>+320</td><td>?</td></tr><tr><td>2</td><td>Isokhorik</td><td>+500</td><td>0</td><td>?</td></tr><tr><td>3</td><td>Isotermal</td><td>+450</td><td>+450</td><td>0</td></tr><tr><td>4</td><td>Adiabatik</td><td>0</td><td>?</td><td>-380</td></tr></table>",
+      "questions": [
+        {
+          "ind": "Inkuiri",
+          "xp": 15,
+          "q": "Setelah mencermati Tabel 1 dan Grafik 1, seorang anggota tim menemukan bahwa nilai ΔU pada Percobaan 3 (Isotermal) = 0 J, padahal gas menerima kalor sebesar +450 J. Ia merasa bingung dan ingin menyelidiki lebih lanjut. Rumusan masalah, hipotesis, dan rencana penyelidikan lanjutan yang paling tepat secara ilmiah adalah…",
+          "a": [
+            "Rumusan masalah: Mengapa nilai ΔU pada semua proses selalu lebih kecil dari nilai Q? Hipotesis: ΔU selalu lebih kecil dari Q karena sebagian energi selalu hilang akibat gesekan piston dengan dinding silinder pada semua jenis proses termodinamika. Rencana penyelidikan: Mengganti piston dengan bahan yang lebih licin dan mengulang keempat percobaan untuk melihat apakah ΔU mendekati nilai Q.",
+            "Rumusan masalah: Apakah pada proses isotermal, seluruh kalor yang diterima sistem dikonversi menjadi usaha tanpa meninggalkan perubahan energi dalam, dan apakah kondisi ini berlaku konsisten pada berbagai nilai Q yang berbeda? Hipotesis: Pada proses isotermal, karena suhu sistem konstan maka energi dalam tidak berubah (ΔU = 0), sehingga seluruh kalor yang masuk ke sistem akan sepenuhnya digunakan untuk melakukan usaha (W = Q), dan hubungan ini akan tetap konsisten pada berbagai nilai Q. Rencana penyelidikan: Mengulangi proses isotermal dengan nilai Q yang bervariasi (misalnya 200 J, 400 J, 600 J, 800 J) lalu mengukur W yang dihasilkan dan memverifikasi apakah W = Q pada setiap percobaan.",
+            "Rumusan masalah: Mengapa proses adiabatik menghasilkan kurva P-V yang lebih curam dibandingkan proses isotermal pada grafik? Hipotesis: Kurva adiabatik lebih curam karena pada proses adiabatik tidak ada kalor yang masuk, sehingga gas harus menggunakan energi dalamnya sendiri untuk melakukan usaha, mengakibatkan penurunan suhu dan tekanan yang lebih drastis. Rencana penyelidikan: Mengukur sudut kemiringan kurva P-V untuk proses adiabatik dan isotermal menggunakan perangkat lunak analisis grafik, lalu membandingkan hasilnya dengan nilai konstanta adiabatik (γ) secara teoretis.",
+            "Rumusan masalah: Apakah nilai usaha W yang dilakukan sistem pada proses isobarik selalu lebih besar dibandingkan proses isokhorik pada nilai Q yang sama? Hipotesis: Usaha W pada proses isobarik lebih besar karena piston bebas bergerak, sedangkan pada proses isokhorik W = 0 karena piston terkunci. Rencana penyelidikan: Memberikan Q yang sama pada proses isobarik dan isokhorik, kemudian mengukur perpindahan piston sebagai indikator usaha yang dilakukan sistem.",
+            "Rumusan masalah: Apakah warna dinding silinder memengaruhi besarnya kalor yang diserap sistem pada proses isobarik? Hipotesis: Silinder berwarna gelap akan menyerap lebih banyak kalor radiasi dari lingkungan sehingga nilai Q menjadi lebih besar dan ΔU juga meningkat. Rencana penyelidikan: Mengecat silinder dengan berbagai warna dan mengukur Q serta ΔU pada setiap kondisi."
+          ],
+          "c": 1,
+          "p": "Inkuiri yang berkualitas tinggi harus berangkat dari anomali data yang spesifik, dalam hal ini ΔU = 0 pada proses isotermal meski Q ≠ 0. Pilihan B secara tepat: (1) merumuskan masalah yang langsung menyasar anomali tersebut; (2) menyusun hipotesis yang dilandasi prinsip fisika (pada isotermal T konstan → energi dalam konstan → ΔU = 0 → Q = W berdasarkan Hukum I Termodinamika: ΔU = Q − W); dan (3) merancang penyelidikan yang terkontrol dan dapat diverifikasi dengan variasi nilai Q. Pilihan C meskipun ilmiah, tidak menjawab anomali data yang ditemukan. Pilihan A keliru karena mengasumsikan gesekan sebagai penyebab tanpa dasar data."
+        },
+        {
+          "ind": "Analisis",
+          "xp": 20,
+          "q": "Perhatikan kembali Tabel 1. Tim peneliti perlu melengkapi nilai yang hilang (?) pada kolom ΔU dan W, lalu menganalisis pola hubungan antarvariabel berdasarkan Hukum I Termodinamika (ΔU = Q − W). Analisis yang paling tepat dan komprehensif adalah…",
+          "a": [
+            "Semua nilai ΔU yang hilang bernilai 0 karena pada setiap proses termodinamika energi bersifat kekal, sehingga energi dalam sistem tidak pernah berubah. Nilai W pada Percobaan 4 adalah −380 J karena gas melakukan usaha positif saat dimampatkan.",
+            "Percobaan 1: ΔU = Q − W = 800 − 320 = +480 J ; Percobaan 2: ΔU = Q − W = 500 − 0 = +500 J; Percobaan 3: ΔU = Q − W = 450 − 450 = 0 J; dan Percobaan 4: W = Q − ΔU = 0 − (−380) = +380 J \nPola yang teridentifikasi: semakin besar usaha yang dilakukan sistem (W), semakin kecil pertambahan energi dalam (ΔU) untuk nilai Q yang sama, dan pada proses adiabatik penurunan ΔU sepenuhnya disebabkan oleh usaha yang dilakukan pada gas",
+            "Percobaan 1: ΔU = Q + W = 800 + 320 = +1120 J; Percobaan 2: ΔU = Q + W = 500 + 0 = +500 J; Percobaan 3: ΔU = Q + W = 450 + 450 = +900 J; dan Percobaan 4: W = ΔU − Q = −380 − 0 = −380 J\nPola yang teridentifikasi: energi dalam selalu bertambah sebesar penjumlahan kalor dan usaha, sesuai dengan prinsip bahwa energi tidak dapat musnah melainkan hanya berpindah bentuk.",
+            "Percobaan 1: ΔU = W − Q = 320 − 800 = −480 J; Percobaan 2: ΔU = 0 − 500 = −500 J; Percobaan 3: ΔU = 450 − 450 = 0 J; dan Percobaan 4: W = ΔU + Q = −380 + 0 = −380 J\nPola yang teridentifikasi: energi dalam sistem selalu berkurang karena sebagian besar kalor dikonversi menjadi usaha yang merugikan sistem, sesuai dengan Hukum II Termodinamika.",
+            "Nilai ΔU tidak dapat dihitung dari data tabel karena Hukum I Termodinamika hanya berlaku untuk sistem tertutup, sementara percobaan ini menggunakan silinder berpiston yang merupakan sistem terbuka sehingga perhitungan harus menggunakan persamaan yang berbeda."
+          ],
+          "c": 1,
+          "p": "Analisis data yang tepat menggunakan Hukum I Termodinamika: ΔU = Q − W (dengan konvensi: Q positif jika sistem menerima kalor, W positif jika sistem melakukan usaha pada lingkungan). Pilihan B menghasilkan: Percobaan 1 → ΔU = +480 J; Percobaan 2 → ΔU = +500 J (proses isokhorik, semua kalor menjadi energi dalam karena W=0); Percobaan 3 → ΔU = 0 J (konsisten dengan isotermal pada gas ideal); Percobaan 4 → W = 0−(−380) = +380 J artinya lingkungan melakukan usaha pada gas sebesar 380 J sehingga energi dalam gas meningkat — namun karena soal mencantumkan ΔU = −380 J, ini berarti gas dimampatkan sehingga usaha dilakukan pada sistem. Pilihan C salah karena menjumlahkan Q dan W alih-alih mengurangkan. Pilihan D membalik tanda secara tidak tepat."
+        },
+        {
+          "ind": "Inferensi",
+          "xp": 15,
+          "q": "Perhatikan Grafik 1 (diagram P-V) dan Gambar 1 (silinder adiabatik). Berdasarkan pola kurva keempat proses dan data pada Tabel 1, inferensi yang paling tepat dan menyeluruh tentang hubungan antara bentuk kurva P-V, jenis proses, dan implikasinya terhadap usaha sistem adalah…",
+          "a": [
+            "Luas area di bawah kurva P-V pada semua proses adalah sama karena total energi yang terlibat dalam sistem termodinamika selalu konstan sesuai dengan hukum kekekalan energi, sehingga bentuk kurva yang berbeda hanyalah representasi visual yang tidak memiliki makna fisika yang berbeda.",
+            "Kurva adiabatik yang lebih curam dibandingkan isotermal pada Grafik 1 tidak memiliki hubungan dengan data pada Tabel 1, karena grafik P-V hanya menggambarkan perubahan tekanan dan volume secara geometris tanpa berkaitan dengan besaran termodinamika seperti Q, W, dan ΔU.",
+            "Berdasarkan Grafik 1 dan Tabel 1, dapat disimpulkan bahwa luas area di bawah kurva P-V merepresentasikan usaha (W) yang dilakukan sistem: proses isobarik menghasilkan luas persegi panjang (W = PΔV = konstan), proses isokhorik menghasilkan luas = 0 (garis vertikal, W = 0 sesuai data), proses isotermal menghasilkan luas area kurva hiperbola (W = +450 J), dan proses adiabatik menghasilkan luas area kurva yang lebih curam. Implikasinya: semakin besar luas area kurva P-V, semakin besar usaha yang dilakukan sistem, yang langsung memengaruhi besarnya ΔU sesuai Hukum I Termodinamika.",
+            "Dari Grafik 1 dapat disimpulkan bahwa proses isotermal selalu menghasilkan usaha yang lebih besar dibandingkan proses adiabatik untuk perubahan volume yang sama, karena kurva isotermal berada di atas kurva adiabatik pada semua titik diagram P-V, sehingga luas area isotermal selalu lebih besar dari adiabatik dalam kondisi apapun.",
+            "Gambar 1 menunjukkan bahwa pada proses adiabatik, gas mengalami pemanasan karena dimampatkan, sehingga suhu gas naik dan tekanan meningkat. Inferensi ini bertentangan dengan data Tabel 1 yang menunjukkan ΔU = −380 J, sehingga dapat disimpulkan terdapat kesalahan dalam desain percobaan yang perlu diperbaiki sebelum data dapat diinterpretasikan lebih lanjut."
+          ],
+          "c": 2,
+          "p": "Inferensi dari grafik P-V harus menghubungkan representasi visual dengan makna fisika yang konkret. Konsep kunci: luas area di bawah kurva P-V = usaha (W) yang dilakukan sistem. Inferensi ini mengintegrasikan tiga sumber informasi secara bersamaan: (1) bentuk geometri kurva di Grafik 1; (2) nilai W pada Tabel 1; dan (3) prinsip Hukum I Termodinamika. Proses isokhorik → garis vertikal → luas = 0 → W = 0 ✓ (sesuai Tabel 1). Proses isobarik → persegi panjang → W = PΔV = 320 J ✓. Proses isotermal → kurva hiperbola → W = 450 J ✓. Pilihan D keliru karena kurva adiabatik lebih curam justru berada di bawah isotermal untuk ekspansi yang sama, menghasilkan luas lebih kecil. Pilihan E keliru karena ΔU = −380 J pada pemampatan memang berarti energi dalam berkurang (gas melepas energi dalam bentuk usaha pada lingkungan), bukan kesalahan percobaan."
+        },
+        {
+          "ind": "Argumentasi",
+          "xp": 15,
+          "q": "Tim peneliti diminta mempresentasikan temuan mereka dan menghubungkannya dengan aplikasi Hukum I Termodinamika dalam kehidupan sehari-hari. Mereka harus membangun argumen ilmiah yang mengaitkan data percobaan, teori, dan fenomena nyata. Perhatikan dua aplikasi berikut:\nAplikasi A - Pompa Sepeda: Saat memompa ban sepeda dengan cepat, tabung pompa terasa panas meskipun tidak ada api.\nAplikasi B - Kulkas/Lemari Es: Refrigeran di dalam kulkas menyerap kalor dari makanan (mendinginkan isi kulkas) dengan cara mengalami proses ekspansi.\nArgumen ilmiah yang paling kuat, akurat, dan komprehensif dalam menghubungkan data percobaan Tabel 1, Grafik 1, Hukum I Termodinamika, serta kedua aplikasi di atas adalah…",
+          "a": [
+            "\"Data percobaan kami membuktikan bahwa pada setiap proses termodinamika, energi selalu hilang ke lingkungan dalam bentuk panas. Pompa sepeda menjadi panas karena gesekan mekanis antara piston dan dinding tabung, bukan karena proses termodinamika. Kulkas bekerja dengan cara yang sama dimana energi listrik diubah menjadi dingin melalui gesekan refrigeran di dalam pipa. Kedua aplikasi ini membuktikan bahwa Hukum I Termodinamika hanya berlaku untuk sistem laboratorium yang terkontrol, bukan untuk alat sehari-hari yang melibatkan gesekan.\"",
+            "\"Berdasarkan data Percobaan 4 (adiabatik, Q = 0, ΔU = −380 J, W = +380 J), kami menemukan bahwa saat gas dimampatkan tanpa pertukaran kalor, energi dalam sistem berkurang. Ini menjelaskan pompa sepeda: saat udara dimampatkan secara cepat (mendekati adiabatik karena prosesnya terlalu cepat untuk kalor berpindah), usaha yang dilakukan pada gas meningkatkan energi dalam udara, sehingga suhu udara dan tabung naik — sesuai dengan ΔU = Q − W, di mana Q ≈ 0 dan W negatif (usaha dilakukan PADA sistem) sehingga ΔU positif. Sementara pada kulkas, refrigeran mengalami proses ekspansi mendekati adiabatik, sehingga W positif (sistem melakukan usaha), ΔU berkurang, dan suhu refrigeran turun drastis sehingga mampu menyerap kalor dari isi kulkas. Kedua aplikasi ini secara konsisten mengkonfirmasi Hukum I Termodinamika: ΔU = Q − W, dan menunjukkan bahwa proses adiabatik memiliki peran krusial dalam teknologi sehari-hari.\"",
+            "\"Data percobaan kami menunjukkan bahwa proses isobarik (Percobaan 1) menghasilkan ΔU paling besar (+480 J) dibandingkan proses lainnya. Oleh karena itu, semua mesin termal seperti pompa sepeda dan kulkas pasti menggunakan proses isobarik sebagai prinsip kerjanya, karena isobarik paling efisien dalam menyimpan energi di dalam sistem. Argumen ini diperkuat oleh data bahwa pada isobarik, sistem menerima kalor paling besar (800 J) dibandingkan proses lain dalam percobaan ini.\"",
+            "\"Hukum I Termodinamika yang kami verifikasi melalui keempat percobaan hanya berlaku untuk gas ideal dalam kondisi laboratorium. Pompa sepeda dan kulkas menggunakan gas nyata yang perilakunya menyimpang dari gas ideal, sehingga Hukum I Termodinamika tidak dapat diaplikasikan secara langsung untuk menjelaskan kedua alat tersebut. Diperlukan persamaan van der Waals yang lebih kompleks untuk menjelaskan fenomena pemanasan pompa dan pendinginan kulkas secara akurat.\"",
+            "\"Data Percobaan 2 (isokhorik, W = 0, ΔU = +500 J) menunjukkan bahwa ketika tidak ada usaha yang dilakukan, seluruh kalor tersimpan sebagai energi dalam. Pompa sepeda bekerja berdasarkan prinsip ini: volume udara dijaga konstan di dalam ban, sehingga semua energi pemompaan tersimpan sebagai tekanan. Kulkas juga bekerja secara isokhorik karena volume refrigeran di dalam pipa tidak berubah. Kedua aplikasi ini membuktikan bahwa isokhorik adalah proses paling dominan dalam teknologi modern.\""
+          ],
+          "c": 1,
+          "p": "Argumentasi ilmiah tingkat lanjut harus memenuhi empat kriteria: (1) akurasi konsep dalam penggunaan Hukum I Termodinamika; (2) konsistensi dengan data percobaan yang spesifik; (3) koneksi yang tepat dengan aplikasi nyata disertai penjelasan mekanisme; dan (4) generalisasi yang valid tanpa overgeneralisasi. Pilihan B memenuhi semua kriteria: menggunakan data Percobaan 4 secara spesifik, menjelaskan mekanisme pompa sepeda (kompresi adiabatik cepat → W dilakukan PADA sistem → ΔU meningkat → T naik) dan kulkas (ekspansi adiabatik → W dilakukan OLEH sistem → ΔU menurun → T turun → menyerap kalor dari lingkungan sekitar) dengan tepat, serta mengkaitkan keduanya pada Hukum I Termodinamika secara konsisten. Pilihan A keliru karena mengatribusikan pemanasan pompa hanya pada gesekan mekanis. Pilihan C salah dalam generalisasi bahwa semua mesin menggunakan proses isobarik. Pilihan D terlalu membatasi berlakunya Hukum I hanya untuk gas ideal, padahal asas kekekalan energi berlaku universal."
+        }
       ]
     },
-    inn: {
-      scenario: "Anak Pak Budi mengamati pemborosan kalor saat ibunya memasak. Ia ingin mengusulkan solusi inovatif berbasis konsep Hukum I Termodinamika untuk meningkatkan efisiensi energi.",
-      questions: [
-        { ind: "Flexibility & Fluency", xp: 20, q: "Kelompok ide yang paling beragam, relevan secara termodinamika, dan mencakup berbagai pendekatan solusi untuk mengurangi pemborosan kalor adalah…", a: ["Membeli kompor baru, mengganti tabung LPG, dan memasak siang hari", "Menggunakan tutup panci (sistem tertutup), panci presto (isobarik P tinggi), termos masak (sistem terisolasi), serta memperkecil api setelah mendidih", "Selalu menggunakan panci presto saja untuk semua jenis masakan", "Memasak semua bahan sekaligus dalam satu panci besar"], c: 1 },
-        { ind: "Creative Thinking", xp: 30, q: "Gagasan kreatif dan hipotesis yang paling orisinal untuk mengurangi pemborosan kalor adalah…", a: ["Desain 'sistem memasak bertingkat': tahap pertama panci bertutup hingga mendidih (isobarik terkontrol), tahap kedua memindahkan ke kotak insulasi mandiri (adiabatik tanpa api). Hipotesis: total kalor yang hilang lebih kecil karena tahap kedua mendekati proses adiabatik (Q≈0), diuji dengan mengukur konsumsi LPG", "Membeli rice cooker listrik", "Memasak pada malam hari", "Menggunakan api yang lebih besar untuk memasak lebih cepat"], c: 0 }
+    "inn": {
+      "scenario": "Anak Pak Budi mengamati pemborosan kalor saat ibunya memasak. Ia ingin mengusulkan solusi inovatif berbasis konsep Hukum I Termodinamika untuk meningkatkan efisiensi energi.",
+      "questions": [
+        {
+          "ind": "Fleksibilitas",
+          "xp": 20,
+          "q": "Berdasarkan video pemanas air listrik yang menunjukkan pemborosan energi, sumber utama pemborosan energi yang dapat diidentifikasi adalah…",
+          "a": [
+            "Alat pemanas air tidak cukup besar untuk jumlah air yang dipanaskan.",
+            "Dinding alat pemanas air tidak terisolasi dengan baik, menyebabkan energi panas hilang ke lingkungan.",
+            "Pemanas air bekerja lebih lama karena suhu air terlalu rendah.",
+            "Pemanas air menggunakan bahan yang tidak efisien dalam mengalirkan listrik.",
+            "Pemanas air menggunakan energi terlalu banyak karena aliran listrik yang tidak stabil."
+          ],
+          "c": 1,
+          "p": "Dalam proses adiabatik, energi yang ditambahkan ke sistem seharusnya digunakan untuk meningkatkan suhu air, tetapi jika sistem tidak terisolasi dengan baik, sebagian besar energi akan hilang ke lingkungan sebagai panas. Oleh karena itu, pemanas air yang tidak terisolasi dengan baik akan mengurangi efisiensi dan menyebabkan pemborosan energi"
+        },
+        {
+          "ind": "Kelancaran",
+          "xp": 15,
+          "q": "Beberapa solusi untuk mengurangi pemborosan energi pada pemanas air listrik adalah…",
+          "a": [
+            "Menggunakan pemanas air yang lebih besar dengan suhu lebih tinggi.",
+            "Menambah lebih banyak energi untuk mempercepat proses pemanasan.",
+            "Menambahkan isolasi pada dinding pemanas untuk mencegah kehilangan panas.",
+            "Menggunakan pemanas dengan daya lebih tinggi agar pemanasan lebih cepat.",
+            "Mengganti pemanas air dengan pemanas gas."
+          ],
+          "c": 2,
+          "p": "Solusi menambahkan isolasi pada dinding pemanas mengurangi kehilangan energi panas ke lingkungan, sehingga lebih banyak energi digunakan untuk memanaskan air daripada terbuang. Hal ini sesuai dengan Hukum I Termodinamika: energi yang disuplai ke sistem (pemanas) harus digunakan untuk menaikkan energi dalam (suhu air), dan isolasi memaksimalkan penggunaan energi tersebut."
+        },
+        {
+          "ind": "Berpikir Kreatif",
+          "xp": 30,
+          "q": "Solusi kreatif yang dapat diterapkan untuk meningkatkan efisiensi energi pada alat pemanas air listrik adalah…",
+          "a": [
+            "Menggunakan pemanas air dengan sistem pemanasan ganda yang lebih cepat.",
+            "Membuat pemanas air berbentuk tabung dan menggunakan bahan isolasi untuk mengurangi panas yang hilang.",
+            "Menggunakan panel surya untuk menggantikan energi listrik yang digunakan.",
+            "Mengganti pemanas dengan alat masak lain yang lebih efisien.",
+            "Menambah daya pemanas untuk menghasilkan panas lebih cepat."
+          ],
+          "c": 2,
+          "p": "Menggunakan panel surya untuk menggantikan sebagian atau seluruh energi listrik yang digunakan oleh pemanas air adalah solusi yang lebih efisien karena panel surya memanfaatkan energi matahari sebagai sumber panas. Proses ini mengurangi ketergantungan pada energi listrik dan mengoptimalkan penggunaan energi terbarukan yang tidak mengandalkan proses pembakaran atau pemborosan energi yang terkait dengan sumber energi konvensional"
+        },
+        {
+          "ind": "Mengidentifikasi Permasalahan",
+          "xp": 20,
+          "q": "Permasalahan yang paling tepat yang menyebabkan rendahnya efisiensi pemanas air listrik adalah…",
+          "a": [
+            "Tidak adanya energi yang digunakan oleh sistem.",
+            "Penggunaan energi listrik yang tinggi tanpa mempertimbangkan efisiensi pemanas.",
+            "Ketidakmampuan sistem untuk menyerap energi dengan baik.",
+            "Kurangnya suhu panas untuk memanaskan air dalam waktu singkat.",
+            "Mesin pemanas air bekerja secara otomatis tanpa pengaturan suhu."
+          ],
+          "c": 1,
+          "p": "Hukum I Termodinamika menyatakan bahwa energi yang disuplai ke sistem harus digunakan untuk melakukan usaha atau meningkatkan energi dalam. Jika energi listrik terlalu banyak digunakan untuk pemanasan, tanpa mengoptimalkan efisiensi dengan cara yang benar, maka sebagian besar energi akan terbuang, dan ini mengarah pada pemborosan energi."
+        },
+        {
+          "ind": "Merumuskan Hipotesis",
+          "xp": 20,
+          "q": "Hipotesis yang paling tepat untuk menguji apakah pemanas air dengan isolasi dapat meningkatkan efisiensi adalah…",
+          "a": [
+            "Jika pemanas air menggunakan lebih banyak energi, maka suhu air akan lebih tinggi",
+            "Jika isolasi ditambahkan pada pemanas air, maka lebih sedikit energi yang akan terbuang ke lingkungan.",
+            "Jika daya pemanas ditingkatkan, maka efisiensi energi akan berkurang.",
+            "Jika pemanas air menggunakan panel surya, maka suhu air akan lebih rendah.",
+            "Jika pemanas air tidak menggunakan isolasi, maka air tidak akan panas."
+          ],
+          "c": 1,
+          "p": "Hipotesis B menguji bahwa dengan menambahkan isolasi, panas yang dihasilkan oleh pemanas air akan lebih banyak digunakan untuk menaikkan suhu air daripada terbuang ke lingkungan. Sesuai dengan Hukum I Termodinamika, energi yang disuplai ke sistem (pemanas) seharusnya digunakan untuk meningkatkan energi dalam (suhu air), dan isolasi membantu mencegah energi tersebut hilang"
+        }
       ]
     }
   }
