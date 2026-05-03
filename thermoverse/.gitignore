@@ -1,0 +1,22 @@
+# ThermoExplorer — Dependency & Build files
+node_modules/
+.env
+.env.local
+.env.production
+.env*.local
+
+# Python scripts (not needed in deployment)
+*.py
+__pycache__/
+*.pyc
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Vercel
+.vercel/

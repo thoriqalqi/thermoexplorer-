@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel Guru — ThermoExplore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--red:#ff3c00;--orange:#ff7c00;--bg:#08080f;--card:#141420;--card2:#1c1c2c;--border:rgba(255,100,0,.18);--text:#e8f4fd;--muted:#5a6a7f;--green:#22c55e}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,100,0,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,100,0,.035) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+    /* Login gate */
+    #login-gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999}
+    .login-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px 40px;width:100%;max-width:400px;text-align:center}
+    .login-icon{font-size:3rem;margin-bottom:16px;filter:drop-shadow(0 0 16px rgba(255,100,0,.7))}
+    .login-card h2{font-size:1.6rem;font-weight:800;margin-bottom:8px}
+    .login-card p{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+    /* Shared input/btn */
+    input,textarea{width:100%;background:rgba(255,255,255,.05);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:'Outfit',sans-serif;font-size:.95rem;padding:12px 14px;outline:none;transition:border-color .25s,box-shadow .25s}
+    input:focus,textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,124,0,.15)}
+    input::placeholder{color:var(--muted)}
+    .btn{padding:12px 20px;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s,opacity .2s}
+    .btn-primary{background:linear-gradient(135deg,#ff3c00,#ff7c00);color:#fff;box-shadow:0 4px 18px rgba(255,60,0,.35)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,60,0,.5)}
+    .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+    .btn-outline:hover{border-color:var(--orange);color:var(--orange)}
+    .btn-danger{background:rgba(255,50,50,.15);border:1px solid rgba(255,50,50,.35);color:#ff8080}
+    .btn-danger:hover{background:rgba(255,50,50,.25)}
+    .btn-sm{padding:7px 14px;font-size:.82rem}
+    .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .msg{padding:10px 14px;border-radius:10px;font-size:.85rem;margin-top:12px;display:none}
+    .msg.err{background:rgba(255,50,50,.15);border:1px solid rgba(255,50,50,.4);color:#ff8080;display:block}
+    .msg.ok{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;display:block}
+    /* Main layout */
+    #app{display:none;position:relative;z-index:10}
+    .topbar{background:rgba(10,10,18,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .topbar-logo{font-size:1.1rem;font-weight:800;background:linear-gradient(135deg,#ff3c00,#ff7c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .content{max-width:1000px;margin:0 auto;padding:32px 20px}
+    /* Section */
+    .section-title{font-size:1.1rem;font-weight:700;color:var(--orange);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    /* Create session panel */
+    .create-panel{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:28px}
+    .create-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end}
+    @media(max-width:600px){.create-grid{grid-template-columns:1fr}}
+    label{display:block;font-size:.8rem;font-weight:600;color:var(--orange);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+    /* Active session panel */
+    .session-panel{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:28px}
+    .session-code-display{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+    .code-big{font-size:2.5rem;font-weight:900;letter-spacing:6px;background:linear-gradient(135deg,#ff3c00,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+    .session-actions{display:flex;gap:10px;flex-wrap:wrap}
+    /* Groups grid */
+    .groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+    .group-card{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:18px;transition:transform .2s}
+    .group-card:hover{transform:translateY(-2px)}
+    .group-rank{font-size:1.2rem;margin-bottom:4px}
+    .group-name{font-size:1rem;font-weight:700;margin-bottom:10px}
+    .group-stat{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-bottom:6px}
+    .group-stat strong{color:var(--text)}
+    .group-bar-wrap{background:rgba(255,255,255,.06);border-radius:999px;height:5px;overflow:hidden;margin-bottom:10px}
+    .group-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#ff3c00,#ff7c00);transition:width .8s ease}
+    .zone-dots{display:flex;gap:6px}
+    .zdot{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+    .zdot-done{background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);color:#86efac}
+    .zdot-pending{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted)}
+    .badge-done{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.35);font-size:.7rem;padding:2px 8px;border-radius:999px}
+    .badge-going{background:rgba(255,124,0,.1);color:#ffb366;border:1px solid rgba(255,124,0,.3);font-size:.7rem;padding:2px 8px;border-radius:999px;animation:pulse 1.5s ease infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    /* empty */
+    .empty-groups{text-align:center;padding:40px;color:var(--muted);font-size:.9rem}
+    /* spinner */
+    .spinner{display:inline-block;width:16px;height:16px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    /* firebase warning */
+    .firebase-warn{background:rgba(255,200,0,.1);border:1px solid rgba(255,200,0,.3);border-radius:14px;padding:20px 24px;margin-bottom:24px;color:#ffd666}
+    .firebase-warn h3{margin-bottom:8px;font-size:1rem}
+    .firebase-warn p{font-size:.85rem;line-height:1.6;color:rgba(255,214,102,.8)}
+    .firebase-warn code{background:rgba(255,255,255,.1);border-radius:4px;padding:1px 5px;font-size:.82rem}
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <!-- LOGIN GATE -->
+  <div id="login-gate">
+    <div class="login-card">
+      <div class="login-icon">🔐</div>
+      <h2>Admin Panel Guru</h2>
+      <p>Masukkan password untuk mengakses panel kontrol sesi kelas</p>
+      <input type="password" id="pwd-input" placeholder="Password guru" style="margin-bottom:12px"/>
+      <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Masuk →</button>
+      <div id="login-msg" class="msg"></div>
+      <div style="margin-top:20px;font-size:.78rem;color:var(--muted)">Default password: <code style="color:var(--orange)">guru123</code></div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app">
+    <div class="topbar">
+      <div class="topbar-logo">🌡️ ThermoExplore — Admin</div>
+      <div class="topbar-right">
+        <span id="topbar-session" style="font-size:.85rem;color:var(--muted)">Belum ada sesi aktif</span>
+        <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Firebase warning if not configured -->
+      <div id="firebase-warn" class="firebase-warn" style="display:none">
+        <h3>⚠️ Firebase Belum Dikonfigurasi</h3>
+        <p>Buka file <code>js/firebase-config.js</code> dan isi nilai konfigurasi Firebase kamu.<br>
+        Ikuti instruksi di dalam file tersebut (hanya 5 menit, gratis). Setelah dikonfigurasi, refresh halaman ini.</p>
+      </div>
+
+      <!-- Create Session -->
+      <div class="create-panel">
+        <div class="section-title">➕ Buat Sesi Baru</div>
+        <div class="create-grid">
+          <div>
+            <label for="class-name">Nama Kelas</label>
+            <input type="text" id="class-name" placeholder="cth: Kelas X-1A"/>
+          </div>
+          <div>
+            <label for="teacher-name">Nama Guru</label>
+            <input type="text" id="teacher-name" placeholder="cth: Pak Budi"/>
+          </div>
+          <button class="btn btn-primary" id="create-btn" onclick="createSession()">🚀 Buat Sesi</button>
+        </div>
+        <div id="create-msg" class="msg"></div>
+      </div>
+
+      <!-- Active Session -->
+      <div class="session-panel" id="session-panel" style="display:none">
+        <div class="section-title">📡 Sesi Aktif</div>
+        <div class="session-code-display">
+          <div>
+            <div style="font-size:.78rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px">Kode Sesi (bagikan ke siswa)</div>
+            <div class="code-big" id="active-code">—</div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.82rem;color:var(--muted)" id="active-class">—</div>
+            <div style="font-size:.75rem;color:var(--muted);margin-top:4px" id="active-time">—</div>
+          </div>
+          <div class="session-actions">
+            <button class="btn btn-outline btn-sm" onclick="copyCode()">📋 Salin Kode</button>
+            <button class="btn btn-outline btn-sm" onclick="openLeaderboard()">🏆 Leaderboard</button>
+            <button class="btn btn-danger btn-sm" onclick="resetGroups()">🔄 Reset Kelompok</button>
+            <button class="btn btn-danger btn-sm" onclick="closeSession()">🔒 Tutup Sesi</button>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:4px">👥 Progress Kelompok (<span id="groups-count">0</span>)</div>
+        <div id="groups-grid" class="groups-grid">
+          <div class="empty-groups">⏳ Menunggu kelompok bergabung...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/session.js"></script>
+  <script>
+    const ADMIN_PWD  = 'guru123';
+    let activeCode   = null;
+    let groupsListener = null;
+
+    /* ---- Auth ---- */
+    function doLogin() {
+      const pwd = document.getElementById('pwd-input').value;
+      if (pwd === ADMIN_PWD) {
+        document.getElementById('login-gate').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        if (!window.FIREBASE_READY) {
+          document.getElementById('firebase-warn').style.display = 'block';
+        }
+        // Resume last session if exists
+        const saved = localStorage.getItem('admin_active_session');
+        if (saved) resumeSession(saved);
+      } else {
+        const m = document.getElementById('login-msg');
+        m.textContent = '❌ Password salah!'; m.className = 'msg err';
+      }
+    }
+
+    document.getElementById('pwd-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    function doLogout() {
+      location.reload();
+    }
+
+    /* ---- Create Session ---- */
+    async function createSession() {
+      const cls = document.getElementById('class-name').value.trim();
+      const tch = document.getElementById('teacher-name').value.trim();
+      const btn = document.getElementById('create-btn');
+      const msg = document.getElementById('create-msg');
+
+      if (!cls || !tch) { msg.textContent = 'Isi nama kelas dan nama guru!'; msg.className = 'msg err'; return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Membuat...';
+
+      const res = await SessionManager.createSession(cls, tch);
+      if (res.success) {
+        msg.textContent = `✅ Sesi "${res.code}" berhasil dibuat!`; msg.className = 'msg ok';
+        localStorage.setItem('admin_active_session', res.code);
+        resumeSession(res.code);
+      } else {
+        msg.textContent = '❌ ' + res.error; msg.className = 'msg err';
+      }
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Buat Sesi';
+    }
+
+    /* ---- Resume/watch session ---- */
+    function resumeSession(code) {
+      activeCode = code;
+      document.getElementById('session-panel').style.display = 'block';
+      document.getElementById('active-code').textContent = code;
+      document.getElementById('topbar-session').textContent = 'Sesi: ' + code;
+
+      if (!window.FIREBASE_READY) return;
+
+      // Watch session meta
+      window.firebaseDB.ref(`sessions/${code}/meta`).once('value', snap => {
+        const m = snap.val() || {};
+        document.getElementById('active-class').textContent = m.className || '';
+        document.getElementById('active-time').textContent  = m.createdAt
+          ? 'Dibuat: ' + new Date(m.createdAt).toLocaleString('id-ID')
+          : '';
+      });
+
+      // Watch groups realtime
+      if (groupsListener) groupsListener.off();
+      groupsListener = window.firebaseDB.ref(`sessions/${code}/groups`);
+      groupsListener.on('value', snap => {
+        renderGroups(snap.val() || {});
+      });
+    }
+
+    /* ---- Render groups ---- */
+    function renderGroups(groups) {
+      const sorted = Object.entries(groups)
+        .map(([id, g]) => ({ id, ...g }))
+        .sort((a, b) => (b.xp - a.xp) || (b.completion - a.completion));
+
+      document.getElementById('groups-count').textContent = sorted.length;
+      const grid = document.getElementById('groups-grid');
+
+      if (!sorted.length) {
+        grid.innerHTML = '<div class="empty-groups">⏳ Menunggu kelompok bergabung...</div>';
+        return;
+      }
+
+      const medals = ['🥇','🥈','🥉'];
+      grid.innerHTML = sorted.map((g, i) => {
+        const z1 = g.zones?.zone1, z2 = g.zones?.zone2, z3 = g.zones?.zone3;
+        return `
+        <div class="group-card">
+          <div class="group-rank">${medals[i] || '#' + (i+1)}</div>
+          <div class="group-name">${escHtml(g.name || 'Kelompok')}</div>
+          <div class="group-stat"><span>XP</span><strong>${g.xp || 0}</strong></div>
+          <div class="group-stat"><span>Penyelesaian</span><strong>${g.completion || 0}%</strong></div>
+          <div class="group-bar-wrap"><div class="group-bar" style="width:${g.completion||0}%"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="zone-dots">
+              <div class="zdot ${z1?'zdot-done':'zdot-pending'}">Z1</div>
+              <div class="zdot ${z2?'zdot-done':'zdot-pending'}">Z2</div>
+              <div class="zdot ${z3?'zdot-done':'zdot-pending'}">Z3</div>
+            </div>
+            ${g.finishedAt
+              ? '<span class="badge-done">✅ Selesai</span>'
+              : '<span class="badge-going">🔄 Aktif</span>'}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ---- Session actions ---- */
+    function copyCode() {
+      if (!activeCode) return;
+      navigator.clipboard.writeText(activeCode).then(() => alert('Kode "' + activeCode + '" disalin!'));
+    }
+
+    function openLeaderboard() {
+      if (activeCode) window.open(`leaderboard.html?code=${activeCode}`, '_blank');
+    }
+
+    async function resetGroups() {
+      if (!activeCode) return;
+      if (!confirm('Reset semua data kelompok? Sesi tetap aktif.')) return;
+      await SessionManager.resetGroups(activeCode);
+      alert('Data kelompok berhasil direset.');
+    }
+
+    async function closeSession() {
+      if (!activeCode) return;
+      if (!confirm('Tutup sesi? Kelompok tidak bisa bergabung lagi.')) return;
+      await SessionManager.closeSession(activeCode);
+      localStorage.removeItem('admin_active_session');
+      document.getElementById('session-panel').style.display = 'none';
+      document.getElementById('topbar-session').textContent = 'Belum ada sesi aktif';
+      activeCode = null;
+      if (groupsListener) { groupsListener.off(); groupsListener = null; }
+      alert('Sesi ditutup.');
+    }
+  </script>
+</body>
+</html>

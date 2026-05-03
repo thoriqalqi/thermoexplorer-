@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Papan Peringkat — ThermoExplore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--red:#ff3c00;--orange:#ff7c00;--gold:#ffcc00;--bg:#080810;--surface:#10101c;--card:#161624;--border:rgba(255,120,0,.18);--text:#e8f4fd;--muted:#5a6a7f}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 16px 60px}
+    /* bg */
+    .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,100,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,100,0,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+    .glow-top{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:300px;background:radial-gradient(ellipse,rgba(255,80,0,.18),transparent 70%);pointer-events:none;z-index:0}
+    /* layout */
+    .wrap{position:relative;z-index:10;max-width:860px;margin:0 auto}
+    /* header */
+    .header{text-align:center;padding:48px 0 32px}
+    .header-badge{display:inline-block;background:linear-gradient(135deg,rgba(255,60,0,.2),rgba(255,120,0,.2));border:1px solid rgba(255,120,0,.35);border-radius:999px;padding:6px 18px;font-size:.82rem;font-weight:600;color:var(--orange);letter-spacing:.5px;margin-bottom:16px}
+    .header h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;background:linear-gradient(135deg,#ff3c00,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1}
+    .session-info{margin-top:12px;color:var(--muted);font-size:.9rem;display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+    .session-info span{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:4px 14px}
+    /* live dot */
+    .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#22c55e;font-weight:600;margin-top:12px}
+    .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:blink 1.2s ease-in-out infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    /* status bar */
+    .status-bar{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+    .progress-info{font-size:.9rem;color:var(--muted)}
+    .progress-info strong{color:var(--text)}
+    .status-track{flex:1;min-width:180px;background:rgba(255,255,255,.06);border-radius:999px;height:8px;overflow:hidden}
+    .status-fill{height:100%;background:linear-gradient(90deg,#ff3c00,#ff7c00,#ffcc00);border-radius:999px;transition:width .8s ease}
+    /* leaderboard */
+    .lb-list{display:flex;flex-direction:column;gap:14px}
+    .lb-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 24px;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:16px;transition:transform .3s,box-shadow .3s;animation:slideIn .5s ease both}
+    .lb-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,80,0,.12)}
+    @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+    /* rank medal */
+    .rank{font-size:2rem;text-align:center;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+    .rank-num{font-size:1.4rem;font-weight:900;color:var(--muted);text-align:center}
+    /* info */
+    .lb-name{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+    .lb-zones{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+    .zone-pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid}
+    .zone-done{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#86efac}
+    .zone-going{background:rgba(255,124,0,.12);border-color:rgba(255,124,0,.4);color:#ffb366;animation:pulse2 1.5s ease infinite}
+    .zone-pending{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--muted)}
+
+    .lb-bar-wrap{background:rgba(255,255,255,.06);border-radius:999px;height:6px;overflow:hidden}
+    .lb-bar{height:100%;border-radius:999px;transition:width 1s ease;background:linear-gradient(90deg,#ff3c00,#ff7c00)}
+    /* right side */
+    .lb-right{text-align:right}
+    .lb-xp{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+    .lb-xp-label{font-size:.75rem;color:var(--muted);margin-top:2px}
+    .lb-pct{font-size:.9rem;color:var(--orange);font-weight:600;margin-top:6px}
+    .badge-done{display:inline-block;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px}
+    .badge-going{display:inline-block;background:rgba(255,124,0,.1);border:1px solid rgba(255,124,0,.3);color:#ffb366;font-size:.72rem;padding:3px 10px;border-radius:999px;margin-top:6px;animation:pulse2 1.5s ease infinite}
+    @keyframes pulse2{0%,100%{opacity:1}50%{opacity:.5}}
+    /* top-3 highlight */
+    .lb-card.rank-1{border-color:rgba(255,200,0,.5);background:linear-gradient(135deg,rgba(255,180,0,.08),var(--card))}
+    .lb-card.rank-2{border-color:rgba(192,192,192,.4);background:linear-gradient(135deg,rgba(180,180,180,.06),var(--card))}
+    .lb-card.rank-3{border-color:rgba(205,127,50,.4);background:linear-gradient(135deg,rgba(200,120,50,.06),var(--card))}
+    /* winner overlay */
+    #winner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;backdrop-filter:blur(8px)}
+    #winner-overlay.show{display:flex;animation:fadeIn .5s ease}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .winner-title{font-size:clamp(2rem,8vw,4rem);font-weight:900;background:linear-gradient(135deg,#ff3c00,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+    .winner-trophy{font-size:5rem;animation:bounce 1s ease infinite alternate}
+    @keyframes bounce{to{transform:translateY(-20px)}}
+    .winner-name{font-size:1.6rem;font-weight:700;color:#ffcc00;margin:12px 0}
+    .winner-sub{color:var(--muted);margin-bottom:32px}
+    .winner-close{background:linear-gradient(135deg,#ff3c00,#ff7c00);border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;padding:14px 32px;cursor:pointer}
+    /* canvas confetti */
+    #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:1000}
+    /* empty */
+    .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+    .empty .icon{font-size:3rem;margin-bottom:16px}
+    /* back btn */
+    .back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--orange);text-decoration:none;font-size:.9rem;font-weight:600;margin-bottom:20px;transition:opacity .2s}
+    .back-btn:hover{opacity:.7}
+    /* refresh */
+    .refresh-badge{font-size:.75rem;color:var(--muted);text-align:center;margin-top:24px}
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="glow-top"></div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div id="winner-overlay">
+    <div class="winner-trophy">🏆</div>
+    <div class="winner-title">Semua Kelompok Selesai!</div>
+    <div class="winner-name" id="winner-name"></div>
+    <div class="winner-sub">meraih XP tertinggi di sesi ini</div>
+    <button class="winner-close" onclick="document.getElementById('winner-overlay').classList.remove('show')">
+      Lihat Papan Peringkat
+    </button>
+  </div>
+
+  <div class="wrap">
+    <div class="header">
+      <div class="header-badge">🔥 LIVE LEADERBOARD</div>
+      <h1>Papan Peringkat Kelas</h1>
+      <div class="session-info">
+        <span id="info-class">Kelas: —</span>
+        <span id="info-code">Kode: —</span>
+        <span id="info-groups">Kelompok: 0</span>
+      </div>
+      <div class="live-dot"><span class="dot"></span> Update Realtime</div>
+    </div>
+
+    <div class="status-bar">
+      <div class="progress-info">
+        <strong id="done-count">0</strong> / <strong id="total-count">0</strong> kelompok selesai
+      </div>
+      <div class="status-track"><div class="status-fill" id="status-fill" style="width:0%"></div></div>
+    </div>
+
+    <div id="lb-list" class="lb-list">
+      <div class="empty"><div class="icon">⏳</div><p>Menunggu data kelompok...</p></div>
+    </div>
+
+    <div class="refresh-badge">Data tersinkron otomatis via Firebase Realtime Database</div>
+    <div style="text-align:center;margin-top:16px">
+      <a href="index.html" class="back-btn">← Kembali ke Game</a>
+    </div>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/session.js"></script>
+  <script>
+    const MEDALS = ['🥇','🥈','🥉'];
+    let prevAllDone = false;
+
+    // Get session code from URL param or localStorage
+    const urlParams   = new URLSearchParams(window.location.search);
+    const sessionCode = urlParams.get('code') || SessionManager.getSession()?.code || '';
+
+    if (!sessionCode) {
+      document.getElementById('lb-list').innerHTML =
+        '<div class="empty"><div class="icon">🔑</div><p>Kode sesi tidak ditemukan.<br>Buka leaderboard via: <code>leaderboard.html?code=KODE</code></p></div>';
+    } else {
+      initLeaderboard(sessionCode);
+    }
+
+    function initLeaderboard(code) {
+      if (!window.FIREBASE_READY) {
+        document.getElementById('lb-list').innerHTML =
+          '<div class="empty"><div class="icon">⚠️</div><p>Firebase belum dikonfigurasi. Hubungkan Firebase untuk melihat leaderboard realtime.</p></div>';
+        return;
+      }
+
+      const sessionRef = window.firebaseDB.ref(`sessions/${code}`);
+      sessionRef.on('value', snap => {
+        const data = snap.val();
+        if (!data) {
+          document.getElementById('lb-list').innerHTML =
+            '<div class="empty"><div class="icon">❌</div><p>Sesi tidak ditemukan.</p></div>';
+          return;
+        }
+        renderLeaderboard(code, data);
+      });
+    }
+
+    function renderLeaderboard(code, data) {
+      const meta   = data.meta   || {};
+      const groups = data.groups || {};
+
+      // Update header info
+      document.getElementById('info-class').textContent  = 'Kelas: ' + (meta.className || '—');
+      document.getElementById('info-code').textContent   = 'Kode: ' + code;
+      document.getElementById('info-groups').textContent = 'Kelompok: ' + Object.keys(groups).length;
+
+      // Sort by XP desc, then completion desc
+      const sorted = Object.entries(groups)
+        .map(([id, g]) => ({ id, ...g }))
+        .sort((a, b) => (b.xp - a.xp) || (b.completion - a.completion));
+
+      // Status bar
+      const doneCount = sorted.filter(g => g.finishedAt).length;
+      document.getElementById('done-count').textContent  = doneCount;
+      document.getElementById('total-count').textContent = sorted.length;
+      const pct = sorted.length ? Math.round(doneCount / sorted.length * 100) : 0;
+      document.getElementById('status-fill').style.width = pct + '%';
+
+      // Render cards
+      const list = document.getElementById('lb-list');
+      if (!sorted.length) {
+        list.innerHTML = '<div class="empty"><div class="icon">⏳</div><p>Belum ada kelompok yang bergabung...</p></div>';
+        return;
+      }
+
+      list.innerHTML = sorted.map((g, i) => {
+        const rank   = i + 1;
+        const medal  = MEDALS[i] || `<span class="rank-num">#${rank}</span>`;
+        const rankCls = rank <= 3 ? `rank-${rank}` : '';
+        const z1 = g.zones?.zone1;
+        const z2 = g.zones?.zone2;
+        const z3 = g.zones?.zone3;
+
+        const cd  = g.challengesDone || {};
+        const anyStarted = z1 || z2 || z3 || (g.xp > 0);
+
+        // Zone pill: ✅ selesai penuh, 🔥 sedang dikerjakan, ⏳ belum
+        function zonePill(zDone, zCompleted, label) {
+          if (zCompleted) return `<span class="zone-pill zone-done">${label} ✅</span>`;
+          if (zDone)      return `<span class="zone-pill zone-going">${label} 🔥</span>`;
+          return `<span class="zone-pill zone-pending">${label} ⏳</span>`;
+        }
+        const zc = g.zonesCompleted || {};
+
+        return `
+        <div class="lb-card ${rankCls}" style="animation-delay:${i * 0.07}s">
+          <div class="rank">${MEDALS[i] || ''}<span class="rank-num" style="${MEDALS[i]?'display:none':''}">#${rank}</span></div>
+          <div>
+            <div class="lb-name">${escHtml(g.name || 'Kelompok')}</div>
+            <div class="lb-zones">
+              ${zonePill(z1, zc.zone1, 'Zona 1')}
+              ${zonePill(z2, zc.zone2, 'Zona 2')}
+              ${zonePill(z3, zc.zone3, 'Zona 3')}
+            </div>
+            <div class="lb-bar-wrap"><div class="lb-bar" style="width:${g.completion||0}%"></div></div>
+          </div>
+          <div class="lb-right">
+            <div class="lb-xp">${g.xp || 0}</div>
+            <div class="lb-xp-label">XP</div>
+            <div class="lb-pct">${g.completion || 0}%</div>
+            ${g.finishedAt
+              ? '<span class="badge-done">✅ Selesai</span>'
+              : anyStarted
+                ? '<span class="badge-going">🔄 Aktif</span>'
+                : '<span style="font-size:.72rem;color:#94A3B8;margin-top:4px;display:block;">⏳ Belum Mulai</span>'}
+          </div>
+        </div>`;
+
+      }).join('');
+
+      // Winner reveal when all done
+      const allDone = sorted.length > 0 && sorted.every(g => g.finishedAt);
+      if (allDone && !prevAllDone) {
+        prevAllDone = true;
+        setTimeout(() => {
+          const winner = sorted[0];
+          document.getElementById('winner-name').textContent = winner?.name || '';
+          document.getElementById('winner-overlay').classList.add('show');
+          launchConfetti();
+        }, 800);
+      }
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function launchConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx    = canvas.getContext('2d');
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      const colors = ['#ff3c00','#ff7c00','#ffcc00','#ffffff','#ff5500'];
+      const pieces = Array.from({length:160}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        w: Math.random() * 12 + 4, h: Math.random() * 6 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vy: Math.random() * 3 + 2, vx: (Math.random() - .5) * 2,
+        angle: Math.random() * Math.PI * 2, va: (Math.random() - .5) * .1, alpha: 1
+      }));
+      let frame = 0;
+      (function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach(p => {
+          p.y += p.vy; p.x += p.vx; p.angle += p.va;
+          if (frame > 120) p.alpha -= .005;
+          ctx.save(); ctx.globalAlpha = Math.max(p.alpha, 0);
+          ctx.translate(p.x, p.y); ctx.rotate(p.angle);
+          ctx.fillStyle = p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+          ctx.restore();
+        });
+        frame++;
+        if (frame < 300) requestAnimationFrame(draw);
+        else ctx.clearRect(0,0,canvas.width,canvas.height);
+      })();
+    }
+  </script>
+</body>
+</html>

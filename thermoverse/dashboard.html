@@ -84,7 +84,7 @@
   <a href="index.html" class="nav-logo">Thermo<span>Explorer</span></a>
   <ul class="nav-links">
     <li><a href="index.html">🏠 Beranda</a></li>
-    <li><a href="map.html">🗺️ Peta Misi</a></li>
+  <li><a href="#" id="nav-lb-link">🏆 Leaderboard Kelas</a></li>
   </ul>
   <div class="nav-xp"><span class="xp-icon">⚡</span><span class="xp-value" id="nav-xp-value">0 XP</span></div>
 </nav>
@@ -200,25 +200,29 @@
       </div>
     </div>
 
-    <!-- Leaderboard -->
+    </div>
+
+    <!-- Leaderboard Kelas (Firebase realtime) -->
     <div class="lb-card">
-      <div class="lb-title">🏆 Papan Peringkat Tim</div>
-      <table class="lb-table">
+      <div class="lb-title">🏆 Papan Peringkat Kelas <span id="lb-session-label" style="font-size:.8rem;color:#9CA3AF;font-weight:400;"></span></div>
+      <div id="lb-loading" style="text-align:center;padding:24px;color:#9CA3AF;font-size:.9rem;">⏳ Memuat data kelompok...</div>
+      <table class="lb-table" id="lb-table" style="display:none">
         <thead>
           <tr>
             <th>Peringkat</th>
-            <th>Tim</th>
+            <th>Tim / Kelompok</th>
             <th>Dimensi Berpikir</th>
-            <th>Skor</th>
+            <th>Penyelesaian</th>
             <th>XP</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody id="lb-body">
-          <!-- Populated by JS -->
         </tbody>
       </table>
-      <div style="margin-top:16px;font-size:0.8rem;color:#9CA3AF;text-align:center;">* Leaderboard menampilkan data sesi lokal. Untuk leaderboard kelas, sinkronkan dengan guru melalui E-LKPD.</div>
+      <div id="lb-offline-note" style="margin-top:16px;font-size:.8rem;color:#9CA3AF;text-align:center;display:none">
+        ⚠️ Data lokal saja — bergabung ke sesi untuk melihat leaderboard kelas.
+      </div>
     </div>
 
     <!-- Kriteria Penilaian -->
@@ -271,14 +275,26 @@
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/session.js"></script>
 <script src="js/game.js"></script>
 <script>
 function renderDashboard() {
   const state = ThermoGame.loadState();
 
-  // Nav XP
+  // Nav XP + group name
+  const sess = window.SessionManager && SessionManager.getSession();
+  const groupLabel = (sess && sess.groupName) ? sess.groupName : (state.playerName || 'Tim Kamu');
+
   const nxp = document.getElementById('nav-xp-value');
-  if (nxp) nxp.textContent = state.xp + ' XP';
+  if (nxp) nxp.textContent = groupLabel + ' | ' + state.xp + ' XP';
+
+  // Fix leaderboard nav link
+  const lbNav = document.getElementById('nav-lb-link');
+  if (lbNav && sess) lbNav.href = 'leaderboard.html?code=' + sess.code;
+  else if (lbNav) lbNav.href = 'leaderboard.html';
 
   document.getElementById('stat-xp').textContent = state.xp;
 
@@ -340,38 +356,100 @@ function renderDashboard() {
   // Radar
   drawRadar(thinkScores);
 
-  // Leaderboard
-  const lbData = [
-    { team: (state.playerName && state.playerName !== 'Agent' ? state.playerName + ' 🎯' : 'Tim Kamu 🎯'), ct: thinkScores.ct, st: thinkScores.st, sci: thinkScores.sci, inn: thinkScores.inn, xp: state.xp, done },
-    { team: 'Tim Alpha ⚡', ct:82, st:75, sci:88, inn:70, xp:320, done:2 },
-    { team: 'Tim Beta 🔥', ct:70, st:80, sci:72, inn:85, xp:290, done:2 },
-    { team: 'Tim Gamma 🌀', ct:65, st:60, sci:68, inn:72, xp:220, done:1 },
-    { team: 'Tim Delta 💫', ct:55, st:58, sci:60, inn:62, xp:180, done:1 },
-  ];
-  lbData.sort((a,b) => b.xp - a.xp);
+  // Leaderboard — load from Firebase session or show offline fallback
+  loadLeaderboard(state, groupLabel);
+}
 
+async function loadLeaderboard(myState, myGroupLabel) {
+  const sess    = window.SessionManager && SessionManager.getSession();
+  const loading = document.getElementById('lb-loading');
+  const table   = document.getElementById('lb-table');
+  const offline = document.getElementById('lb-offline-note');
+  const labelEl = document.getElementById('lb-session-label');
+
+  if (!sess || !window.FIREBASE_READY) {
+    // Offline/no session
+    if (loading) loading.style.display = 'none';
+    if (offline) { offline.style.display = 'block'; offline.innerHTML = '⚠️ Belum bergabung ke sesi — <a href="index.html" style="color:var(--primary);font-weight:700;">Masuk lewat halaman utama</a> untuk melihat leaderboard kelas.'; }
+    if (table)   table.style.display = 'table';
+    const done = ['zone1','zone2','zone3'].filter(k => myState.zones[k]?.completed).length;
+    renderLbRows([{ name: myGroupLabel, xp: myState.xp, completion: ThermoGame.getCompletionPct ? ThermoGame.getCompletionPct(myState) : done*33, zones:{ zone1: myState.zones.zone1?.completed||false, zone2: myState.zones.zone2?.completed||false, zone3: myState.zones.zone3?.completed||false }, finishedAt: done===3?1:null }], myGroupLabel);
+    return;
+  }
+
+  if (labelEl) labelEl.textContent = '— Kode: ' + sess.code;
+
+  const ref = window.firebaseDB.ref(`sessions/${sess.code}/groups`);
+
+  const render = (snap) => {
+    const groups = snap.val() || {};
+    const list   = Object.values(groups).sort((a,b) => (b.xp||0)-(a.xp||0) || (b.completion||0)-(a.completion||0));
+    if (loading) loading.style.display = 'none';
+    if (list.length === 0) {
+      if (table) table.style.display = 'none';
+      if (loading) { loading.style.display = 'block'; loading.innerHTML = '👥 Belum ada kelompok yang bergabung ke sesi <strong>' + sess.code + '</strong>'; }
+    } else {
+      if (table) table.style.display = 'table';
+      renderLbRows(list, myGroupLabel);
+    }
+  };
+
+  try {
+    // Initial load
+    const snap = await ref.once('value');
+    render(snap);
+    // Live updates
+    ref.on('value', render);
+  } catch(e) {
+    if (loading) loading.textContent = '⚠️ Gagal memuat data: ' + e.message;
+  }
+}
+
+function renderLbRows(list, myGroupLabel) {
   const tbody = document.getElementById('lb-body');
+  const table = document.getElementById('lb-table');
+  const loading = document.getElementById('lb-loading');
   if (!tbody) return;
-  tbody.innerHTML = '';
-  lbData.forEach((t, i) => {
-    const rankStr = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1)+'';
-    const avgS = Math.round((t.ct+t.st+t.sci+t.inn)/4);
-    const status = t.done >= 3 ? '<span style="color:#059669;font-weight:800;">✅ Selesai</span>' : t.done > 0 ? '<span style="color:#F97316;font-weight:800;">🔄 Aktif ('+t.done+'/3)</span>' : '<span style="color:#9CA3AF;">⏳ Belum Mulai</span>';
-    tbody.innerHTML += `<tr style="${i===0?'background:#FEF3C7;':''}">
-      <td><span class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${rankStr}</span></td>
-      <td class="lb-team">${t.team}</td>
+  if (!list || list.length === 0) {
+    if (table)   table.style.display = 'none';
+    if (loading) { loading.style.display = 'block'; loading.innerHTML = '👥 Belum ada kelompok yang bergabung ke sesi ini.'; }
+    return;
+  }
+  if (table)   table.style.display = 'table';
+  if (loading) loading.style.display = 'none';
+  const medals = ['🥇','🥈','🥉'];
+  const me = (myGroupLabel||'').toLowerCase().trim();
+  tbody.innerHTML = list.map((g, i) => {
+    const gn   = (g.name||'').toLowerCase().trim();
+    const isMe = me && (gn === me || gn.includes(me) || me.includes(gn));
+    const rank = medals[i] || '#' + (i+1);
+    const z1=g.zones?.zone1, z2=g.zones?.zone2, z3=g.zones?.zone3;
+    const done = [z1,z2,z3].filter(Boolean).length;
+    const comp = g.completion !== undefined ? g.completion : Math.round(done/3*100);
+    const status = g.finishedAt
+      ? '<span style="color:#059669;font-weight:800;">✅ Selesai</span>'
+      : done > 0
+        ? `<span style="color:#F97316;font-weight:800;">🔄 Aktif (${done}/3)</span>`
+        : '<span style="color:#9CA3AF;">⏳ Belum Mulai</span>';
+    const rowBg = isMe ? 'background:rgba(124,58,237,.05);border-left:3px solid var(--primary);' : '';
+    return `<tr style="${rowBg}">
+      <td><span class="lb-rank ${i===0?'r1':i===1?'r2':i===2?'r3':''}">${rank}</span></td>
+      <td class="lb-team">${escHtml(g.name||'—')}${isMe?' <span style="font-size:.7rem;color:var(--primary);font-weight:700;background:rgba(124,58,237,.1);padding:1px 8px;border-radius:4px;margin-left:4px;">● Kamu</span>':''}</td>
       <td><div class="lb-badge-row">
-        <span class="lb-chip" style="background:#FEF3C7;color:#D97706;">CT ${t.ct}</span>
-        <span class="lb-chip" style="background:#EDE9FE;color:#7C3AED;">ST ${t.st}</span>
-        <span class="lb-chip" style="background:#D1FAE5;color:#059669;">SCI ${t.sci}</span>
-        <span class="lb-chip" style="background:#FCE7F3;color:#DB2777;">INN ${t.inn}</span>
+        <span class="lb-chip" style="background:#D1FAE5;color:#059669;">Z1 ${z1?'✅':'⏳'}</span>
+        <span class="lb-chip" style="background:#EDE9FE;color:#7C3AED;">Z2 ${z2?'✅':'⏳'}</span>
+        <span class="lb-chip" style="background:#FEF3C7;color:#D97706;">Z3 ${z3?'✅':'⏳'}</span>
       </div></td>
-      <td class="lb-score">${avgS}%</td>
-      <td><span style="font-family:var(--font-heading);color:var(--primary);">⚡ ${t.xp}</span></td>
+      <td class="lb-score">${comp}%</td>
+      <td><span style="font-family:var(--font-heading);color:var(--primary);">⚡ ${g.xp||0}</span></td>
       <td>${status}</td>
     </tr>`;
-  });
+  }).join('');
 }
+
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 
 function drawRadar(scores) {
   const canvas = document.getElementById('radar-chart');
@@ -458,7 +536,13 @@ function resetGame() {
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => { document.getElementById('loading-screen').classList.add('hidden'); }, 1000);
   renderDashboard();
+  // Push data lokal ke Firebase segera saat dashboard dibuka
+  const st = ThermoGame.loadState();
+  if (st.xp > 0 || Object.values(st.zones).some(z => z.challengesDone?.length > 0)) {
+    ThermoGame.syncToSession(st);
+  }
 });
+
 
 document.querySelectorAll('a[href]').forEach(link => {
   link.addEventListener('click', e => {

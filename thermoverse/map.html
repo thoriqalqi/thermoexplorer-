@@ -331,7 +331,7 @@
     <a href="index.html" class="nav-logo">Thermo<span>Explorer</span></a>
     <ul class="nav-links">
       <li><a href="index.html">🏠 Beranda</a></li>
-      <li><a href="dashboard.html">📊 Leaderboard</a></li>
+      <li><a href="#" id="nav-lb-link">🏆 Leaderboard</a></li>
     </ul>
     <div class="nav-xp" style="margin-right: 15px; background: #6366F1; cursor: pointer;"
       onclick="document.getElementById('info-modal').classList.add('show')">
@@ -372,7 +372,6 @@
       <div class="tt-title">⚡ Pulau Energi</div>
       <div class="tt-sub">Level 2: Hukum I Termodinamika<br>Energi, kalor, dan kerja pada sistem</div>
       <div class="tt-challenges">
-        <span class="tt-chip" style="background:#F3F4F6;color:#4B5563;">📝 Quiz Awal</span>
         <span class="tt-chip chip-ct">🔍 Critical</span>
         <span class="tt-chip chip-st">🔗 Systemic</span>
         <span class="tt-chip chip-sci">🔬 Scientific</span>
@@ -391,7 +390,6 @@
       <div class="tt-title">🌿 Pulau Entropi</div>
       <div class="tt-sub">Level 3: Hukum II Termodinamika<br>Entropi, efisiensi, dan mesin kalor</div>
       <div class="tt-challenges">
-        <span class="tt-chip" style="background:#F3F4F6;color:#4B5563;">📝 Quiz Awal</span>
         <span class="tt-chip chip-ct">🔍 Critical</span>
         <span class="tt-chip chip-st">🔗 Systemic</span>
         <span class="tt-chip chip-sci">🔬 Scientific</span>
@@ -469,6 +467,10 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/session.js"></script>
   <script src="js/game.js"></script>
   <script>
     // ---- Three.js Map Logic ----
@@ -605,12 +607,32 @@
     });
 
     // ---- Game State & UI ----
+    // Sync session group name into game state so all pages see it
+    (function syncGroupName() {
+      const sess = window.SessionManager && SessionManager.getSession();
+      if (sess && sess.groupName) {
+        const st = ThermoGame.loadState();
+        if (st.playerName !== sess.groupName) {
+          st.playerName = sess.groupName;
+          ThermoGame.saveState(st);
+        }
+        // Set leaderboard link with session code
+        const lbLink = document.getElementById('nav-lb-link');
+        if (lbLink) lbLink.href = 'leaderboard.html?code=' + sess.code;
+      } else {
+        const lbLink = document.getElementById('nav-lb-link');
+        if (lbLink) lbLink.href = 'leaderboard.html';
+      }
+    })();
+
     function updateUI() {
       const state = ThermoGame.loadState();
-      
+      const sess  = window.SessionManager && SessionManager.getSession();
+      const groupLabel = (sess && sess.groupName) ? sess.groupName : (state.playerName || '');
+
       // Update XP
       const navXp = document.getElementById('nav-xp-value');
-      if (navXp) navXp.textContent = (state.playerName && state.playerName !== 'Agent' ? 'Tim ' + state.playerName + ' | ' : '') + state.xp + ' XP';
+      if (navXp) navXp.textContent = (groupLabel ? groupLabel + ' | ' : '') + state.xp + ' XP';
 
       // Update Progress & Unlocks
       [1, 2, 3].forEach(z => {
@@ -649,7 +671,15 @@
       const state = ThermoGame.loadState();
       const prevZone = state.zones['zone' + (z - 1)];
       if (z === 1 || (prevZone && (prevZone.completed || prevZone.score >= 60))) {
-        if (!state.playerName || state.playerName === 'Agent') {
+        // Use session group name if available, else use saved playerName
+        const sess = window.SessionManager && SessionManager.getSession();
+        if (sess && sess.groupName) {
+          if (state.playerName !== sess.groupName) {
+            state.playerName = sess.groupName;
+            ThermoGame.saveState(state);
+          }
+          location.href = url;
+        } else if (!state.playerName || state.playerName === 'Agent') {
           window._pendingUrl = url;
           document.getElementById('team-modal').style.display = 'flex';
         } else {
@@ -670,6 +700,20 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      // Sync session → game state, then set nav-lb-link
+      const sess = window.SessionManager && SessionManager.getSession();
+      if (sess && sess.groupName) {
+        const st = ThermoGame.loadState();
+        if (st.playerName !== sess.groupName) {
+          st.playerName = sess.groupName;
+          ThermoGame.saveState(st);
+        }
+        const lbLink = document.getElementById('nav-lb-link');
+        if (lbLink) lbLink.href = 'leaderboard.html?code=' + sess.code;
+      } else {
+        const lbLink = document.getElementById('nav-lb-link');
+        if (lbLink) lbLink.href = 'leaderboard.html';
+      }
       updateUI();
       setTimeout(() => { document.getElementById('loading-screen').classList.add('hidden'); }, 1000);
     });

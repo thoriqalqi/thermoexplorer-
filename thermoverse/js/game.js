@@ -4,7 +4,12 @@
 // ====================================================
 
 const ThermoGame = (() => {
-  const KEY = 'thermoexplorer_state_v2';
+  // Key is per-session-group sehingga tiap kelompok punya state sendiri
+  function getStateKey() {
+    const sess = window.SessionManager && SessionManager.getSession();
+    if (sess && sess.groupId) return 'thermo_state_' + sess.groupId;
+    return 'thermoexplorer_state_v2'; // fallback tanpa sesi
+  }
 
   const DEFAULT_STATE = {
     playerName: '',
@@ -19,11 +24,9 @@ const ThermoGame = (() => {
 
   function loadState() {
     try {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(getStateKey());
       if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
       const parsed = JSON.parse(raw);
-      
-      // Ensure structure
       if (!parsed.zones) parsed.zones = JSON.parse(JSON.stringify(DEFAULT_STATE.zones));
       ['zone1','zone2','zone3'].forEach(k => {
         if (!parsed.zones[k]) parsed.zones[k] = JSON.parse(JSON.stringify(DEFAULT_STATE.zones[k]));
@@ -31,7 +34,6 @@ const ThermoGame = (() => {
         if (!parsed.zones[k].challengesDone) parsed.zones[k].challengesDone = [];
         if (!parsed.zones[k].answers) parsed.zones[k].answers = {};
       });
-      
       return parsed;
     } catch (e) {
       console.error('Error loading state:', e);
@@ -41,9 +43,9 @@ const ThermoGame = (() => {
 
   function saveState(state) {
     try {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(getStateKey(), JSON.stringify(state));
       return true;
-    } catch (e) { 
+    } catch (e) {
       console.warn('Cannot save state:', e);
       return false;
     }
@@ -92,10 +94,13 @@ const ThermoGame = (() => {
       state.zones[zoneKey].score = Math.round(avg);
     }
     
-    if (state.zones[zoneKey].challengesDone.length >= 5) { // Quiz + 4 challenges
+    if (state.zones[zoneKey].challengesDone.length >= 4) { // 4 challenges (CT,ST,SCI,INN)
       state.zones[zoneKey].completed = true;
     }
     
+    saveState(state);
+    // Sync ke Firebase setiap kali ada jawaban baru
+    syncToSession(state);
     return state;
   }
 
@@ -105,18 +110,98 @@ const ThermoGame = (() => {
   }
 
   function resetState() {
-    localStorage.removeItem(KEY);
+    localStorage.removeItem(getStateKey());
   }
 
-  return { 
-    loadState, 
-    saveState, 
+
+  /* ---- Completion & Category ---- */
+  function getCompletionPct(state) {
+    const zoneList = Object.values(state.zones || {});
+    if (!zoneList.length) return 0;
+    const avg = zoneList.reduce((sum, z) => sum + (z.score || 0), 0) / zoneList.length;
+    return Math.round(avg);
+  }
+
+  function getFinalCategory(pct) {
+    if (pct >= 85) return { label: 'Termofisikawan Unggul', color: '#ff3c00', emoji: '🔥' };
+    if (pct >= 70) return { label: 'Penjelajah Termal',     color: '#ff7c00', emoji: '⚡' };
+    if (pct >= 50) return { label: 'Peneliti Pemula',       color: '#ffaa00', emoji: '🌡️' };
+    return { label: 'Kadet Termo', color: '#888', emoji: '🧪' };
+  }
+
+  /* ---- Mark zone complete (called by quiz.js) ---- */
+  function markZoneComplete(state, zoneKey, pct, totalXP, thinkingScores) {
+    if (!state.zones[zoneKey]) {
+      state.zones[zoneKey] = JSON.parse(JSON.stringify(DEFAULT_STATE.zones.zone1));
+    }
+    state.zones[zoneKey].score     = pct;
+    state.zones[zoneKey].completed = pct >= 70;
+    state = addXP(state, totalXP);
+
+    if (!state.thinking) state.thinking = {};
+    Object.keys(thinkingScores || {}).forEach(k => {
+      state.thinking[k] = Math.max(state.thinking[k] || 0, thinkingScores[k] || 0);
+    });
+
+    saveState(state);
+    syncToSession(state);
+    return state;
+  }
+
+  /* ---- Firebase sync ---- */
+  function syncToSession(state) {
+    if (window.SessionManager) {
+      SessionManager.syncGroupState(state).catch(() => {});
+    }
+  }
+
+  /* ---- XP Float animation ---- */
+  function showXPFloat(amount) {
+    const el = document.createElement('div');
+    el.textContent = `+${amount} XP`;
+    Object.assign(el.style, {
+      position: 'fixed', top: '80px', right: '24px',
+      background: 'linear-gradient(135deg,#ff3c00,#ff7c00)',
+      color: '#fff', fontWeight: '700', fontSize: '1.1rem',
+      padding: '8px 18px', borderRadius: '999px',
+      boxShadow: '0 4px 20px rgba(255,100,0,.5)',
+      zIndex: 9999, pointerEvents: 'none',
+      animation: 'xpFloat 1.4s ease forwards'
+    });
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+
+    if (!document.getElementById('xp-float-style')) {
+      const s = document.createElement('style');
+      s.id = 'xp-float-style';
+      s.textContent = '@keyframes xpFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px)}}';
+      document.head.appendChild(s);
+    }
+  }
+
+  /* ---- Nav XP refresh ---- */
+  function updateNavXP() {
+    const st = loadState();
+    document.querySelectorAll('#nav-xp, .nav-xp').forEach(el => {
+      el.textContent = `${st.xp || 0} XP`;
+    });
+  }
+
+  return {
+    loadState,
+    saveState,
     setPlayerName,
     getPlayerName,
-    isZoneUnlocked, 
-    addXP, 
-    saveZoneChallenge, 
+    isZoneUnlocked,
+    addXP,
+    saveZoneChallenge,
     getZoneProgress,
-    resetState 
+    resetState,
+    getCompletionPct,
+    getFinalCategory,
+    markZoneComplete,
+    syncToSession,
+    showXPFloat,
+    updateNavXP
   };
 })();
