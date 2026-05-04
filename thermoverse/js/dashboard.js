@@ -44,8 +44,8 @@ function renderStats(state) {
 function renderIndicators(state) {
     const thinking = state.thinking || {};
     const indicators = [
-        { key: 'critical', name: 'Berpikir Kritis', fillClass: 'fill-critical', color: '#ff3c00' },
-        { key: 'systemic', name: 'Berpikir Sistemik', fillClass: 'fill-systemic', color: '#ff7c00' },
+        { key: 'critical', name: 'Berpikir Kritis', fillClass: 'fill-critical', color: '#0c3753' },
+        { key: 'systemic', name: 'Berpikir Sistemik', fillClass: 'fill-systemic', color: '#165682' },
         { key: 'scientific', name: 'Berpikir Ilmiah', fillClass: 'fill-scientific', color: '#ffaa00' },
         { key: 'innovative', name: 'Berpikir Inovatif', fillClass: 'fill-innovative', color: '#ffffff' }
     ];
@@ -116,10 +116,10 @@ function renderRadarChart(state) {
                 ],
                 backgroundColor: 'rgba(232,60,0,0.15)',
                 borderColor: 'rgba(255,124,0,0.8)',
-                pointBackgroundColor: '#ff3c00',
+                pointBackgroundColor: '#0c3753',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: '#ff7c00',
+                pointHoverBorderColor: '#165682',
                 borderWidth: 2
             }]
         },
@@ -158,7 +158,7 @@ function renderBarChart(state) {
                     'rgba(255,124,0,0.45)',
                     'rgba(255,200,50,0.35)'
                 ],
-                borderColor: ['#ff3c00', '#ff7c00', '#ffcc00'],
+                borderColor: ['#0c3753', '#165682', '#ffdf7a'],
                 borderWidth: 2,
                 borderRadius: 8
             }]
@@ -195,7 +195,7 @@ function checkConfetti(state) {
     canvas.height = window.innerHeight;
 
     const pieces = [];
-    const colors = ['#ff3c00', '#ff7c00', '#ffcc00', '#ffffff', '#ff5500', '#ffa500'];
+    const colors = ['#0c3753', '#165682', '#ffdf7a', '#a0aec0', '#475569', '#cbd5e1'];
 
     for (let i = 0; i < 150; i++) {
         pieces.push({

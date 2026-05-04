@@ -10,7 +10,7 @@
   <style>
     body {
       overflow: hidden;
-      background: #87CEEB;
+      background: var(--bg);
     }
 
     /* Full-screen Three.js canvas */
@@ -47,7 +47,7 @@
 
     .map-header-badge {
       display: inline-block;
-      background: white;
+      background: var(--bg-card);
       border-radius: 30px;
       padding: 8px 24px;
       font-size: 0.8rem;
@@ -73,7 +73,7 @@
     /* Island Info Cards — appear on hover */
     .island-tooltip {
       position: absolute;
-      background: white;
+      background: var(--bg-card);
       border-radius: var(--radius-md);
       padding: 16px 20px;
       min-width: 220px;
@@ -292,8 +292,10 @@
 
 <body>
   <div id="loading-screen">
-    <div class="energy-pulse"></div>
-    <div class="loading-text">🏝️ Memuat Peta Misi...</div>
+    <div style="position:relative;">
+      <div class="thermo-bar"><div class="thermo-fill"></div></div>
+      <div class="thermo-bulb"></div>
+    </div>
   </div>
   <div id="page-transition"></div>
   <div id="badge-popup">
@@ -454,7 +456,7 @@
           <li>Setiap pulau memiliki <strong>Kegiatan Awal (Quiz)</strong> dan <strong>4 Tantangan Berpikir
               Kompleks</strong>.</li>
           <li>Tantangan Berpikir Kompleks meliputi: Berpikir Kritis, Sistemik, Ilmiah, dan Inovatif.</li>
-          <li>Setiap tantangan memiliki <strong>Timer Diskusi 18 Menit</strong>.</li>
+          <li>Setiap tantangan memiliki <strong>Timer Diskusi 30 Menit</strong>.</li>
           <li>Kamu bisa mendapatkan XP dengan menjawab soal dengan benar dan menyelesaikan misi tepat waktu.</li>
         </ul>
         <h4 style="color:var(--text); margin:20px 0 10px;">Sistem Skor:</h4>

@@ -123,8 +123,8 @@ const ThermoGame = (() => {
   }
 
   function getFinalCategory(pct) {
-    if (pct >= 85) return { label: 'Termofisikawan Unggul', color: '#ff3c00', emoji: '🔥' };
-    if (pct >= 70) return { label: 'Penjelajah Termal',     color: '#ff7c00', emoji: '⚡' };
+    if (pct >= 85) return { label: 'Termofisikawan Unggul', color: '#0c3753', emoji: '🔥' };
+    if (pct >= 70) return { label: 'Penjelajah Termal',     color: '#165682', emoji: '⚡' };
     if (pct >= 50) return { label: 'Peneliti Pemula',       color: '#ffaa00', emoji: '🌡️' };
     return { label: 'Kadet Termo', color: '#888', emoji: '🧪' };
   }
@@ -161,7 +161,7 @@ const ThermoGame = (() => {
     el.textContent = `+${amount} XP`;
     Object.assign(el.style, {
       position: 'fixed', top: '80px', right: '24px',
-      background: 'linear-gradient(135deg,#ff3c00,#ff7c00)',
+      background: 'linear-gradient(135deg,#0c3753,#165682)',
       color: '#fff', fontWeight: '700', fontSize: '1.1rem',
       padding: '8px 18px', borderRadius: '999px',
       boxShadow: '0 4px 20px rgba(255,100,0,.5)',

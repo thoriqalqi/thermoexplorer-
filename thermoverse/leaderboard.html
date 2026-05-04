@@ -9,19 +9,19 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    :root{--red:#ff3c00;--orange:#ff7c00;--gold:#ffcc00;--bg:#080810;--surface:#10101c;--card:#161624;--border:rgba(255,120,0,.18);--text:#e8f4fd;--muted:#5a6a7f}
+    :root{--red:#ff6b6b;--orange:#0c3753;--gold:#ffdf7a;--bg:#f5f8fa;--surface:#ffffff;--card:#ffffff;--border:rgba(12,55,83,.1);--text:#0c3753;--muted:#526f82}
     body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:0 16px 60px}
     /* bg */
-    .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,100,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,100,0,.04) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-    .glow-top{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:300px;background:radial-gradient(ellipse,rgba(255,80,0,.18),transparent 70%);pointer-events:none;z-index:0}
+    .bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(12,55,83,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(12,55,83,.05) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+    .glow-top{position:fixed;top:-120px;left:50%;transform:translateX(-50%);width:700px;height:300px;background:radial-gradient(ellipse,rgba(12,55,83,.05),transparent 70%);pointer-events:none;z-index:0}
     /* layout */
     .wrap{position:relative;z-index:10;max-width:860px;margin:0 auto}
     /* header */
     .header{text-align:center;padding:48px 0 32px}
-    .header-badge{display:inline-block;background:linear-gradient(135deg,rgba(255,60,0,.2),rgba(255,120,0,.2));border:1px solid rgba(255,120,0,.35);border-radius:999px;padding:6px 18px;font-size:.82rem;font-weight:600;color:var(--orange);letter-spacing:.5px;margin-bottom:16px}
-    .header h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;background:linear-gradient(135deg,#ff3c00,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1}
+    .header-badge{display:inline-block;background:rgba(12,55,83,.05);border:1px solid rgba(12,55,83,.1);border-radius:999px;padding:6px 18px;font-size:.82rem;font-weight:600;color:var(--orange);letter-spacing:.5px;margin-bottom:16px}
+    .header h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;color:var(--orange);line-height:1.1}
     .session-info{margin-top:12px;color:var(--muted);font-size:.9rem;display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
-    .session-info span{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:4px 14px}
+    .session-info span{background:rgba(12,55,83,.04);border:1px solid var(--border);border-radius:8px;padding:4px 14px}
     /* live dot */
     .live-dot{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#22c55e;font-weight:600;margin-top:12px}
     .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:blink 1.2s ease-in-out infinite}
@@ -30,12 +30,12 @@
     .status-bar{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
     .progress-info{font-size:.9rem;color:var(--muted)}
     .progress-info strong{color:var(--text)}
-    .status-track{flex:1;min-width:180px;background:rgba(255,255,255,.06);border-radius:999px;height:8px;overflow:hidden}
-    .status-fill{height:100%;background:linear-gradient(90deg,#ff3c00,#ff7c00,#ffcc00);border-radius:999px;transition:width .8s ease}
+    .status-track{flex:1;min-width:180px;background:var(--bg);border-radius:999px;height:8px;overflow:hidden;border:1px solid var(--border)}
+    .status-fill{height:100%;background:linear-gradient(90deg,#0c3753,#165682,#ffdf7a);border-radius:999px;transition:width .8s ease}
     /* leaderboard */
     .lb-list{display:flex;flex-direction:column;gap:14px}
-    .lb-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 24px;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:16px;transition:transform .3s,box-shadow .3s;animation:slideIn .5s ease both}
-    .lb-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,80,0,.12)}
+    .lb-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 24px;display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:16px;transition:transform .3s,box-shadow .3s;animation:slideIn .5s ease both;box-shadow:0 8px 24px rgba(12,55,83,.05)}
+    .lb-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(12,55,83,.15)}
     @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
     /* rank medal */
     .rank{font-size:2rem;text-align:center;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
@@ -46,13 +46,13 @@
     .zone-pill{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid}
     .zone-done{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#86efac}
     .zone-going{background:rgba(255,124,0,.12);border-color:rgba(255,124,0,.4);color:#ffb366;animation:pulse2 1.5s ease infinite}
-    .zone-pending{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--muted)}
+    .zone-pending{background:rgba(12,55,83,.05);border-color:rgba(12,55,83,.1);color:var(--muted)}
 
-    .lb-bar-wrap{background:rgba(255,255,255,.06);border-radius:999px;height:6px;overflow:hidden}
-    .lb-bar{height:100%;border-radius:999px;transition:width 1s ease;background:linear-gradient(90deg,#ff3c00,#ff7c00)}
+    .lb-bar-wrap{background:rgba(12,55,83,.06);border-radius:999px;height:6px;overflow:hidden}
+    .lb-bar{height:100%;border-radius:999px;transition:width 1s ease;background:linear-gradient(90deg,#0c3753,#165682)}
     /* right side */
     .lb-right{text-align:right}
-    .lb-xp{font-size:1.6rem;font-weight:800;background:linear-gradient(135deg,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+    .lb-xp{font-size:1.6rem;font-weight:800;color:var(--orange);line-height:1}
     .lb-xp-label{font-size:.75rem;color:var(--muted);margin-top:2px}
     .lb-pct{font-size:.9rem;color:var(--orange);font-weight:600;margin-top:6px}
     .badge-done{display:inline-block;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;margin-top:6px}
@@ -66,12 +66,12 @@
     #winner-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:none;align-items:center;justify-content:center;flex-direction:column;text-align:center;backdrop-filter:blur(8px)}
     #winner-overlay.show{display:flex;animation:fadeIn .5s ease}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    .winner-title{font-size:clamp(2rem,8vw,4rem);font-weight:900;background:linear-gradient(135deg,#ff3c00,#ff7c00,#ffcc00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
+    .winner-title{font-size:clamp(2rem,8vw,4rem);font-weight:900;background:linear-gradient(135deg,#0c3753,#165682,#ffdf7a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:16px}
     .winner-trophy{font-size:5rem;animation:bounce 1s ease infinite alternate}
     @keyframes bounce{to{transform:translateY(-20px)}}
     .winner-name{font-size:1.6rem;font-weight:700;color:#ffcc00;margin:12px 0}
     .winner-sub{color:var(--muted);margin-bottom:32px}
-    .winner-close{background:linear-gradient(135deg,#ff3c00,#ff7c00);border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;padding:14px 32px;cursor:pointer}
+    .winner-close{background:linear-gradient(135deg,#0c3753,#165682);border:none;border-radius:12px;color:#fff;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;padding:14px 32px;cursor:pointer}
     /* canvas confetti */
     #confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:1000}
     /* empty */
@@ -258,7 +258,7 @@
       const canvas = document.getElementById('confetti-canvas');
       const ctx    = canvas.getContext('2d');
       canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-      const colors = ['#ff3c00','#ff7c00','#ffcc00','#ffffff','#ff5500'];
+      const colors = ['#0c3753','#165682','#ffdf7a','#ffffff','#a0aec0'];
       const pieces = Array.from({length:160}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height - canvas.height,

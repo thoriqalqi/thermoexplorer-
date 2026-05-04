@@ -76,7 +76,7 @@ function showIntro(){
       <h2 class="le-intro-title">${cfg.title}</h2>
       <p class="le-intro-sub">${cfg.subtitle}</p>
       <div class="le-intro-meta">
-        <div class="le-meta-item">⏱ <strong>18 Menit</strong><span>Waktu Pengerjaan</span></div>
+        <div class="le-meta-item">⏱ <strong>30 Menit</strong><span>Waktu Pengerjaan</span></div>
         <div class="le-meta-item">⚡ <strong>${maxXP+60} XP</strong><span>Maks (+ Speed Bonus)</span></div>
         <div class="le-meta-item">📝 <strong>${TOTAL_QUESTIONS} Soal</strong><span>Total Pertanyaan</span></div>
       </div>
@@ -107,7 +107,11 @@ function startTimer(){
     const m=Math.floor(timeRemaining/60), s=timeRemaining%60;
     if(disp) disp.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
     if(timeRemaining<=60) document.getElementById('main-timer')?.classList.add('urgent');
-    if(timeRemaining<=0){ clearInterval(timerInterval); finishLevel(); }
+    if(timeRemaining<=0){ 
+      clearInterval(timerInterval); 
+      toast('Waktu Habis! Mengumpulkan jawaban...', 'warn');
+      leFinish(true); 
+    }
   },1000);
 }
 
@@ -246,10 +250,29 @@ window.leSubmit=function(key){
 };
 
 // ── Finish Level ───────────────────────────────
-window.leFinish=function(){
-  if(completedSet.size<4){ toast('Selesaikan semua tantangan dulu!','warn'); return; }
+window.leFinish=function(isTimeout=false){
+  if(!isTimeout && completedSet.size<4){ toast('Selesaikan semua tantangan dulu!','warn'); return; }
+  
+  if(isTimeout) {
+    ORDER.forEach(key => {
+      if(!completedSet.has(key)) {
+        const ch = cfg.challenges[key];
+        let xp = 0;
+        userAnswers[key] = [];
+        ch.questions.forEach((q, i) => {
+          const selNode = document.querySelector(`input[name="${key}_q${i}"]:checked`);
+          const sel = selNode ? parseInt(selNode.value) : -1;
+          userAnswers[key].push(sel);
+          if(sel === q.c) xp += getXP(q.ind);
+        });
+        xpEarned[key] = xp;
+        completedSet.add(key);
+      }
+    });
+  }
+
   clearInterval(timerInterval);
-  const elapsed=cfg.timeSeconds - timeRemaining;
+  const elapsed=cfg.timeSeconds - Math.max(0, timeRemaining);
   const bonus=speedBonus(timeRemaining);
   const totalXP=Object.values(xpEarned).reduce((a,b)=>a+b,0)+bonus;
 
@@ -293,16 +316,16 @@ function showResult(elapsed, bonus, totalXP, pct){
 
   const banner = document.createElement('div');
   banner.innerHTML = `
-    <div style="background:white; border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(124,58,237,0.12); margin-bottom:24px; text-align:center; border:2px solid #E2E8F0;">
+    <div style="background:var(--bg-card); border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(12, 55, 83, 0.15); margin-bottom:24px; text-align:center; border:1px solid var(--border);">
       <div style="font-size:3.5rem;margin-bottom:12px">${pct>=80?'🏆':pct>=60?'⭐':'📝'}</div>
-      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:#0F172A;margin-bottom:20px;">Level ${cfg.levelNum} Selesai!</h2>
+      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:var(--text);margin-bottom:20px;">Level ${cfg.levelNum} Selesai!</h2>
       <div class="le-stats-grid" style="max-width:700px; margin:0 auto 20px;">
         <div class="le-stat-box ok"><div class="le-stat-val">✅ ${correctAll}</div><div class="le-stat-lbl">Benar (⚡${baseXP})</div></div>
         <div class="le-stat-box err"><div class="le-stat-val">❌ ${wrongAll}</div><div class="le-stat-lbl">Salah</div></div>
         <div class="le-stat-box"><div class="le-stat-val">⏱ ${em}</div><div class="le-stat-lbl">Bonus ⚡${bonus}</div></div>
         <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${totalXP}</div><div class="le-stat-lbl">Total XP Akhir</div></div>
       </div>
-      <p style="color:#64748B; font-size:0.95rem; margin-bottom:24px;">Silakan lihat pembahasan jawaban Anda di bawah ini.</p>
+      <p style="color:var(--muted); font-size:0.95rem; margin-bottom:24px;">Silakan lihat pembahasan jawaban Anda di bawah ini.</p>
       <a href="map.html" class="btn btn-primary" style="padding:12px 36px;font-size:1.05rem;">🗺️ Kembali ke Peta</a>
     </div>
   `;
@@ -349,7 +372,7 @@ function syncProgress(){
 // ── Init ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
   cfg=window.LEVEL_CONFIG;
-  timeRemaining=cfg.timeSeconds||18*60;
+  timeRemaining=cfg.timeSeconds||30*60;
   
   // Hitung dinamis total soal
   TOTAL_QUESTIONS = 0;
@@ -413,7 +436,7 @@ function showAlreadyCompleted(zoneData){
   const bonus=zoneData.speedBonus||0;
   const score=zoneData.score||0;
   
-  let em = "18:00";
+  let em = "30:00";
   if (zoneData.timeTaken !== undefined) {
     em = String(Math.floor(zoneData.timeTaken/60)).padStart(2,'0')+':'+String(zoneData.timeTaken%60).padStart(2,'0');
   } else {
@@ -426,16 +449,16 @@ function showAlreadyCompleted(zoneData){
   
   const reviewBanner = document.createElement('div');
   reviewBanner.innerHTML = `
-    <div style="background:white; border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(124,58,237,0.12); margin-bottom:24px; text-align:center; border:2px solid #E2E8F0;">
+    <div style="background:var(--bg-card); border-radius:16px; padding:32px; box-shadow:0 8px 30px rgba(0,0,0,0.5); margin-bottom:24px; text-align:center; border:1px solid var(--border);">
       <div style="font-size:3.5rem;margin-bottom:12px">${score>=80?'🏆':score>=60?'⭐':'📝'}</div>
-      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:#0F172A;margin-bottom:20px;">✅ Level ${cfg.levelNum} Sudah Selesai</h2>
+      <h2 style="font-family:var(--font-heading);font-size:1.8rem;color:var(--text);margin-bottom:20px;">✅ Level ${cfg.levelNum} Sudah Selesai</h2>
       <div class="le-stats-grid" style="max-width:700px; margin:0 auto 20px;">
         <div class="le-stat-box ok"><div class="le-stat-val">✅ ${correctAll}</div><div class="le-stat-lbl">Benar (⚡${baseXP})</div></div>
         <div class="le-stat-box err"><div class="le-stat-val">❌ ${wrongAll}</div><div class="le-stat-lbl">Salah</div></div>
         <div class="le-stat-box"><div class="le-stat-val">⏱ ${em}</div><div class="le-stat-lbl">Bonus ⚡${bonus}</div></div>
         <div class="le-stat-box xp"><div class="le-stat-val">⚡ ${totalXP}</div><div class="le-stat-lbl">Total XP Akhir</div></div>
       </div>
-      <p style="color:#64748B; font-size:0.95rem; margin-bottom:24px;">Kamu berada di mode Review Jawaban & Pembahasan.</p>
+      <p style="color:var(--muted); font-size:0.95rem; margin-bottom:24px;">Kamu berada di mode Review Jawaban & Pembahasan.</p>
       <a href="map.html" class="btn btn-primary" style="padding:12px 36px;font-size:1.05rem;">🗺️ Kembali ke Peta</a>
     </div>
   `;
@@ -459,7 +482,7 @@ style.textContent=`
 .le-toast-ok{background:#065F46}
 
 /* ── XP Badge ── */
-.le-xp-badge{display:inline-block;background:linear-gradient(135deg,#7C3AED,#EC4899);color:#fff;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
+.le-xp-badge{display:inline-block;background:linear-gradient(135deg,var(--secondary),var(--primary));color:#fff;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px}
 
 /* ── Tab Locked ── */
 .tab-btn.locked{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
@@ -467,55 +490,55 @@ style.textContent=`
 .tab-btn.done::after{content:'✓';margin-left:6px;color:#10B981;font-weight:900}
 
 /* ── Intro Overlay ── */
-#le-intro{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:8000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
-.le-intro-box{background:#fff;border-radius:24px;padding:44px 40px;max-width:520px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:leIn .35s ease}
+#le-intro{position:fixed;inset:0;background:rgba(12, 55, 83, 0.85);z-index:8000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.le-intro-box{background:var(--bg-card);border:1px solid var(--border);border-radius:24px;padding:44px 40px;max-width:520px;width:100%;box-shadow:0 24px 64px rgba(12, 55, 83, 0.2);animation:leIn .35s ease}
 @keyframes leIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 .le-intro-badge{display:inline-block;background:var(--primary);color:#fff;font-size:.78rem;font-weight:700;padding:4px 14px;border-radius:999px;margin-bottom:14px}
-.le-intro-title{font-family:var(--font-heading);font-size:1.7rem;color:#0F172A;margin-bottom:6px}
-.le-intro-sub{color:#64748B;font-size:.95rem;margin-bottom:20px}
+.le-intro-title{font-family:var(--font-heading);font-size:1.7rem;color:var(--text);margin-bottom:6px}
+.le-intro-sub{color:var(--muted);font-size:.95rem;margin-bottom:20px}
 .le-intro-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.le-meta-item{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:12px;text-align:center}
-.le-meta-item strong{display:block;font-family:var(--font-heading);font-size:1.1rem;color:#0F172A}
-.le-meta-item span{font-size:.74rem;color:#64748B}
+.le-meta-item{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.le-meta-item strong{display:block;font-family:var(--font-heading);font-size:1.1rem;color:var(--text)}
+.le-meta-item span{font-size:.74rem;color:var(--muted)}
 .le-intro-challenges{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.le-intro-row{display:flex;justify-content:space-between;align-items:center;background:#F1F5F9;border-radius:8px;padding:8px 14px;font-size:.88rem;font-weight:600;color:#334155}
-.le-xp-tag{background:#EDE9FE;color:#6D28D9;font-size:.75rem;padding:2px 10px;border-radius:6px;font-weight:700}
-.le-speed-info{font-size:.78rem;color:#94A3B8;text-align:center;margin-bottom:20px}
-.le-start-btn{width:100%;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-family:var(--font-heading);font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(124,58,237,.3)}
-.le-start-btn:hover{background:#6D28D9;transform:translateY(-2px)}
+.le-intro-row{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:8px 14px;font-size:.88rem;font-weight:600;color:var(--text); border:1px solid var(--border);}
+.le-xp-tag{background:var(--surface);color:var(--primary);border:1px solid var(--border);font-size:.75rem;padding:2px 10px;border-radius:6px;font-weight:700}
+.le-intro-btn{width:100%;justify-content:center;padding:14px;font-size:1.1rem;margin-top:10px}
+.le-start-btn{width:100%;padding:14px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-family:var(--font-heading);font-size:1.1rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(12, 55, 83, 0.2)}
+.le-start-btn:hover{background:var(--primary-light);transform:translateY(-2px)}
 
 /* ── Result Screen ── */
 .le-result-wrap{max-width:680px;margin:0 auto;text-align:center;padding:20px 0 40px}
-.le-res-title{font-family:var(--font-heading);font-size:2rem;color:#0F172A;margin-bottom:20px}
+.le-res-title{font-family:var(--font-heading);font-size:2rem;color:var(--text);margin-bottom:20px}
 .le-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.le-stat-box{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;padding:16px 8px}
-.le-stat-box.ok{background:#F0FDF4;border-color:#86EFAC}
-.le-stat-box.err{background:#FEF2F2;border-color:#FECACA}
-.le-stat-box.xp{background:#F5F3FF;border-color:#DDD6FE}
-.le-stat-val{font-family:var(--font-heading);font-size:1.3rem;color:#0F172A;margin-bottom:4px}
-.le-stat-lbl{font-size:.74rem;color:#64748B;font-weight:600;text-transform:uppercase}
-.le-detail-card{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;padding:20px;margin-bottom:20px;text-align:left}
-.le-detail-title{font-weight:700;color:#334155;margin-bottom:12px;font-size:.9rem}
-.le-res-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F1F5F9;font-size:.88rem;color:#475569}
+.le-stat-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:14px;padding:16px 8px}
+.le-stat-box.ok{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4)}
+.le-stat-box.err{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.4)}
+.le-stat-box.xp{background:rgba(255,223,122,.2);border-color:rgba(255,223,122,.6)}
+.le-stat-val{font-family:var(--font-heading);font-size:1.3rem;color:var(--text);margin-bottom:4px}
+.le-stat-lbl{font-size:.74rem;color:var(--muted);font-weight:600;text-transform:uppercase}
+.le-detail-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:20px;text-align:left}
+.le-detail-title{font-weight:700;color:var(--text);margin-bottom:12px;font-size:.9rem}
+.le-res-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:.88rem;color:var(--muted)}
 .le-res-row:last-child{border-bottom:none}
-.bonus-row{color:#7C3AED;font-weight:600}
-.total-row{color:#0F172A;font-weight:700;font-size:1rem;border-top:2px solid #E2E8F0;margin-top:4px;padding-top:10px}
+.bonus-row{color:var(--primary);font-weight:600}
+.total-row{color:var(--text);font-weight:700;font-size:1rem;border-top:2px solid var(--border);margin-top:4px;padding-top:10px}
 
 /* ── Koreksi ── */
-.le-korr-wrap{border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;text-align:left;margin-bottom:16px}
-.le-korr-header{padding:14px 20px;background:#F1F5F9;font-weight:700;color:#334155;cursor:pointer;user-select:none}
+.le-korr-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;text-align:left;margin-bottom:16px}
+.le-korr-header{padding:14px 20px;background:var(--bg-surface);font-weight:700;color:var(--text);cursor:pointer;user-select:none}
 .le-korr-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
 .le-korr-body.open{max-height:2000px}
-.le-korr-section{padding:16px 20px;border-top:1px solid #E2E8F0}
-.le-korr-title{font-weight:700;color:#334155;margin-bottom:10px;font-size:.9rem}
+.le-korr-section{padding:16px 20px;border-top:1px solid var(--border)}
+.le-korr-title{font-weight:700;color:var(--text);margin-bottom:10px;font-size:.9rem}
 .le-korr-item{padding:10px 12px;border-radius:8px;margin-bottom:8px}
-.k-correct{background:#F0FDF4;border-left:3px solid #10B981}
-.k-wrong{background:#FEF2F2;border-left:3px solid #EF4444}
-.le-korr-q{font-size:.85rem;color:#374151;margin-bottom:6px}
+.k-correct{background:rgba(34,197,94,.1);border-left:3px solid #10B981}
+.k-wrong{background:rgba(239,68,68,.1);border-left:3px solid #EF4444}
+.le-korr-q{font-size:.85rem;color:var(--text);margin-bottom:6px}
 .le-korr-ans{font-size:.82rem;display:flex;flex-direction:column;gap:2px}
-.k-ok{color:#059669}
-.k-err{color:#DC2626}
-.k-key{color:#059669}
+.k-ok{color:#10B981}
+.k-err{color:#EF4444}
+.k-key{color:#10B981}
 @media(max-width:600px){.le-stats-grid{grid-template-columns:repeat(2,1fr)}.le-intro-meta{grid-template-columns:1fr 1fr}}
 `;
 document.head.appendChild(style);
