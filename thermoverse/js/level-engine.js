@@ -97,6 +97,7 @@ function startLevel(){
   switchTab('ct');
   startTimer();
   syncProgress();
+  saveOngoingProgress();
 }
 
 // ── Timer ──────────────────────────────────────
@@ -107,6 +108,9 @@ function startTimer(){
     const m=Math.floor(timeRemaining/60), s=timeRemaining%60;
     if(disp) disp.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
     if(timeRemaining<=60) document.getElementById('main-timer')?.classList.add('urgent');
+    
+    if(timeRemaining % 5 === 0) saveOngoingProgress();
+    
     if(timeRemaining<=0){ 
       clearInterval(timerInterval); 
       toast('Waktu Habis! Mengumpulkan jawaban...', 'warn');
@@ -127,6 +131,7 @@ function switchTab(tab){
   document.getElementById('tab-'+tab)?.classList.add('active');
   document.querySelectorAll('.challenge-card').forEach(c=>c.style.display='none');
   document.getElementById('panel-'+tab).style.display='block';
+  saveOngoingProgress();
 }
 window.switchTab=switchTab;
 
@@ -200,6 +205,9 @@ window.leSelect=function(key,qi,oi){
   const block=document.getElementById(`${key}-q-${qi}`);
   block.querySelectorAll('.option-btn').forEach(b=>b.classList.remove('selected'));
   block.querySelectorAll('.option-btn')[oi].classList.add('selected');
+  const radio = block.querySelector(`input[name="${key}_q${qi}"][value="${oi}"]`);
+  if(radio) radio.checked = true;
+  saveOngoingProgress();
 };
 
 // ── Submit challenge ───────────────────────────
@@ -230,6 +238,10 @@ window.leSubmit=function(key){
   completedSet.add(key);
   document.getElementById('tab-'+key)?.classList.add('done');
 
+  const panel = document.getElementById(`panel-${key}`);
+  const submitBtn = panel?.querySelector('.btn-primary');
+  if(submitBtn) submitBtn.style.display = 'none';
+
   // Update running XP in header
   const runXP=Object.values(xpEarned).reduce((a,b)=>a+b,0);
   const el=document.getElementById('current-xp');
@@ -238,6 +250,7 @@ window.leSubmit=function(key){
 
   updateTabLocks();
   syncProgress();
+  saveOngoingProgress();
 
   const idx=ORDER.indexOf(key);
   if(idx<ORDER.length-1){
@@ -280,6 +293,23 @@ window.leFinish=function(isTimeout=false){
   const state=ThermoGame.loadState();
   const allDone=completedSet.size===4;
   const pct=Math.round(totalXP/((calcMaxXP()+60))*100);
+
+  // Compute per-challenge thinking score % (XP earned / max XP per challenge)
+  const thinkingScores = {};
+  ORDER.forEach(k => {
+    const ch = cfg.challenges[k];
+    if (!ch) return;
+    const maxXP = ch.questions.reduce((s, q) => s + getXP(q.ind), 0);
+    const earned = xpEarned[k] || 0;
+    thinkingScores[k] = maxXP > 0 ? Math.round((earned / maxXP) * 100) : 0;
+  });
+
+  // Merge into state.thinking (keep best score per dimension)
+  if (!state.thinking) state.thinking = {};
+  Object.keys(thinkingScores).forEach(k => {
+    state.thinking[k] = Math.max(state.thinking[k] || 0, thinkingScores[k]);
+  });
+
   state.zones[cfg.zone]={
     completed:allDone, score:pct,
     xpEarned:totalXP, speedBonus:bonus,
@@ -289,6 +319,7 @@ window.leFinish=function(isTimeout=false){
   };
   ThermoGame.addXP(state,totalXP);
   ThermoGame.saveState(state);
+  clearOngoingProgress();
   if(window.SessionManager) SessionManager.syncGroupState(state);
 
   showResult(elapsed, bonus, totalXP, pct);
@@ -369,6 +400,44 @@ function syncProgress(){
   }
 }
 
+// ── Ongoing Progress (Auto-save) ───────────────
+function saveOngoingProgress() {
+  try {
+    const draftAnswers = {};
+    ORDER.forEach(k => {
+      if(!completedSet.has(k)) {
+        draftAnswers[k] = [];
+        const ch = cfg.challenges[k];
+        if(ch && ch.questions) {
+          ch.questions.forEach((q, i) => {
+            const selNode = document.querySelector(`input[name="${k}_q${i}"]:checked`);
+            draftAnswers[k].push(selNode ? parseInt(selNode.value) : -1);
+          });
+        }
+      }
+    });
+
+    const activeBtn = document.querySelector('.tab-btn.active');
+    const activeTab = (activeBtn && activeBtn.id) ? activeBtn.id.replace('tab-', '') : 'ct';
+
+    localStorage.setItem(`thermo_ongoing_${cfg.zone}`, JSON.stringify({
+      timeRemaining: timeRemaining || (cfg.timeSeconds || 1800),
+      completedArray: Array.from(completedSet || []),
+      challengeXP: challengeXP || {},
+      userAnswers: userAnswers || {},
+      xpEarned: xpEarned || {},
+      draftAnswers,
+      activeTab
+    }));
+  } catch(e) {
+    console.error("Gagal save ongoing progress:", e);
+  }
+}
+
+function clearOngoingProgress() {
+  localStorage.removeItem(`thermo_ongoing_${cfg.zone}`);
+}
+
 // ── Init ───────────────────────────────────────
 document.addEventListener('DOMContentLoaded',()=>{
   cfg=window.LEVEL_CONFIG;
@@ -404,6 +473,83 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(zoneData&&zoneData.completed){
     showAlreadyCompleted(zoneData);
     return; // jangan tampilkan intro
+  }
+
+  // Cek apakah ada progress ongoing
+  const ongoingJson = localStorage.getItem(`thermo_ongoing_${cfg.zone}`);
+  if (ongoingJson) {
+    try {
+      const ongoing = JSON.parse(ongoingJson);
+      timeRemaining = ongoing.timeRemaining;
+      completedSet = new Set(ongoing.completedArray || []);
+      challengeXP = ongoing.challengeXP || {};
+      userAnswers = ongoing.userAnswers || {};
+      xpEarned = ongoing.xpEarned || {};
+      
+      const runXP = Object.values(xpEarned).reduce((a,b)=>a+b,0);
+      if(cxp) cxp.textContent = (state.xp || 0) + runXP;
+      
+      levelStarted = true;
+      document.getElementById('le-intro')?.remove();
+      renderAllChallenges();
+      
+      // Restore UI
+      ORDER.forEach(k => {
+        const ch = cfg.challenges[k];
+        if(!ch) return;
+        if (ongoing.completedArray && ongoing.completedArray.includes(k)) {
+          const tabBtn = document.getElementById('tab-'+k);
+          if (tabBtn) tabBtn.classList.add('done');
+          
+          if (ongoing.userAnswers && ongoing.userAnswers[k]) {
+            ch.questions.forEach((q, i) => {
+              const sel = ongoing.userAnswers[k][i];
+              const block = document.getElementById(`${k}-q-${i}`);
+              if(!block) return;
+              block.querySelectorAll('.option-btn').forEach((btn, bi) => {
+                btn.style.pointerEvents = 'none';
+                if (bi === q.c) btn.classList.add('correct');
+                else if (bi === sel) btn.classList.add('wrong');
+              });
+              const radio = block.querySelector(`input[name="${k}_q${i}"][value="${sel}"]`);
+              if(radio) radio.checked = true;
+            });
+          }
+          const panel = document.getElementById(`panel-${k}`);
+          const submitBtn = panel?.querySelector('.btn-primary');
+          if(submitBtn) submitBtn.style.display = 'none';
+        } else if (ongoing.draftAnswers && ongoing.draftAnswers[k]) {
+          ch.questions.forEach((q, i) => {
+            const sel = ongoing.draftAnswers[k][i];
+            if (sel !== -1 && sel !== null && sel !== undefined) {
+              const block = document.getElementById(`${k}-q-${i}`);
+              if(!block) return;
+              const optionBtn = block.querySelectorAll('.option-btn')[sel];
+              if (optionBtn) optionBtn.classList.add('selected');
+              const radio = block.querySelector(`input[name="${k}_q${i}"][value="${sel}"]`);
+              if(radio) radio.checked = true;
+            }
+          });
+        }
+      });
+      
+      updateTabLocks();
+      if (completedSet && completedSet.size === 4) {
+        const flc = document.getElementById('finish-level-container');
+        if(flc) flc.style.display='flex';
+      }
+      
+      switchTab(ongoing.activeTab || 'ct');
+      startTimer();
+      const m=Math.floor((timeRemaining||0)/60), s=(timeRemaining||0)%60;
+      const disp=document.getElementById('timer-val');
+      if(disp) disp.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+      
+      return;
+    } catch(e) {
+      console.error('Gagal memulihkan progress:', e);
+
+    }
   }
 
   // Show intro

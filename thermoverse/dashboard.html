@@ -330,18 +330,15 @@ function renderDashboard() {
     });
   });
 
-  // Think scores (aggregate from all zones)
-  const thinkScores = { ct:0, st:0, sci:0, inn:0 };
+  // Think scores — read directly from state.thinking (saved by level-engine on finish)
+  const thinkScores = { ct: 0, st: 0, sci: 0, inn: 0 };
   let count = 0;
-  ['zone1','zone2','zone3'].forEach(k => {
-    const zs = state.zones[k]?.scores?.all;
-    if (zs && typeof zs === 'object') {
-      ['ct','st','sci','inn'].forEach(d => { thinkScores[d] += (zs[d] || 0); });
-      count++;
-    }
-  });
-  if (count > 0) {
-    ['ct','st','sci','inn'].forEach(d => { thinkScores[d] = Math.round(thinkScores[d] / count); });
+  if (state.thinking && typeof state.thinking === 'object') {
+    ['ct','st','sci','inn'].forEach(d => {
+      thinkScores[d] = state.thinking[d] || 0;
+    });
+    // consider "active" if any zone completed
+    count = ['zone1','zone2','zone3'].filter(k => state.zones[k]?.completed).length;
   }
 
   ['ct','st','sci','inn'].forEach(d => {
@@ -361,7 +358,7 @@ function renderDashboard() {
   else if (count > 0) { lvlEl.textContent = '🌱 Calon Agen'; dscEl.textContent = 'Terus berlatih untuk mengembangkan kemampuan berpikir!'; }
 
   // Radar
-  drawRadar(thinkScores);
+  requestAnimationFrame(() => drawRadar(thinkScores));
 
   // Leaderboard — load from Firebase session or show offline fallback
   loadLeaderboard(state, groupLabel);
@@ -542,7 +539,7 @@ function resetGame() {
 
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => { document.getElementById('loading-screen').classList.add('hidden'); }, 1000);
-  renderDashboard();
+  setTimeout(() => renderDashboard(), 100);
   // Push data lokal ke Firebase segera saat dashboard dibuka
   const st = ThermoGame.loadState();
   if (st.xp > 0 || Object.values(st.zones).some(z => z.challengesDone?.length > 0)) {

@@ -319,6 +319,45 @@
     .map-bottom-bar { background: rgba(12, 55, 83, 0.6) !important; backdrop-filter: blur(12px) !important; border-top: 1px solid rgba(255,255,255,0.1) !important; }
     .zone-pill { background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.1); }
     .zone-pill-name { color: #fff !important; }
+
+    /* Responsive untuk Mobile */
+    @media (max-width: 768px) {
+      .island-tooltip {
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, 20px) !important;
+        width: 85%;
+        max-width: 350px;
+      }
+      .island-tooltip.visible {
+        transform: translate(-50%, -50%) !important;
+      }
+      .hud-top-left {
+        top: 10px;
+        left: 10px;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .hud-top-right {
+        top: 10px;
+        right: 10px;
+      }
+      .hud-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+      }
+      .hud-xp {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+      .map-bottom-bar {
+        padding: 10px;
+        justify-content: center;
+      }
+      .zone-pill {
+        padding: 6px 10px;
+      }
+    }
   </style>
 </head>
 
@@ -892,17 +931,49 @@
 
     // Raycaster for interaction
     const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
+    const pointer = new THREE.Vector2(-1000, -1000); // Set ke luar layar awalnya
     let hoveredIdx = -1;
 
-    window.addEventListener('mousemove', (e) => {
-      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-      pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    });
+    function updatePointer(x, y) {
+      pointer.x = (x / window.innerWidth) * 2 - 1;
+      pointer.y = -(y / window.innerHeight) * 2 + 1;
+    }
 
-    window.addEventListener('click', () => {
-      if (hoveredIdx !== -1) {
-        showTooltip(hoveredIdx);
+    window.addEventListener('mousemove', (e) => updatePointer(e.clientX, e.clientY));
+    
+    // Support sentuhan di HP
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    window.addEventListener('click', (e) => {
+      // Jika yang di-klik adalah elemen UI (bukan canvas), jangan lakukan raycast 3D
+      if (e.target.tagName !== 'CANVAS') return;
+
+      // Update pointer jika event dari mouse
+      if (e.clientX !== undefined && e.clientY !== undefined && e.clientX !== 0) {
+        updatePointer(e.clientX, e.clientY);
+      }
+      
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      
+      let found = -1;
+      for (let intersect of intersects) {
+        let obj = intersect.object;
+        while (obj && obj.parent && obj.type !== 'Scene' && !('index' in obj.userData)) {
+          obj = obj.parent;
+        }
+        if (obj && obj.userData && 'index' in obj.userData) {
+          found = obj.userData.index;
+          break;
+        }
+      }
+      
+      if (found !== -1) {
+        showTooltip(found);
       } else {
         hideAllTooltips();
       }

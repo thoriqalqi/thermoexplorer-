@@ -25,6 +25,9 @@
     .lab-title{font-weight:800;color:#475569;margin-bottom:12px;display:flex;align-items:center;gap:8px}
     .video-container{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;border-radius:12px;margin-bottom:16px}
     .video-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+    .data-table{width:100%;border-collapse:collapse;margin:15px 0;background:#fff;border-radius:8px;overflow:hidden}
+    .data-table th,.data-table td{padding:12px;text-align:center;border:1px solid #E5E7EB}
+    .data-table th{background:#F3F4F6;font-weight:700;color:#1F2937}
   </style>
 </head>
 <body>
@@ -94,13 +97,19 @@
 
     <div id="panel-sci" class="challenge-card" style="display:none">
       <div class="challenge-card-header"><div><div class="challenge-card-title">🔬 Berpikir Ilmiah (Scientific Thinking)</div></div></div>
+      <div class="lab-box">
+        <div class="lab-title">🔬 Virtual Lab: Simulasi Energi &amp; Generator</div>
+        <div class="video-container">
+          <iframe src="https://phet.colorado.edu/sims/html/energy-forms-and-changes/latest/energy-forms-and-changes_en.html" allowfullscreen></iframe>
+        </div>
+      </div>
       <div class="challenge-content" id="content-sci"></div>
     </div>
 
     <div id="panel-inn" class="challenge-card" style="display:none">
       <div class="challenge-card-header"><div><div class="challenge-card-title">💡 Berpikir Inovatif (Innovative Thinking)</div></div></div>
       <div class="video-container" style="margin:16px 0">
-        <iframe src="https://www.youtube.com/embed/S2pEa4_WvK0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube.com/embed/5IILIvwF5rQ" allowfullscreen></iframe>
       </div>
       <div class="challenge-content" id="content-inn"></div>
       <div class="finish-btn-container" id="finish-level-container" style="display:none">
@@ -122,10 +131,10 @@ window.LEVEL_CONFIG = {
   "title": "Hukum II Termodinamika",
   "subtitle": "Entropi & Efisiensi",
   "color": "#10B981",
-  "timeSeconds": 1080,
+  "timeSeconds": 1800,
   "challenges": {
     "ct": {
-      "scenario": "Gunakan simulasi PhET Gas Properties. Masukkan sejumlah partikel gas, pertahankan volume tetap, kemudian naikkan suhu gas secara bertahap. Amati perubahan tekanan dan gerakan partikel.",
+      "scenario": "<b>Langkah-langkah menggunakan simulasi PhET:</b><br><ol style='margin-left: 20px; margin-bottom: 15px; color: #475569;'><li>Gunakan simulasi PhET di atas.</li><li>Pilih mode simulasi Ideal atau tampilan utama gas dalam wadah.</li><li>Masukkan sejumlah partikel gas ke dalam wadah menggunakan pompa.</li><li>Aktifkan tampilan pengukuran suhu dan tekanan.</li><li>Pertahankan volume wadah tetap, kemudian naikkan suhu gas secara bertahap.</li><li>Amati perubahan gerak partikel, suhu, dan tekanan gas.</li><li>Catat data hasil pengamatan ke dalam tabel.</li><li>Ulangi pengamatan dengan beberapa variasi suhu.</li><li>Bandingkan perubahan tekanan pada setiap kenaikan suhu.</li><li>Gunakan data tersebut untuk menjawab soal berpikir kritis.</li></ol><b>Tabel Hasil Pengamatan:</b><table class='data-table' style='margin-top: 10px;'><tr><th>No</th><th>Suhu gas</th><th>Tekanan gas</th><th>Volume wadah</th><th>Pengamatan gerak partikel</th></tr><tr><td>1</td><td>Rendah</td><td>.......</td><td>Tetap</td><td>.......</td></tr><tr><td>2</td><td>Sedang</td><td>.......</td><td>Tetap</td><td>.......</td></tr><tr><td>3</td><td>Tinggi</td><td>.......</td><td>Tetap</td><td>.......</td></tr></table>",
       "questions": [
         {
           "ind": "Interpretasi",
@@ -186,7 +195,7 @@ window.LEVEL_CONFIG = {
         {
           "ind": "Inferensi",
           "xp": 15,
-          "q": "Dalam simulasi, diperoleh data berikut:\nKesimpulan paling logis berdasarkan data tersebut adalah…",
+          "q": "Dalam simulasi, diperoleh data berikut:<br><table class='data-table' style='margin:10px 0;'><tr><th>Kondisi</th><th>Suhu</th><th>Tekanan</th><th>Volume</th></tr><tr><td>1</td><td>Rendah</td><td>Rendah</td><td>Tetap</td></tr><tr><td>2</td><td>Sedang</td><td>Sedang</td><td>Tetap</td></tr><tr><td>3</td><td>Tinggi</td><td>Tinggi</td><td>Tetap</td></tr></table>Kesimpulan paling logis berdasarkan data tersebut adalah…",
           "a": [
             "Pada volume tetap, tekanan gas cenderung meningkat ketika suhu meningkat.",
             "Pada volume tetap, tekanan gas menurun ketika suhu meningkat.",
@@ -214,7 +223,7 @@ window.LEVEL_CONFIG = {
       ]
     },
     "st": {
-      "scenario": "Gunakan simulasi PhET Energy Forms and Changes. Atur sumber energi ke Burner dan hubungkan dengan ketel/turbin/generator. Amati aliran energi masuk, energi berguna, dan energi terbuang.",
+      "scenario": "<b>SIMULASI 1 — Energy Forms and Changes</b><br><br><b>Langkah-Langkah Simulasi:</b><br><ol style='margin-left:20px;margin-bottom:15px;color:#475569;'><li>Gunakan simulasi PhET di atas.</li><li>Pilih tab <b>Systems</b>.</li><li>Atur <b>Energy Source</b> menjadi <b>Burner</b>.</li><li>Hubungkan burner dengan sistem yang memuat ketel/turbin/generator.</li><li>Siapkan stopwatch, boleh menggunakan stopwatch dari HP.</li><li>Tekan tombol mulai pada stopwatch bersamaan dengan menaikkan pemanas hingga terlihat nyala api.</li><li>Amati paket energi yang keluar dari ketel dan paket energi yang diserap oleh turbin/generator.</li><li>Catat jumlah energi yang diserap sistem dan energi yang terbuang ke lingkungan.</li><li>Ulangi pengamatan pada tiga variasi waktu, yaitu 60 s, 120 s, dan 180 s.</li></ol>Hitung efisiensi sistem menggunakan rumus:<br><div style='background:#EFF6FF;border-left:4px solid #3B82F6;padding:10px 14px;border-radius:6px;margin:10px 0;font-size:1rem;color:#1E3A5F;font-weight:600;'>η = (1 − Q<sub>Lepas</sub> / Q<sub>Serap</sub>) × 100%</div><table class='data-table' style='margin-top:10px;'><tr><th>No</th><th>Waktu</th><th>Energi yang Dilepas</th><th>Energi yang Diserap</th><th>Efisiensi</th></tr><tr><td>1</td><td>60 s</td><td>……</td><td>……</td><td>……</td></tr><tr><td>2</td><td>120 s</td><td>……</td><td>……</td><td>……</td></tr><tr><td>3</td><td>180 s</td><td>……</td><td>……</td><td>……</td></tr></table>",
       "questions": [
         {
           "ind": "Pemahaman Hubungan dalam Sistem",
@@ -275,7 +284,7 @@ window.LEVEL_CONFIG = {
       ]
     },
     "sci": {
-      "scenario": "Simulasi Virtual Hukum Termodinamika II (Generator). Amati aliran energi masuk (panas), berguna (mekanik), dan terbuang (lingkungan) pada berbagai kondisi suhu.",
+      "scenario": "<b>Simulasi Virtual \u2013 Hukum Termodinamika II</b><br><br><ul style='margin-left:18px;margin-bottom:12px;color:#475569;line-height:2;'><li>Gunakan simulasi PhET di atas.</li><li>Pilih tab <b>Systems</b></li><li>Aktifkan:<ul style='margin-left:16px;'><li>Energy Source: <b>Burner</b></li><li>Energy User: <b>Generator</b></li></ul></li><li>Amati aliran energi:<ul style='margin-left:16px;'><li>Energi masuk (panas)</li><li>Energi berguna (mekanik)</li><li>Energi terbuang (lingkungan)</li></ul></li></ul><div style='background:#FFF7ED;border-left:4px solid #F59E0B;padding:10px 14px;border-radius:6px;margin:10px 0;color:#92400E;font-size:0.9rem;'><b>Catatan:</b><br>&bull; <b>Q<sub>in</sub></b> : simbol &ldquo;E&rdquo; menuju generator dari pemanas.<br>&bull; <b>W<sub>out</sub></b> : simbol &ldquo;E&rdquo; yang keluar dari baling-baling.</div><br><b>Tabel Hasil Pengamatan:</b><table class='data-table' style='margin-top:10px;'><tr><th>Percobaan</th><th>Q<sub>in</sub></th><th>W<sub>out</sub></th><th>Efisiensi &eta; = W/Q<sub>in</sub> &times; 100%</th></tr><tr><td>1</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td></tr><tr><td>2</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td></tr><tr><td>3</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td><td>&hellip;&hellip;</td></tr></table>",
       "questions": [
         {
           "ind": "Inkuiri",
