@@ -287,6 +287,38 @@
       border-radius: 10px;
       transition: width 0.5s ease;
     }
+    /* HUD Styling */
+    .game-hud {
+      position: fixed; z-index: 100; pointer-events: none; inset: 0;
+    }
+    .hud-btn {
+      pointer-events: auto; display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(12, 55, 83, 0.5); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff; text-decoration: none; font-family: var(--font-heading); font-weight: 700;
+      border-radius: 999px; padding: 10px 20px; font-size: 0.9rem; transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: pointer;
+    }
+    .hud-btn:hover { background: rgba(12, 55, 83, 0.9); transform: translateY(-2px); border-color: rgba(255,255,255,0.3); }
+    .hud-top-left { position: absolute; top: 24px; left: 24px; display: flex; gap: 12px; }
+    .hud-top-right { position: absolute; top: 24px; right: 24px; display: flex; gap: 12px; align-items: center; }
+    .hud-xp {
+      background: linear-gradient(135deg, rgba(255,223,122,0.95), rgba(234,179,8,0.95));
+      color: #0c3753; padding: 10px 24px; border-radius: 999px; font-weight: 900; font-family: var(--font-heading);
+      display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 20px rgba(234,179,8,0.4); pointer-events: auto; font-size:1.1rem;
+    }
+    .island-tooltip {
+      background: rgba(12, 55, 83, 0.75) !important; backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 223, 122, 0.3) !important; color: #fff !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important; border-radius: 16px !important;
+    }
+    .island-tooltip .tt-title { color: #ffdf7a !important; }
+    .island-tooltip .tt-sub { color: rgba(255,255,255,0.8) !important; }
+    .island-tooltip .tt-chip { background: rgba(255,255,255,0.1) !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.1); }
+    .island-tooltip .tt-btn { background: #ffdf7a !important; color: #0c3753 !important; }
+    
+    .map-bottom-bar { background: rgba(12, 55, 83, 0.6) !important; backdrop-filter: blur(12px) !important; border-top: 1px solid rgba(255,255,255,0.1) !important; }
+    .zone-pill { background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.1); }
+    .zone-pill-name { color: #fff !important; }
   </style>
 </head>
 
@@ -329,27 +361,18 @@
 
   <canvas id="map-canvas"></canvas>
 
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-logo">Thermo<span>Explorer</span></a>
-    <ul class="nav-links">
-      <li><a href="index.html">🏠 Beranda</a></li>
-      <li><a href="#" id="nav-lb-link">🏆 Leaderboard</a></li>
-    </ul>
-    <div class="nav-xp" style="margin-right: 15px; background: #6366F1; cursor: pointer;"
-      onclick="document.getElementById('info-modal').classList.add('show')">
-      <span style="color: white; font-weight: bold;">⚙️ Info & Aturan Game</span>
+  <div class="game-hud">
+    <div class="hud-top-left">
+      <a href="index.html" class="hud-btn">🏠 Beranda</a>
+      <a href="dashboard.html" class="hud-btn">📊 Statistik</a>
+      <a href="leaderboard.html" class="hud-btn" style="background:#ffdf7a; color:#0c3753; border:none; font-weight:800;">🏆 Leaderboard</a>
     </div>
-    <div class="nav-xp">
-      <span class="xp-icon">⚡</span>
-      <span class="xp-value" id="nav-xp-value">0 XP</span>
+    <div class="hud-top-right">
+      <div class="hud-xp"><span class="xp-icon">⚡</span><span id="nav-xp-value">0 XP</span></div>
     </div>
-  </nav>
+  </div>
 
   <div class="map-ui">
-    <div class="map-header">
-      <div class="map-header-badge">🗺️ PETA MISI THERMOEXPLORER</div>
-      <div class="map-header-title">Pilih <span>Pulau Misimu</span></div>
-    </div>
 
     <!-- Island 1 Tooltip -->
     <div class="island-tooltip" id="tt-1" style="left:15%; top:45%;">
@@ -432,10 +455,6 @@
         </div>
       </div>
     </div>
-    <div class="bottom-bar-actions">
-      <button class="btn btn-ghost" onclick="ThermoGame.resetState(); location.reload();">🔄 Reset Progress</button>
-      <a href="dashboard.html" class="btn btn-primary">📊 Statistik Lengkap</a>
-    </div>
   </div>
 
   <!-- Info Modal -->
@@ -469,6 +488,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <script src="js/firebase-config.js"></script>
@@ -483,13 +503,48 @@
     renderer.shadowMap.enabled = true;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 35, 45);
-    camera.lookAt(0, 0, 0);
+    // Lower camera and zoom in slightly to match image perspective
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 30, 85);
+    camera.lookAt(0, 5, 0);
 
-    // Lights
-    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-    const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+    // Controls: Pan Only (No Rotation)
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.enableRotate = false; // Mencegah putaran 360 derajat
+    controls.enablePan = true;
+    controls.screenSpacePanning = true;
+    controls.mouseButtons = {
+      LEFT: THREE.MOUSE.PAN,
+      MIDDLE: THREE.MOUSE.DOLLY,
+      RIGHT: null
+    };
+    controls.minDistance = 20;
+    controls.maxDistance = 120;
+
+    // Sky Background (Vibrant Light Blue to match image)
+    scene.background = new THREE.Color(0x60c5f1);
+    
+    // Add some floating clouds (fluffier)
+    const clouds = [];
+    for(let i=0; i<30; i++) {
+      const cGroup = new THREE.Group();
+      const numPuffs = 4 + Math.floor(Math.random()*5);
+      for(let j=0; j<numPuffs; j++) {
+        const puffGeo = new THREE.DodecahedronGeometry(2 + Math.random()*3, 0);
+        const puffMat = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true, transparent: true, opacity: 0.95 });
+        const puff = new THREE.Mesh(puffGeo, puffMat);
+        puff.position.set((Math.random()-0.5)*6, (Math.random()-0.5)*3, (Math.random()-0.5)*6);
+        cGroup.add(puff);
+      }
+      cGroup.position.set((Math.random()-0.5)*200, 15 + Math.random()*20, (Math.random()-0.5)*80 - 40);
+      scene.add(cGroup);
+      clouds.push({ mesh: cGroup, speed: 0.01 + Math.random()*0.02 });
+    }
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.6);
     sun.position.set(20, 40, 10);
     sun.castShadow = true;
     sun.shadow.mapSize.width = 512;
@@ -497,44 +552,342 @@
     scene.add(sun);
 
     // Ocean
-    const oceanGeo = new THREE.PlaneGeometry(200, 200, 10, 10);
-    const oceanMat = new THREE.MeshPhongMaterial({ color: 0x4FC3F7, transparent: true, opacity: 0.8, shininess: 80 });
+    const oceanGeo = new THREE.PlaneGeometry(250, 250, 40, 40);
+    const oceanMat = new THREE.MeshPhongMaterial({ color: 0x4FC3F7, transparent: true, opacity: 0.85, shininess: 90, flatShading: true });
     const ocean = new THREE.Mesh(oceanGeo, oceanMat);
     ocean.rotation.x = -Math.PI / 2;
     ocean.receiveShadow = true;
     scene.add(ocean);
+    const oceanInitialZ = new Float32Array(oceanGeo.attributes.position.array.length);
+    for(let i=0; i<oceanGeo.attributes.position.array.length; i+=3){
+      let vx = oceanGeo.attributes.position.array[i];
+      let drop = (vx * vx) * 0.0025; // Parabolic curve to create Globe effect
+      oceanGeo.attributes.position.array[i+2] -= drop;
+      oceanInitialZ[i+2] = oceanGeo.attributes.position.array[i+2];
+    }
 
-    // ---- Island Builder ----
-    function buildIsland(cfg) {
+    // ---- Advanced Island Builder ----
+    function createTree(group, x, y, z, scale, trunkColor, leafColor) {
+      const trunkGeo = new THREE.CylinderGeometry(0.2*scale, 0.4*scale, 1.5*scale, 5);
+      const trunkMat = new THREE.MeshPhongMaterial({ color: trunkColor, flatShading: true });
+      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      trunk.position.set(x, y + 0.75*scale, z);
+      trunk.castShadow = true; trunk.receiveShadow = true;
+      group.add(trunk);
+
+      const leafGeo = new THREE.DodecahedronGeometry(1.2*scale, 0);
+      const leafMat = new THREE.MeshPhongMaterial({ color: leafColor, flatShading: true });
+      const leaf = new THREE.Mesh(leafGeo, leafMat);
+      leaf.position.set(x, y + 1.5*scale + 0.5*scale, z);
+      leaf.castShadow = true; leaf.receiveShadow = true;
+      group.add(leaf);
+    }
+
+    function createRock(group, x, y, z, scale, color) {
+      const rockGeo = new THREE.DodecahedronGeometry(scale, 0);
+      const rockMat = new THREE.MeshPhongMaterial({ color: color, flatShading: true });
+      const rock = new THREE.Mesh(rockGeo, rockMat);
+      rock.position.set(x, y + scale*0.8, z);
+      rock.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+      rock.castShadow = true; rock.receiveShadow = true;
+      group.add(rock);
+    }
+
+    function createParticles(group, color) {
+      const pGeo = new THREE.BufferGeometry();
+      const pCount = 40;
+      const posArray = new Float32Array(pCount * 3);
+      for(let i=0; i<pCount*3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 10;
+      }
+      pGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      const pMat = new THREE.PointsMaterial({ size: 0.5, color: color, transparent: true, opacity: 0.8 });
+      const points = new THREE.Points(pGeo, pMat);
+      points.position.y = 3;
+      group.add(points);
+      return points;
+    }
+
+    function createBridge(scene, startX, endX, yPos) {
+      const bridgeGroup = new THREE.Group();
+      const length = Math.abs(endX - startX);
+      const numPlanks = Math.floor(length / 2.5);
+      const step = length / numPlanks;
+      
+      for(let i=1; i<numPlanks; i++) {
+        const plankGeo = new THREE.BoxGeometry(1.8, 0.3, 3.5);
+        const plankMat = new THREE.MeshPhongMaterial({ color: 0x451a03, flatShading: true });
+        const plank = new THREE.Mesh(plankGeo, plankMat);
+        const dip = Math.sin((i / numPlanks) * Math.PI) * -4;
+        plank.position.set(startX + (Math.sign(endX - startX) * i * step), yPos + dip, 0);
+        plank.rotation.x = (Math.random() - 0.5) * 0.2;
+        plank.rotation.z = (Math.random() - 0.5) * 0.1;
+        plank.castShadow = true; plank.receiveShadow = true;
+        bridgeGroup.add(plank);
+      }
+      
+      const ropeGeo = new THREE.CylinderGeometry(0.1, 0.1, length, 4);
+      const ropeMat = new THREE.MeshPhongMaterial({ color: 0x1c1917 });
+      const rope1 = new THREE.Mesh(ropeGeo, ropeMat);
+      rope1.rotation.z = Math.PI / 2;
+      rope1.position.set((startX + endX)/2, yPos - 1.5, 1.7);
+      bridgeGroup.add(rope1);
+      const rope2 = new THREE.Mesh(ropeGeo, ropeMat);
+      rope2.rotation.z = Math.PI / 2;
+      rope2.position.set((startX + endX)/2, yPos - 1.5, -1.7);
+      bridgeGroup.add(rope2);
+
+      scene.add(bridgeGroup);
+    }
+
+    function buildAdvancedIsland(cfg) {
       const group = new THREE.Group();
-      const baseGeo = new THREE.CylinderGeometry(cfg.rTop, cfg.rBot, cfg.h, 16);
-      const baseMat = new THREE.MeshPhongMaterial({ color: cfg.rockColor });
-      const base = new THREE.Mesh(baseGeo, baseMat);
-      base.castShadow = true; base.receiveShadow = true;
-      group.add(base);
+      
+      const clusters = [
+        { x: 0, z: 0, r: 8 * cfg.scale, h: 6 },
+        { x: -4*cfg.scale, z: 3*cfg.scale, r: 5*cfg.scale, h: 5.5 },
+        { x: 5*cfg.scale, z: -2*cfg.scale, r: 6*cfg.scale, h: 5 },
+        { x: 2*cfg.scale, z: 4*cfg.scale, r: 4.5*cfg.scale, h: 4.5 }
+      ];
 
-      const grassGeo = new THREE.CylinderGeometry(cfg.rTop + 0.3, cfg.rTop - 0.5, 0.8, 16);
-      const grassMat = new THREE.MeshPhongMaterial({ color: cfg.grassColor });
-      const grass = new THREE.Mesh(grassGeo, grassMat);
-      grass.position.y = cfg.h / 2 + 0.2;
-      group.add(grass);
+      clusters.forEach(c => {
+        const baseGeo = new THREE.CylinderGeometry(c.r, c.r*0.7, c.h, 8);
+        const baseMat = new THREE.MeshPhongMaterial({ color: cfg.rockColor, flatShading: true });
+        const base = new THREE.Mesh(baseGeo, baseMat);
+        base.position.set(c.x, 0, c.z);
+        base.castShadow = true; base.receiveShadow = true;
+        group.add(base);
+
+        const grassGeo = new THREE.CylinderGeometry(c.r + 0.3, c.r - 0.2, 1.2, 8);
+        const grassMat = new THREE.MeshPhongMaterial({ color: cfg.grassColor, flatShading: true });
+        const grass = new THREE.Mesh(grassGeo, grassMat);
+        grass.position.set(c.x, c.h / 2 + 0.5, c.z);
+        grass.castShadow = true; grass.receiveShadow = true;
+        group.add(grass);
+      });
+
+      const surfaceY = 6 / 2 + 1.1;
+      
+      if (cfg.theme === 'konsep') {
+        const volGeo = new THREE.CylinderGeometry(2, 6, 5, 7);
+        const volMat = new THREE.MeshPhongMaterial({ color: 0x78350f, flatShading: true });
+        const vol = new THREE.Mesh(volGeo, volMat);
+        vol.position.y = surfaceY + 2.5;
+        vol.castShadow = true; vol.receiveShadow = true;
+        group.add(vol);
+        
+        const lavaGeo = new THREE.CylinderGeometry(1.8, 2.2, 0.4, 7);
+        const lavaMat = new THREE.MeshPhongMaterial({ color: 0xf97316, flatShading: true, emissive: 0xc2410c });
+        const lava = new THREE.Mesh(lavaGeo, lavaMat);
+        lava.position.y = surfaceY + 5;
+        group.add(lava);
+
+        // Windmill
+        const millBaseGeo = new THREE.CylinderGeometry(1.5, 2, 5, 6);
+        const millBaseMat = new THREE.MeshPhongMaterial({ color: 0x451a03, flatShading: true });
+        const millBase = new THREE.Mesh(millBaseGeo, millBaseMat);
+        millBase.position.set(-8, surfaceY + 2.5, 3);
+        group.add(millBase);
+
+        const bladeGroup = new THREE.Group();
+        for(let i=0; i<4; i++){
+          const bladeGeo = new THREE.BoxGeometry(0.3, 5, 0.6);
+          const bladeMat = new THREE.MeshPhongMaterial({ color: 0xfde047 });
+          const blade = new THREE.Mesh(bladeGeo, bladeMat);
+          blade.position.y = 2.5;
+          const pivot = new THREE.Group();
+          pivot.rotation.x = (Math.PI/2) * i;
+          pivot.add(blade);
+          bladeGroup.add(pivot);
+        }
+        bladeGroup.position.set(-8, surfaceY + 5, 4.2);
+        group.add(bladeGroup);
+        cfg.machine = { type: 'windmill', mesh: bladeGroup };
+
+        createTree(group, -4, surfaceY, -3, 1.5, 0x5c4033, 0xd97706);
+        createTree(group, 6, surfaceY, -5, 1.8, 0x5c4033, 0xf59e0b);
+        createTree(group, 8, surfaceY, 2, 1.2, 0x5c4033, 0xb45309);
+        createRock(group, 4, surfaceY, 6, 1.5, 0x4b5563);
+        
+        cfg.particles = createParticles(group, 0xf97316);
+      } 
+      else if (cfg.theme === 'energi') {
+        const pBaseGeo = new THREE.BoxGeometry(5, 4, 5);
+        const pBaseMat = new THREE.MeshPhongMaterial({ color: 0x1e293b, flatShading: true });
+        const pBase = new THREE.Mesh(pBaseGeo, pBaseMat);
+        pBase.position.set(0, surfaceY + 2, 0);
+        group.add(pBase);
+
+        const cylinderGeo = new THREE.CylinderGeometry(1.8, 1.8, 5, 12);
+        const cylinderMat = new THREE.MeshPhongMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.5 });
+        const cylinder = new THREE.Mesh(cylinderGeo, cylinderMat);
+        cylinder.position.set(0, surfaceY + 6.5, 0);
+        group.add(cylinder);
+
+        const headGeo = new THREE.CylinderGeometry(1.7, 1.7, 1.2, 12);
+        const headMat = new THREE.MeshPhongMaterial({ color: 0x38bdf8, emissive: 0x0284c7 });
+        const head = new THREE.Mesh(headGeo, headMat);
+        head.position.set(0, surfaceY + 5, 0);
+        group.add(head);
+        cfg.machine = { type: 'piston', mesh: head, baseY: surfaceY + 5 };
+
+        for(let i=0; i<5; i++) {
+          const cryGeo = new THREE.CylinderGeometry(0, 1.5, 6 + Math.random()*5, 6);
+          const cryMat = new THREE.MeshPhongMaterial({ color: 0x38bdf8, flatShading: true, emissive: 0x0ea5e9, shininess: 100 });
+          const cry = new THREE.Mesh(cryGeo, cryMat);
+          cry.position.set((Math.random()-0.5)*14, surfaceY + 3.5, (Math.random()-0.5)*14);
+          cry.rotation.set((Math.random()-0.5)*0.8, 0, (Math.random()-0.5)*0.8);
+          cry.castShadow = true;
+          group.add(cry);
+        }
+        createTree(group, -8, surfaceY, 5, 1.6, 0x1e293b, 0x818cf8);
+        createTree(group, 7, surfaceY, -7, 1.4, 0x1e293b, 0x6366f1);
+        
+        cfg.particles = createParticles(group, 0x38bdf8);
+      }
+      else if (cfg.theme === 'entropi') {
+        const towerGeo = new THREE.CylinderGeometry(2.5, 4.5, 8, 8);
+        const towerMat = new THREE.MeshPhongMaterial({ color: 0x3f3f46, flatShading: true });
+        const tower = new THREE.Mesh(towerGeo, towerMat);
+        tower.position.set(-4, surfaceY + 4, -3);
+        const crack = new THREE.Mesh(new THREE.BoxGeometry(0.8, 4, 0.8), new THREE.MeshBasicMaterial({color: 0x18181b}));
+        crack.position.set(-3, surfaceY + 4, -6);
+        crack.rotation.z = 0.2;
+        group.add(tower);
+        group.add(crack);
+        cfg.machine = { type: 'tower', x: cfg.x - 4, y: surfaceY + 8, z: cfg.z - 3 };
+
+        for(let i=0; i<8; i++) {
+          const chunkGeo = new THREE.DodecahedronGeometry(1.8 + Math.random()*3, 0);
+          const chunkMat = new THREE.MeshPhongMaterial({ color: cfg.rockColor, flatShading: true });
+          const chunk = new THREE.Mesh(chunkGeo, chunkMat);
+          chunk.position.set((Math.random()-0.5)*20, surfaceY + 4 + Math.random()*12, (Math.random()-0.5)*20);
+          chunk.castShadow = true;
+          group.add(chunk);
+        }
+        createTree(group, 6, surfaceY, 6, 1.7, 0x27272a, 0x10b981);
+        createTree(group, -6, surfaceY, 8, 1.9, 0x27272a, 0x34d399);
+        createRock(group, -8, surfaceY, 4, 2, 0x3f3f46);
+
+        cfg.particles = createParticles(group, 0x10b981);
+      }
+
+      const pLight = new THREE.PointLight(cfg.glowColor, 3, 40);
+      pLight.position.set(0, 18, 0);
+      group.add(pLight);
 
       group.position.set(cfg.x, cfg.y, cfg.z);
       scene.add(group);
       return group;
     }
 
-    // Island Positions - ALL IN ONE ROW
+    // Island Positions - Curved for Globe
     const islandDefs = [
-      { x: -22, y: 0, z: 0, rTop: 7, rBot: 5, h: 5, rockColor: 0xD97706, grassColor: 0x65A30D },
-      { x: 0, y: 1, z: 0, rTop: 8, rBot: 6, h: 6, rockColor: 0x6D28D9, grassColor: 0x16A34A },
-      { x: 22, y: -0.5, z: 0, rTop: 6.5, rBot: 4.5, h: 4.5, rockColor: 0x065F46, grassColor: 0x10B981 }
+      { x: -38, y: -3.6, z: 0, scale: 1.4, rockColor: 0x78350f, grassColor: 0x4d7c0f, theme: 'konsep', glowColor: 0xf59e0b },
+      { x: 0, y: 1, z: 0, scale: 1.5, rockColor: 0x1e1b4b, grassColor: 0x312e81, theme: 'energi', glowColor: 0x3b82f6 },
+      { x: 38, y: -4.1, z: 0, scale: 1.4, rockColor: 0x064e3b, grassColor: 0x065f46, theme: 'entropi', glowColor: 0x10b981 }
     ];
 
+    // Build Bridges
+    createBridge(scene, -28, -10, 4);
+    createBridge(scene, 10, 28, 4);
+
     const islands = islandDefs.map((def, i) => {
-      const group = buildIsland(def);
+      const group = buildAdvancedIsland(def);
       group.userData = { index: i };
       return group;
+    });
+
+    // Clouds movement
+    // Removing old clouds logic as they are now added in the background setup
+
+
+    // Balloons
+    function createHotAirBalloon(x, y, z, colorBase) {
+      const group = new THREE.Group();
+      const balloonGeo = new THREE.SphereGeometry(3.5, 16, 16);
+      const balloonMat = new THREE.MeshPhongMaterial({ color: colorBase, flatShading: true });
+      const balloon = new THREE.Mesh(balloonGeo, balloonMat);
+      balloon.scale.y = 1.3;
+      group.add(balloon);
+
+      const basketGeo = new THREE.BoxGeometry(1.5, 1.2, 1.5);
+      const basketMat = new THREE.MeshPhongMaterial({ color: 0x8b5a2b, flatShading: true });
+      const basket = new THREE.Mesh(basketGeo, basketMat);
+      basket.position.y = -5;
+      group.add(basket);
+
+      const ropeGeo = new THREE.CylinderGeometry(0.05, 0.05, 1.5);
+      const ropeMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const ropes = [[0.6, 0.6], [-0.6, 0.6], [0.6, -0.6], [-0.6, -0.6]];
+      ropes.forEach(pos => {
+        const rope = new THREE.Mesh(ropeGeo, ropeMat);
+        rope.position.set(pos[0], -4, pos[1]);
+        group.add(rope);
+      });
+
+      group.position.set(x, y, z);
+      scene.add(group);
+      return group;
+    }
+
+    const balloons = [
+      createHotAirBalloon(-20, 25, -15, 0xf43f5e),
+      createHotAirBalloon(15, 30, -25, 0x0ea5e9)
+    ];
+
+    // Objek Kapal Kecil
+    function createBoat(x, z) {
+      const group = new THREE.Group();
+      
+      const hullGeo = new THREE.BoxGeometry(4, 1.5, 2);
+      const hullMat = new THREE.MeshPhongMaterial({ color: 0x8b5a2b, flatShading: true });
+      const hull = new THREE.Mesh(hullGeo, hullMat);
+      hull.position.y = 0.75;
+      hull.castShadow = true;
+      group.add(hull);
+      
+      const sailGeo = new THREE.ConeGeometry(2, 4, 3);
+      const sailMat = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
+      const sail = new THREE.Mesh(sailGeo, sailMat);
+      sail.position.set(0, 3.5, 0);
+      sail.rotation.y = Math.PI / 4;
+      sail.castShadow = true;
+      group.add(sail);
+
+      group.position.set(x, 0, z);
+      scene.add(group);
+      return group;
+    }
+    const boat = createBoat(-15, 15);
+
+    // Island Markers (Floating Icons like in the reference image)
+    function createIslandMarker(x, y, z, color) {
+      const group = new THREE.Group();
+      
+      // Outer Ring
+      const ringGeo = new THREE.TorusGeometry(2, 0.2, 16, 32);
+      const ringMat = new THREE.MeshPhongMaterial({ color: color, emissive: color, emissiveIntensity: 0.5 });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      group.add(ring);
+      
+      // Inner Icon (Simplified shapes for now)
+      let iconGeo;
+      if (color === 0xf59e0b) iconGeo = new THREE.SphereGeometry(0.8, 8, 8); // Concept: Light/Brain
+      else if (color === 0x3b82f6) iconGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2); // Energy: Battery/Box
+      else iconGeo = new THREE.OctahedronGeometry(1.2); // Entropy: Crystal/Chaos
+      
+      const iconMat = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
+      const icon = new THREE.Mesh(iconGeo, iconMat);
+      group.add(icon);
+
+      group.position.set(x, y + 10, z);
+      scene.add(group);
+      return group;
+    }
+
+    const markers = islandDefs.map((def, i) => {
+      return createIslandMarker(def.x, def.y, def.z, def.glowColor);
     });
 
     // Raycaster for interaction
@@ -568,6 +921,18 @@
     function animate() {
       requestAnimationFrame(animate);
 
+      controls.update(); // Add damping and rotation
+
+      // Lock camera to Pan-only view (Horizontal only)
+      camera.position.y = 30;
+      camera.position.z = 85;
+      controls.target.y = 5;
+      controls.target.z = 0;
+      
+      // Tighter panning boundaries to hide world edges
+      if (camera.position.x > 32) { camera.position.x = 32; controls.target.x = 32; }
+      if (camera.position.x < -32) { camera.position.x = -32; controls.target.x = -32; }
+
       // Hover detection
       raycaster.setFromCamera(pointer, camera);
       const intersects = raycaster.intersectObjects(scene.children, true);
@@ -575,8 +940,10 @@
       let found = -1;
       for (let intersect of intersects) {
         let obj = intersect.object;
-        while (obj.parent && !obj.userData.hasOwnProperty('index')) obj = obj.parent;
-        if (obj.userData.hasOwnProperty('index')) {
+        while (obj && obj.parent && obj.type !== 'Scene' && !('index' in obj.userData)) {
+          obj = obj.parent;
+        }
+        if (obj && obj.userData && 'index' in obj.userData) {
           found = obj.userData.index;
           break;
         }
@@ -585,17 +952,67 @@
       if (found !== hoveredIdx) {
         if (hoveredIdx !== -1) islands[hoveredIdx].scale.set(1, 1, 1);
         hoveredIdx = found;
-        if (hoveredIdx !== -1) islands[hoveredIdx].scale.set(1.1, 1.1, 1.1);
+        if (hoveredIdx !== -1) islands[hoveredIdx].scale.set(1.08, 1.08, 1.08);
         canvas.style.cursor = hoveredIdx !== -1 ? 'pointer' : 'grab';
       }
 
-      // Floating islands
+      const time = Date.now() * 0.001;
+
+      // Floating islands & Particles & Machines
       islands.forEach((isl, i) => {
-        isl.position.y = islandDefs[i].y + Math.sin(Date.now() * 0.001 + i) * 0.5;
+        isl.position.y = islandDefs[i].y + Math.sin(time * 1.5 + i) * 0.4;
+        const def = islandDefs[i];
+        if (def.particles) {
+          const positions = def.particles.geometry.attributes.position.array;
+          for(let p=0; p<positions.length; p+=3) {
+            positions[p+1] += 0.03; 
+            if (positions[p+1] > 10) positions[p+1] = -2;
+          }
+          def.particles.geometry.attributes.position.needsUpdate = true;
+          def.particles.rotation.y += 0.01;
+        }
+
+        if (def.machine) {
+          if (def.machine.type === 'windmill') {
+            def.machine.mesh.rotation.x -= 0.02; // Rotate blades
+          } else if (def.machine.type === 'piston') {
+            def.machine.mesh.position.y = def.machine.baseY + Math.sin(time * 3) * 1.2; // Pump up and down
+          } else if (def.machine.type === 'tower') {
+            // Emitting smoke from tower could be added to particles
+          }
+        }
       });
 
-      // Ocean waves (simplified - no vertex update for better performance)
-      // Waves are now handled by shader-like effect via position animation
+      // Clouds movement
+      clouds.forEach(c => {
+        c.mesh.position.x += c.speed;
+        if (c.mesh.position.x > 80) c.mesh.position.x = -80;
+      });
+
+      // Ocean waves
+      const positions = oceanGeo.attributes.position.array;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i+2] = oceanInitialZ[i+2] + Math.sin(time*1.5 + positions[i]*0.1) * 0.8 + Math.cos(time*1.5 + positions[i+1]*0.1) * 0.8;
+      }
+      // Animate balloons
+      balloons.forEach((b, i) => {
+        b.position.y += Math.sin(time * 2 + i) * 0.02;
+        b.rotation.y += 0.005;
+      });
+
+      // Animate boat
+      const boatBaseY = -((boat.position.x * boat.position.x) * 0.0025);
+      boat.position.y = boatBaseY + Math.sin(time*1.5 + boat.position.x*0.1) * 0.8 + Math.cos(time*1.5 + boat.position.z*0.1) * 0.8;
+      boat.rotation.z = Math.sin(time*2) * 0.08;
+      boat.rotation.x = Math.cos(time*1.5) * 0.08;
+
+      // Animate markers
+      markers.forEach((m, i) => {
+        m.position.y = (islandDefs[i].y + 12) + Math.sin(time * 2 + i) * 1.5;
+        m.rotation.y += 0.02;
+      });
+
+      oceanGeo.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     }
