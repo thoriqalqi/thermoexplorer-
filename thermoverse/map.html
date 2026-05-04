@@ -941,14 +941,61 @@
 
     window.addEventListener('mousemove', (e) => updatePointer(e.clientX, e.clientY));
     
-    // Support sentuhan di HP
+    // Support sentuhan di HP — deteksi tap vs drag
+    let touchStartX = 0, touchStartY = 0, touchMoved = false;
+
     window.addEventListener('touchstart', (e) => {
       if (e.touches.length > 0) {
-        updatePointer(e.touches[0].clientX, e.touches[0].clientY);
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchMoved = false;
+        updatePointer(touchStartX, touchStartY);
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const dx = e.touches[0].clientX - touchStartX;
+        const dy = e.touches[0].clientY - touchStartY;
+        if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+          touchMoved = true;
+        }
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      // Hanya proses jika ini adalah tap (bukan drag)
+      if (touchMoved) return;
+
+      // Update pointer ke posisi akhir sentuhan
+      const touch = e.changedTouches[0];
+      updatePointer(touch.clientX, touch.clientY);
+
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObjects(scene.children, true);
+
+      let found = -1;
+      for (let intersect of intersects) {
+        let obj = intersect.object;
+        while (obj && obj.parent && obj.type !== 'Scene' && !('index' in obj.userData)) {
+          obj = obj.parent;
+        }
+        if (obj && obj.userData && 'index' in obj.userData) {
+          found = obj.userData.index;
+          break;
+        }
+      }
+
+      if (found !== -1) {
+        showTooltip(found);
+      } else {
+        hideAllTooltips();
       }
     }, { passive: true });
 
     window.addEventListener('click', (e) => {
+      // Di HP, touchend sudah handle — skip jika bukan dari mouse asli
+      if (e.sourceCapabilities && !e.sourceCapabilities.firesTouchEvents === false) return;
       // Jika yang di-klik adalah elemen UI (bukan canvas), jangan lakukan raycast 3D
       if (e.target.tagName !== 'CANVAS') return;
 
