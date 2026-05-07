@@ -4,7 +4,7 @@
   "title": "Hukum I Termodinamika",
   "subtitle": "Energi, Kalor & Usaha",
   "color": "#6366F1",
-  "timeSeconds": 1080,
+  "timeSeconds": 1800,
   "challenges": {
     "ct": {
       "scenario": "Sebuah eksperimen dilakukan menggunakan gas ideal di dalam silinder berpiston. Gas mengalami empat proses berbeda (A, B, C, D) yang ditampilkan dalam grafik P-V dan tabel data berikut.<div class='scenario-media'><img src='assets/grafik-pv.png' alt='Grafik P-V' class='scenario-img'><div class='scenario-table-wrap'><table class='data-table' style='margin:0;'><tr><th>Proses</th><th>Jenis</th><th>Q (J)</th><th>W (J)</th><th>ΔU (J)</th></tr><tr><td>A</td><td>Isobarik</td><td>+1200</td><td>+300</td><td>?</td></tr><tr><td>B</td><td>Isokhorik</td><td>+800</td><td>0</td><td>?</td></tr><tr><td>C</td><td>Isotermal</td><td>+500</td><td>?</td><td>0</td></tr><tr><td>D</td><td>Adiabatik</td><td>0</td><td>?</td><td>-450</td></tr></table></div></div>",

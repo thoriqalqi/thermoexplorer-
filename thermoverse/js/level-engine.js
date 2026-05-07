@@ -76,7 +76,7 @@ function showIntro(){
       <h2 class="le-intro-title">${cfg.title}</h2>
       <p class="le-intro-sub">${cfg.subtitle}</p>
       <div class="le-intro-meta">
-        <div class="le-meta-item">⏱ <strong>30 Menit</strong><span>Waktu Pengerjaan</span></div>
+        <div class="le-meta-item">⏱ <strong>${Math.floor(cfg.timeSeconds/60)} Menit</strong><span>Waktu Pengerjaan</span></div>
         <div class="le-meta-item">⚡ <strong>${maxXP+60} XP</strong><span>Maks (+ Speed Bonus)</span></div>
         <div class="le-meta-item">📝 <strong>${TOTAL_QUESTIONS} Soal</strong><span>Total Pertanyaan</span></div>
       </div>
